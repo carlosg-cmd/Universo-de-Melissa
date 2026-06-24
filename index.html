@@ -125,6 +125,10 @@
                 <span class="nav-icon">💌</span>
                 <span class="nav-label">Carta de hoy</span>
             </button>
+            <button id="nav-journal" class="nav-btn nav-journal">
+                <span class="nav-icon">📖</span>
+                <span class="nav-label">Diario</span>
+            </button>
         </div>
 
         <!-- Audio Player (Hidden, controlled via JS) -->
@@ -183,6 +187,35 @@
             </div>
             <div class="modal-body">
                 <div class="game-area" id="game-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: JOURNAL ===== -->
+    <div id="journal-modal" class="modal-overlay hidden">
+        <div class="modal-content journal-modal-content">
+            <button class="modal-close" id="close-journal">&times;</button>
+            <div class="modal-header">
+                <span class="modal-emoji">📖</span>
+                <h2 class="modal-title">Tu Diario</h2>
+            </div>
+            <div class="modal-body">
+                <p class="modal-text" style="margin-bottom: 20px; font-size: 0.9rem;">Guarda aquí las frases que más te gusten de este universo y cuéntame por qué.</p>
+                
+                <div class="journal-form" style="display: flex; flex-direction: column; gap: 10px; margin-bottom: 20px; text-align: left;">
+                    <label for="journal-phrase" style="color: var(--primary); font-weight: bold; font-size: 0.9rem;">La frase que más te llenó hoy:</label>
+                    <input type="text" id="journal-phrase" placeholder="Escribe la frase aquí..." style="padding: 10px; border-radius: 8px; border: 1px solid rgba(0,229,255,0.3); background: rgba(0,0,0,0.5); color: #fff;">
+                    
+                    <label for="journal-reason" style="color: var(--primary); font-weight: bold; font-size: 0.9rem;">¿Por qué te gustó?</label>
+                    <textarea id="journal-reason" rows="3" placeholder="Me hizo sentir..." style="padding: 10px; border-radius: 8px; border: 1px solid rgba(0,229,255,0.3); background: rgba(0,0,0,0.5); color: #fff;"></textarea>
+                    
+                    <button id="save-journal-btn" class="modal-btn" style="width: 100%; margin-top: 10px;">Guardar recuerdo ✨</button>
+                </div>
+
+                <h3 style="margin-top: 30px; border-bottom: 1px solid rgba(0,229,255,0.3); padding-bottom: 5px; color: var(--primary); font-size: 1.1rem; text-align: left;">Tus recuerdos guardados</h3>
+                <div class="journal-entries" id="journal-entries-list" style="margin-top: 15px; display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Entries will be injected here via JS -->
+                </div>
             </div>
         </div>
     </div>

@@ -536,6 +536,23 @@
             phrase.el.style.opacity = finalOpacity;
             phrase.el.style.zIndex = Math.floor(1000 - p.z);
         });
+        
+        // Modals
+        const surpriseModal = document.getElementById('surprise-modal');
+        const letterModal = document.getElementById('letter-modal');
+        const gameModal = document.getElementById('game-modal');
+        const journalModal = document.getElementById('journal-modal');
+        
+        // Buttons
+        const navMessage = document.getElementById('nav-message');
+        const navGame = document.getElementById('nav-game');
+        const navJournal = document.getElementById('nav-journal');
+        
+        // Close Buttons
+        const closeSurprise = document.getElementById('close-surprise');
+        const closeLetter = document.getElementById('close-letter');
+        const closeGame = document.getElementById('close-game');
+        const closeJournal = document.getElementById('close-journal');
     }
 
     function updateCenterElements() {
@@ -602,6 +619,87 @@
         // Game button
         document.getElementById('nav-game').addEventListener('click', () => {
             openGameModal();
+        });
+        
+        closeGame.addEventListener('click', () => {
+            gameModal.classList.add('hidden');
+        });
+        
+        closeJournal.addEventListener('click', () => {
+            journalModal.classList.add('hidden');
+        });
+
+        // ====== JOURNAL LOGIC ======
+        const journalPhrase = document.getElementById('journal-phrase');
+        const journalReason = document.getElementById('journal-reason');
+        const saveJournalBtn = document.getElementById('save-journal-btn');
+        const journalEntriesList = document.getElementById('journal-entries-list');
+
+        function loadJournalEntries() {
+            journalEntriesList.innerHTML = '';
+            const entries = JSON.parse(localStorage.getItem('melisa_journal_entries') || '[]');
+            
+            if(entries.length === 0) {
+                journalEntriesList.innerHTML = '<p style="color: rgba(255,255,255,0.5); font-style: italic;">Aún no tienes recuerdos guardados.</p>';
+                return;
+            }
+
+            entries.forEach(entry => {
+                const div = document.createElement('div');
+                div.style.background = 'rgba(0, 229, 255, 0.1)';
+                div.style.padding = '15px';
+                div.style.borderRadius = '8px';
+                div.style.borderLeft = '3px solid var(--primary)';
+                div.style.textAlign = 'left';
+                
+                div.innerHTML = `
+                    <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 5px;">${entry.date} - Día ${entry.day}</div>
+                    <div style="font-weight: bold; color: #fff; margin-bottom: 5px;">"${entry.phrase}"</div>
+                    <div style="color: rgba(255,255,255,0.9); font-size: 0.95rem; font-style: italic;">${entry.reason}</div>
+                `;
+                journalEntriesList.appendChild(div);
+            });
+        }
+
+        saveJournalBtn.addEventListener('click', () => {
+            const phrase = journalPhrase.value.trim();
+            const reason = journalReason.value.trim();
+            
+            if(!phrase || !reason) {
+                alert('Por favor escribe tu frase favorita y el por qué te gustó ❤️');
+                return;
+            }
+
+            const entries = JSON.parse(localStorage.getItem('melisa_journal_entries') || '[]');
+            const todayDate = new Date().toLocaleDateString('es-ES');
+            const day = typeof DailyContent !== 'undefined' ? DailyContent.getCurrentDay() : 1;
+
+            entries.unshift({
+                phrase,
+                reason,
+                date: todayDate,
+                day: day
+            });
+
+            localStorage.setItem('melisa_journal_entries', JSON.stringify(entries));
+            
+            journalPhrase.value = '';
+            journalReason.value = '';
+            
+            loadJournalEntries();
+            
+            const originalText = saveJournalBtn.textContent;
+            saveJournalBtn.textContent = '¡Recuerdo Guardado! 💖';
+            saveJournalBtn.style.background = '#00c853';
+            setTimeout(() => {
+                saveJournalBtn.textContent = originalText;
+                saveJournalBtn.style.background = '';
+            }, 2000);
+        });
+
+        navJournal.addEventListener('click', () => {
+            loadJournalEntries();
+            journalModal.classList.remove('hidden');
         });
 
         // Letter button
