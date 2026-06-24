@@ -547,23 +547,6 @@
             phrase.el.style.opacity = finalOpacity;
             phrase.el.style.zIndex = Math.floor(1000 - p.z);
         });
-        
-        // Modals
-        const surpriseModal = document.getElementById('surprise-modal');
-        const letterModal = document.getElementById('letter-modal');
-        const gameModal = document.getElementById('game-modal');
-        const journalModal = document.getElementById('journal-modal');
-        
-        // Buttons
-        const navMessage = document.getElementById('nav-message');
-        const navGame = document.getElementById('nav-game');
-        const navJournal = document.getElementById('nav-journal');
-        
-        // Close Buttons
-        const closeSurprise = document.getElementById('close-surprise');
-        const closeLetter = document.getElementById('close-letter');
-        const closeGame = document.getElementById('close-game');
-        const closeJournal = document.getElementById('close-journal');
     }
 
     function updateCenterElements() {
@@ -630,14 +613,6 @@
         // Game button
         document.getElementById('nav-game').addEventListener('click', () => {
             openGameModal();
-        });
-        
-        closeGame.addEventListener('click', () => {
-            gameModal.classList.add('hidden');
-        });
-        
-        closeJournal.addEventListener('click', () => {
-            journalModal.classList.add('hidden');
         });
 
         // ====== JOURNAL LOGIC ======
@@ -708,9 +683,9 @@
             }, 2000);
         });
 
-        navJournal.addEventListener('click', () => {
+        document.getElementById('nav-journal').addEventListener('click', () => {
             loadJournalEntries();
-            journalModal.classList.remove('hidden');
+            openModal('journal-modal');
         });
 
         // Letter button
@@ -721,6 +696,7 @@
         // Close buttons
         document.getElementById('close-surprise').addEventListener('click', () => closeModal('surprise-modal'));
         document.getElementById('close-letter').addEventListener('click', () => closeModal('letter-modal'));
+        document.getElementById('close-journal').addEventListener('click', () => closeModal('journal-modal'));
         document.getElementById('close-game').addEventListener('click', () => {
             if (currentGameInstance && currentGameInstance.destroy) {
                 currentGameInstance.destroy();
