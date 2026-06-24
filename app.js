@@ -695,9 +695,19 @@
 
         // Close buttons
         document.getElementById('close-surprise').addEventListener('click', () => {
-            alert("No se te olvide regresar mañana, te estaré esperando, Carlos 💕");
             closeModal('surprise-modal');
+            const alertModal = document.getElementById('custom-alert-modal');
+            if(alertModal) {
+                document.getElementById('custom-alert-text').textContent = "No se te olvide regresar mañana, te estaré esperando, Carlos 💕";
+                alertModal.classList.remove('hidden');
+            }
         });
+
+        // Custom alert close
+        const customAlertOk = document.getElementById('custom-alert-ok');
+        if (customAlertOk) {
+            customAlertOk.addEventListener('click', () => closeModal('custom-alert-modal'));
+        }
         document.getElementById('close-letter').addEventListener('click', () => closeModal('letter-modal'));
         document.getElementById('close-journal').addEventListener('click', () => closeModal('journal-modal'));
         document.getElementById('close-game').addEventListener('click', () => {
