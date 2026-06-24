@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>✨ Universo Melisa ✨</title>
+    <meta name="description" content="Un universo de amor creado especialmente para Melissa">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Outfit:wght@300;400;500;600;700&family=Great+Vibes&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ===== SCREEN 1: PIN ENTRY ===== -->
+    <div id="pin-screen" class="screen pin-screen active">
+        <div class="pin-stars-bg"></div>
+        <div class="pin-content">
+            <div class="pin-lock-icon">
+                <svg width="60" height="60" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+                    <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
+                    <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+                </svg>
+            </div>
+            <h1 class="pin-title">Este rincón fue creado solo para ti</h1>
+            <p class="pin-subtitle">Solo tú conoces el código para abrirlo 💕</p>
+            
+            <div class="pin-input-container" id="pin-container">
+                <input type="tel" class="pin-digit" maxlength="1" data-index="0" autocomplete="off" inputmode="numeric">
+                <input type="tel" class="pin-digit" maxlength="1" data-index="1" autocomplete="off" inputmode="numeric">
+                <input type="tel" class="pin-digit" maxlength="1" data-index="2" autocomplete="off" inputmode="numeric">
+                <input type="tel" class="pin-digit" maxlength="1" data-index="3" autocomplete="off" inputmode="numeric">
+            </div>
+
+            <p class="pin-hint" id="pin-hint"></p>
+            <p class="pin-error" id="pin-error"></p>
+        </div>
+        <!-- Unlock particles (shown on success) -->
+        <div class="pin-unlock-particles" id="pin-particles"></div>
+    </div>
+
+    <!-- ===== SCREEN 2: WELCOME ===== -->
+    <div id="welcome-screen" class="screen welcome-screen">
+        <div class="welcome-stars"></div>
+        <div class="welcome-content">
+            <div class="welcome-glow"></div>
+            <p class="welcome-pretitle">Para ti, mi amor</p>
+            <h1 class="welcome-title">Melissa</h1>
+            <div class="welcome-day-counter" id="day-counter">
+                <span class="day-badge">Día <span id="day-number">1</span> de tu recuperación 💪</span>
+            </div>
+            <p class="welcome-daily-msg" id="welcome-daily-msg"></p>
+            <button id="explore-btn" class="explore-btn">
+                <span>Explorar tu universo</span>
+                <svg class="btn-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 5v14M19 12l-7 7-7-7"/>
+                </svg>
+            </button>
+        </div>
+        <div class="welcome-shooting-stars">
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+            <div class="shooting-star"></div>
+        </div>
+    </div>
+
+    <!-- ===== SCREEN 3: MAIN UNIVERSE ===== -->
+    <div id="universe" class="screen universe">
+        <canvas id="galaxy-canvas"></canvas>
+        
+        <!-- Floating Phrases Container -->
+        <div id="phrases-container" class="phrases-container"></div>
+
+        <!-- Center Photo/Heart -->
+        <div id="center-heart" class="center-heart">
+            <div class="center-photo-frame">
+                <img id="center-photo" src="nosotros.jpg" alt="Nosotros" class="center-photo" 
+                     onerror="this.style.display='none'; document.getElementById('center-fallback').style.display='flex';">
+                <div id="center-fallback" class="center-fallback" style="display:none;">
+                    <svg class="heart-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+                        <defs>
+                            <filter id="heart-glow">
+                                <feGaussianBlur stdDeviation="4" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                            <linearGradient id="heart-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#00e5ff;stop-opacity:1" />
+                                <stop offset="50%" style="stop-color:#00bcd4;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#0097a7;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                        <path d="M100 180 C60 140 10 110 10 70 C10 40 35 20 60 20 C78 20 92 32 100 45 C108 32 122 20 140 20 C165 20 190 40 190 70 C190 110 140 140 100 180Z" 
+                              fill="none" stroke="url(#heart-gradient)" stroke-width="2.5" filter="url(#heart-glow)" opacity="0.9"/>
+                    </svg>
+                    <div class="couple-icon">
+                        <div class="couple-figure">
+                            <div class="person person-left"></div>
+                            <div class="person person-right"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Galaxy Rings -->
+        <div id="galaxy-ring-1" class="galaxy-ring ring-1"></div>
+        <div id="galaxy-ring-2" class="galaxy-ring ring-2"></div>
+        <div id="galaxy-ring-3" class="galaxy-ring ring-3"></div>
+
+        <!-- Bottom Navigation Bar -->
+        <div class="universe-nav">
+            <button id="nav-surprise" class="nav-btn nav-surprise">
+                <span class="nav-icon">🎁</span>
+                <span class="nav-label">Sorpresa del día</span>
+            </button>
+            <button id="nav-game" class="nav-btn nav-game">
+                <span class="nav-icon">🎮</span>
+                <span class="nav-label">Juego del día</span>
+            </button>
+            <button id="nav-letter" class="nav-btn nav-letter">
+                <span class="nav-icon">💌</span>
+                <span class="nav-label">Carta de hoy</span>
+            </button>
+        </div>
+
+        <!-- Audio Player (Hidden, controlled via JS) -->
+        <audio id="bg-music"></audio>
+        
+        <!-- Mute Button -->
+        <button id="mute-btn" class="mute-btn">
+            <span class="nav-icon" id="mute-icon">🔊</span>
+        </button>
+
+        <!-- Drag Instruction -->
+        <div id="drag-hint" class="drag-hint">
+            <span>Arrastra para girar el espacio ✨</span>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: DAILY SURPRISE ===== -->
+    <div id="surprise-modal" class="modal-overlay hidden">
+        <div class="modal-content surprise-modal-content">
+            <button class="modal-close" id="close-surprise">&times;</button>
+            <div class="modal-header">
+                <span class="modal-emoji" id="surprise-emoji">🎁</span>
+                <h2 class="modal-title" id="surprise-title">Sorpresa del Día</h2>
+            </div>
+            <div class="modal-body">
+                <p class="surprise-fun-phrase" id="surprise-fun-phrase"></p>
+                <p class="surprise-recovery" id="surprise-recovery"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: LOVE LETTER ===== -->
+    <div id="letter-modal" class="modal-overlay hidden">
+        <div class="modal-content letter-modal-content">
+            <button class="modal-close" id="close-letter">&times;</button>
+            <div class="modal-header">
+                <span class="modal-emoji">💌</span>
+                <h2 class="modal-title" id="letter-title">Carta de Hoy</h2>
+            </div>
+            <div class="modal-body">
+                <div class="letter-paper">
+                    <p class="letter-text" id="letter-text"></p>
+                    <p class="letter-signature">Con todo mi amor,<br><span class="signature-name">Carlos 💕</span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: GAME ===== -->
+    <div id="game-modal" class="modal-overlay hidden">
+        <div class="modal-content game-modal-content">
+            <button class="modal-close" id="close-game">&times;</button>
+            <div class="modal-header">
+                <span class="modal-emoji">🎮</span>
+                <h2 class="modal-title" id="game-title">Juego del Día</h2>
+            </div>
+            <div class="modal-body">
+                <div class="game-area" id="game-area"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Scripts -->
+    <script src="daily-content.js"></script>
+    <script src="games.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
