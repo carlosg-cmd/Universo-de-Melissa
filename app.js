@@ -694,7 +694,10 @@
         });
 
         // Close buttons
-        document.getElementById('close-surprise').addEventListener('click', () => closeModal('surprise-modal'));
+        document.getElementById('close-surprise').addEventListener('click', () => {
+            alert("No se te olvide regresar mañana, te estaré esperando, Carlos 💕");
+            closeModal('surprise-modal');
+        });
         document.getElementById('close-letter').addEventListener('click', () => closeModal('letter-modal'));
         document.getElementById('close-journal').addEventListener('click', () => closeModal('journal-modal'));
         document.getElementById('close-game').addEventListener('click', () => {
