@@ -485,6 +485,8 @@ html, body {
 
 .floating-phrase {
     position: absolute;
+    top: 0;
+    left: 0;
     white-space: nowrap;
     font-family: var(--font-body);
     font-weight: 400;
@@ -805,6 +807,7 @@ html, body {
     color: var(--text-secondary);
     font-size: 1.3rem;
     cursor: pointer;
+    z-index: 1000;
     transition: all 0.3s ease;
     display: flex;
     align-items: center;
@@ -943,6 +946,7 @@ html, body {
     aspect-ratio: 1;
     perspective: 600px;
     cursor: pointer;
+    z-index: 1000;
 }
 
 .game-memory-card-inner {
