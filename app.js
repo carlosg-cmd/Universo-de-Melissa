@@ -12,6 +12,17 @@
 
     // ===== LOVE PHRASES (expanded to 60+) =====
     const PHRASES = [
+        // Memorias especiales
+        { text: "Por eso las operan 😂" },
+        { text: "Octubre 19 📅" },
+        { text: "Viaje al mar 🌊" },
+        { text: "Viaje a Tarazá 🌴" },
+        { text: "Primera navidad juntos 🎄" },
+        { text: "25 rosas 🌹" },
+        { text: "Flores amarillas 🌻" },
+        { text: "26 de septiembre 🗓️" },
+        { text: "Viaje a Medellín 🏙️" },
+        { text: "Tormento divino 😈" },
         // Romantic
         { text: "Te amo infinitamente 💕" },
         { text: "Eres mi estrella ⭐" },

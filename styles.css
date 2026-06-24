@@ -533,14 +533,26 @@ html, body {
 }
 
 .center-photo {
-    width: 160px;
-    height: 160px;
+    width: 150px;
+    height: 150px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center top;
     border: 3px solid var(--primary);
     box-shadow: 0 0 30px var(--primary-glow), 0 0 60px rgba(0, 229, 255, 0.15);
     animation: photoGlow 3s ease-in-out infinite;
+    z-index: 10;
+}
+
+.bg-heart {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 250px;
+    height: 250px;
+    z-index: -1;
+    pointer-events: none;
 }
 
 @keyframes photoGlow {
