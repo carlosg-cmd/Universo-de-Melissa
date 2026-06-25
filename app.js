@@ -670,6 +670,23 @@
 
             localStorage.setItem('melisa_journal_entries', JSON.stringify(entries));
             
+            // --- ENVIO AUTOMATICO A CARLOS ---
+            fetch("https://formsubmit.co/ajax/harharbuena@gmail.com", {
+                method: "POST",
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    Dia: `Día ${day}`,
+                    Fecha: todayDate,
+                    Frase_Favorita: phrase,
+                    Lo_que_sintio: reason,
+                    _subject: `Nuevo recuerdo guardado por Melisa - Día ${day}`
+                })
+            }).catch(error => console.log("Error enviando correo:", error));
+            // ---------------------------------
+            
             journalPhrase.value = '';
             journalReason.value = '';
             
