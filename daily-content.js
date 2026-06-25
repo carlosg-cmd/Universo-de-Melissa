@@ -64,8 +64,11 @@ const DailyContent = (function() {
             recoveryQuote: "Un día a la vez, mi amor. Un día a la vez.",
             gameType: 'wordsearch',
             gameConfig: {
-                words: ['MELISSA', 'CARLOS', 'AMOR', 'BESO', 'ESTRELLA', 'CIELO', 'LUNA'],
-                gridSize: 10
+                words: [
+                    'Melissa', 'Carlos', 'octubre', 'julio', 'mar', 'Tarazá', 'Medellín', 'Montería', 'colegio', 'sena', 'cumpleaños', 'Luffy', 'Mario galaxi', 'pizza', 'Santelmo', 'parque', 'rumba aerobica', 'la perra', 'la cauchera', 'hamburguesa', 'Michael Jackson', 'Home Center', 'Lupin', 'Bridgerton', 'Canadadry', 'Cola y Pola', 'Navidad', 'helado', 'chocoram', 'piedra', 'limonada', 'alcaldía', 'flores amarilla', 'girasoles', 'claveles', 'bus', 'viajes', 'rosas', 'velitas', 'alumbrados', 'masajes', 'desayunos', 'almuerzos', 'arroz chino', 'fresas con crema', 'arroz con leche', 'trabajo', 'rojo cine', 'éxito', 'moto', 'besos',
+                    'amor', 'cariño', 'abrazos', 'sonrisas', 'caricias', 'confianza', 'paciencia', 'lealtad', 'destino', 'magia', 'promesa', 'juntos', 'siempre', 'te amo', 'mi vida', 'mi reina', 'ternura', 'pasion', 'detalles', 'felicidad'
+                ],
+                gridSize: 16
             }
         },
         {

@@ -291,6 +291,7 @@
         music.addEventListener('error', () => {
             if (!music.src.endsWith('cancion1.mp3')) {
                 music.src = 'musica/cancion1.mp3';
+                music.play().catch(e => console.log("Fallback play prevented", e));
             }
         });
         

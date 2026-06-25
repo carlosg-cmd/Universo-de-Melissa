@@ -163,9 +163,10 @@ const UniverseGames = (function() {
         // Randomize which words we pick if we have more than needed
         let allWords = config.words || ['MELISSA', 'CARLOS', 'AMOR', 'BESO', 'ESTRELLA', 'CIELO', 'LUNA'];
         shuffleArray(allWords);
-        let words = allWords.slice(0, 6).map(w => w.toUpperCase()); // Pick 6 max for UI reasons
+        let selectedOriginalWords = allWords.slice(0, 10);
+        let words = selectedOriginalWords.map(w => w.toUpperCase().replace(/\s+/g, ''));
         
-        const size = config.gridSize || 10;
+        const size = config.gridSize || 16;
         let grid = Array(size).fill(null).map(() => Array(size).fill(''));
         let foundWords = new Set();
         
@@ -237,10 +238,11 @@ const UniverseGames = (function() {
         // Render Word List
         const listEl = document.createElement('div');
         listEl.className = 'game-wordlist';
-        words.forEach(w => {
+        selectedOriginalWords.forEach((originalW, idx) => {
+            const w = words[idx];
             const wEl = document.createElement('div');
             wEl.className = 'game-wordlist-item';
-            wEl.textContent = w;
+            wEl.textContent = originalW;
             wEl.dataset.word = w;
             listEl.appendChild(wEl);
         });
