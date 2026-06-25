@@ -10,6 +10,16 @@ const DailyContent = (function() {
 
     // Helper to calculate current day
     function calculateCurrentDay() {
+        // --- MODO DE PRUEBA (SOLO PARA TI) ---
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('dia')) {
+            const testDay = parseInt(urlParams.get('dia'));
+            if (!isNaN(testDay) && testDay >= 1 && testDay <= TOTAL_DAYS) {
+                return testDay;
+            }
+        }
+        // -------------------------------------
+
         const today = new Date();
         const start = new Date(START_DATE + 'T00:00:00'); // Force local midnight
         
