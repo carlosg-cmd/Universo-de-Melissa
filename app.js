@@ -639,10 +639,12 @@
                 div.style.borderLeft = '3px solid var(--primary)';
                 div.style.textAlign = 'left';
                 
+                const msg = encodeURIComponent(`Amor, hoy en mi diario del universo guardé esto:\n\n✨ "${entry.phrase}"\n\nY me hizo sentir esto:\n💭 ${entry.reason}`);
                 div.innerHTML = `
                     <div style="font-size: 0.8rem; color: rgba(255,255,255,0.6); margin-bottom: 5px;">${entry.date} - Día ${entry.day}</div>
                     <div style="font-weight: bold; color: #fff; margin-bottom: 5px;">"${entry.phrase}"</div>
-                    <div style="color: rgba(255,255,255,0.9); font-size: 0.95rem; font-style: italic;">${entry.reason}</div>
+                    <div style="color: rgba(255,255,255,0.9); font-size: 0.95rem; font-style: italic; margin-bottom: 12px;">${entry.reason}</div>
+                    <a href="https://wa.me/?text=${msg}" target="_blank" style="display: inline-block; background: #25D366; color: white; padding: 6px 14px; border-radius: 20px; font-size: 0.8rem; text-decoration: none; font-weight: bold; cursor: pointer;">Compartir por WhatsApp 💚</a>
                 `;
                 journalEntriesList.appendChild(div);
             });
