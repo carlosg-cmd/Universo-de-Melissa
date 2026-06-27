@@ -573,8 +573,8 @@ html, body {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 180px;
-    height: 180px;
+    width: 260px;
+    height: 260px;
     z-index: 5;
     animation: heartFloat 4s ease-in-out infinite;
     pointer-events: none;
@@ -595,8 +595,8 @@ html, body {
 }
 
 .center-photo {
-    width: 150px;
-    height: 150px;
+    width: 220px;
+    height: 220px;
     border-radius: 50%;
     object-fit: cover;
     object-position: center top;
@@ -1529,8 +1529,8 @@ html, body {
    RESPONSIVE
    =================================================================== */
 @media (max-width: 768px) {
-    .center-heart { width: 140px; height: 140px; }
-    .center-photo { width: 100px; height: 100px; }
+    .center-heart { width: 220px; height: 220px; }
+    .center-photo { width: 180px; height: 180px; }
     .ring-1 { width: 200px; height: 200px; }
     .ring-2 { width: 300px; height: 300px; }
     .ring-3 { width: 400px; height: 400px; }
@@ -1545,8 +1545,8 @@ html, body {
 }
 
 @media (max-width: 480px) {
-    .center-heart { width: 110px; height: 110px; }
-    .center-photo { width: 80px; height: 80px; }
+    .center-heart { width: 180px; height: 180px; }
+    .center-photo { width: 150px; height: 150px; }
     .ring-1 { width: 160px; height: 160px; }
     .ring-2 { width: 240px; height: 240px; }
     .ring-3 { width: 340px; height: 340px; }

@@ -8,12 +8,12 @@
   "description": "Un regalo interactivo para Melisa",
   "icons": [
     {
-      "src": "fotos/foto (186).jpeg",
+      "src": "fotos/foto_186.jpeg",
       "sizes": "192x192",
       "type": "image/jpeg"
     },
     {
-      "src": "fotos/foto (186).jpeg",
+      "src": "fotos/foto_186.jpeg",
       "sizes": "512x512",
       "type": "image/jpeg"
     }
