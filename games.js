@@ -332,7 +332,7 @@ const UniverseGames = (function() {
         ];
         
         // Randomize questions
-        let questions = shuffleArray([...allQuestions]).slice(0, 5); // Pick 5 random
+        let questions = shuffleArray([...allQuestions]).slice(0, 15); // Pick 15 random
         
         let currentQ = 0;
         let score = 0;

@@ -81,18 +81,50 @@ const DailyContent = (function() {
             gameType: 'trivia',
             gameConfig: {
                 questions: [
-                    {
-                        q: '¿Cuál es mi comida favorita?',
-                        options: ['Pizza', 'Hamburguesa', 'Pasta', 'Sushi'], // Carlos: Cambia esto!
-                        correct: 0,
-                        explanation: '¡Exacto! Siempre pido pizza.'
-                    },
-                    {
-                        q: '¿Qué canción nos identifica?',
-                        options: ['Perfect', 'Yellow', 'All of me', 'Nuestra canción'], // Carlos: Cambia esto!
-                        correct: 3,
-                        explanation: 'Esa canción es solo nuestra.'
-                    }
+                    { q: '¿Qué mes empezamos a hablar?', options: ['enero', 'febrero', 'marzo', 'abril'], correct: 1, explanation: 'Exacto, empezamos en febrero.' },
+                    { q: '¿Qué día nos dimos nuestro primer beso?', options: ['5 de junio', '10 de mayo', '15 de julio', '20 de agosto'], correct: 0, explanation: 'Inolvidable 5 de junio.' },
+                    { q: '¿A dónde fuimos en nuestra primera cita?', options: ['cine', 'restaurante', 'parque', 'heladería'], correct: 0, explanation: '¡Al cine!' },
+                    { q: '¿A dónde fuimos en nuestro primer viaje?', options: ['montaña', 'río', 'mar', 'nevado'], correct: 2, explanation: 'Fuimos al mar.' },
+                    { q: '¿Cuántos viajes hemos hecho juntos?', options: ['1', '3', 'más de 5', '2'], correct: 2, explanation: '¡Han sido más de 5!' },
+                    { q: '¿Qué tomábamos con más frecuencia en la etapa de conocernos?', options: ['café', 'cerveza', 'gaseosa', 'limonada'], correct: 3, explanation: 'Limonada, ¡clásico!' },
+                    { q: '¿Qué comimos cuando fuimos a 911?', options: ['pizza', 'hamburguesa', 'jugos y empanada', 'salchipapa'], correct: 2, explanation: 'Ricos jugos y empanada.' },
+                    { q: '¿Nombre de la hamburguesa que nos gusta a ambos?', options: ['clásica', 'septiembre', 'tocineta', 'corral'], correct: 1, explanation: 'La septiembre, nuestra favorita.' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['Elvis', 'Bohemian Rhapsody', 'Rocketman', 'Michael Jackson'], correct: 3, explanation: '¡La de Michael Jackson!' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['El diablo viste la moda 2', 'Chicas Pesadas', 'Barbie', 'Crepúsculo'], correct: 0, explanation: 'El diablo viste la moda 2.' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['Fórmula 1', 'Rápidos y Furiosos', 'Need for Speed', 'Rush'], correct: 0, explanation: 'Fórmula 1.' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['El teléfono negro 2', 'El conjuro', 'Annabelle', 'La monja'], correct: 0, explanation: 'El teléfono negro 2.' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['¿Qué pasó ayer? 1', 'Son como niños', 'Proyecto X', 'Supercool'], correct: 0, explanation: '¿Qué pasó ayer? 1.' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['¿Qué pasó ayer? 2', 'Ted', 'American Pie', 'Scary Movie'], correct: 0, explanation: '¿Qué pasó ayer? 2.' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['¿Qué pasó ayer? 3', 'Guerra de papás', 'Nosotros los Nobles', '¿Qué culpa tiene el niño?'], correct: 0, explanation: '¿Qué pasó ayer? 3.' },
+                    { q: '¿Cuál de estas películas nos hemos visto?', options: ['Mario Galaxy', 'Sonic', 'Zelda', 'Minecraft'], correct: 0, explanation: 'Mario Galaxy.' },
+                    { q: '¿Cuál es mi jugo favorito?', options: ['Fresa', 'Mora', 'Milo', 'Lulo'], correct: 2, explanation: 'El Milo, ¡obvio!' },
+                    { q: 'Canción que te dediqué junto con el ramo de rosas:', options: ['Flores Amarillas', '25 rosas', 'Perfecta', 'Mi Universo'], correct: 1, explanation: '25 rosas para ti.' },
+                    { q: '¿Qué día nos hicimos novios?', options: ['5 de junio', '25 de diciembre', '14 de febrero', '19 de octubre'], correct: 3, explanation: 'El 19 de octubre.' },
+                    { q: 'Yo siempre te he dicho que eres mi...', options: ['Reina', '2025', 'Princesa', 'Vida'], correct: 1, explanation: 'Eres mi 2025.' },
+                    { q: '¿Qué serie nos hemos visto?', options: ['The Crown', 'Bridgerton', 'Elite', 'Stranger Things'], correct: 1, explanation: 'Bridgerton.' },
+                    { q: '¿Qué serie nos hemos visto?', options: ['Lupin', 'La Casa de Papel', 'Dark', 'Peaky Blinders'], correct: 0, explanation: 'Lupin.' },
+                    { q: '¿En dónde estaba escrita la nota que te dejé en tu oficina?', options: ['En un post-it', 'En una hoja de cuaderno', 'En tu mano', 'En una servilleta'], correct: 3, explanation: 'Fue en una servilleta.' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['Santa Elmo', 'París', 'Roma', 'Miami'], correct: 0, explanation: '¡A Santa Elmo!' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['Tarazá', 'Bogotá', 'Cartagena', 'San Andrés'], correct: 0, explanation: '¡A Tarazá!' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['Cali', 'Medellín', 'Barranquilla', 'Santa Marta'], correct: 1, explanation: '¡A Medellín!' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['Bucaramanga', 'Cúcuta', 'Montería', 'Pereira'], correct: 2, explanation: '¡A Montería!' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['La Perra', 'El Gato', 'El Pájaro', 'El Perro'], correct: 0, explanation: 'A La Perra.' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['Montaña', 'Piedra', 'Roca', 'Colina'], correct: 1, explanation: 'A Piedra.' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['La Cauchera', 'La Resortera', 'La Honda', 'El Tirachinas'], correct: 0, explanation: 'A La Cauchera.' },
+                    { q: 'Yo tomé la iniciativa del primer beso.', options: ['Verdadero', 'Falso'], correct: 0, explanation: '¡Totalmente cierto!' },
+                    { q: 'Tus jugos favoritos son los cítricos.', options: ['Falso', 'Verdadero'], correct: 1, explanation: '¡Así es!' },
+                    { q: 'Yo dije primero te amo.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Fui yo el primero.' },
+                    { q: 'Me puedo dar el lujo de decir que te llevé a playa.', options: ['Falso', 'Verdadero'], correct: 1, explanation: 'Y fue un viaje hermoso.' },
+                    { q: 'Son más de 3 cm.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Es la verdad.' },
+                    { q: 'La primera cita no demoró mucho.', options: ['Falso', 'Verdadero'], correct: 1, explanation: 'Así fue.' },
+                    { q: 'El arroz con leche del día de la mujer no tenía quéreme.', options: ['Falso', 'Verdadero'], correct: 1, explanation: '¡Cierto!' },
+                    { q: 'Eres una niña consentida y mimosa.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Y me encanta que lo seas.' },
+                    { q: 'Yo soy tu macho.', options: ['Verdadero', 'Falso'], correct: 0, explanation: '¡Claro que sí!' },
+                    { q: 'A veces cuando nos vamos a ver eres muy puntual.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Sueles llegar tarde a veces jeje.' },
+                    { q: 'La maniguita que me diste me la diste en el éxito.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Falso, no fue ahí.' },
+                    { q: 'Alquilé una sala de cine solo para los dos.', options: ['Falso', 'Verdadero'], correct: 1, explanation: '¡Lo hice por ti!' },
+                    { q: 'Por eso las operan.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nuestra frase.' },
+                    { q: 'Morat es de nuestros cantantes favoritos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nos encantan.' }
                 ]
             }
         },
