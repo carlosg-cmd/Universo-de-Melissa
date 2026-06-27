@@ -1,6 +1,9 @@
+const CACHE_NAME = 'melisa-store-v2';
+
 self.addEventListener('install', (e) => {
+  self.skipWaiting();
   e.waitUntil(
-    caches.open('melisa-store-v1').then((cache) => cache.addAll([
+    caches.open(CACHE_NAME).then((cache) => cache.addAll([
       './',
       './index.html',
       './styles.css',
@@ -12,8 +15,26 @@ self.addEventListener('install', (e) => {
   );
 });
 
+self.addEventListener('activate', (e) => {
+  e.waitUntil(
+    caches.keys().then((keyList) => {
+      return Promise.all(keyList.map((key) => {
+        if (key !== CACHE_NAME) {
+          return caches.delete(key);
+        }
+      }));
+    })
+  );
+  self.clients.claim();
+});
+
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    caches.match(e.request).then((response) => response || fetch(e.request))
+    fetch(e.request).then(response => {
+      return caches.open(CACHE_NAME).then(cache => {
+        cache.put(e.request, response.clone());
+        return response;
+      });
+    }).catch(() => caches.match(e.request))
   );
 });
