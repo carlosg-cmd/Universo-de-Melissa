@@ -987,6 +987,19 @@ if ('serviceWorker' in navigator) {
 
 document.addEventListener('DOMContentLoaded', () => {
         initPinScreen();
+
+        // Alerta de actualización V4
+        if (!localStorage.getItem('melisa_update_v4_seen')) {
+            const updateModal = document.getElementById('update-alert-modal');
+            const updateOk = document.getElementById('update-alert-ok');
+            if (updateModal && updateOk) {
+                updateModal.classList.remove('hidden');
+                updateOk.addEventListener('click', () => {
+                    localStorage.setItem('melisa_update_v4_seen', 'true');
+                    updateModal.classList.add('hidden');
+                });
+            }
+        }
     });
 
 })();
