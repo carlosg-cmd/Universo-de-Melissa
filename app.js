@@ -926,6 +926,15 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('sw.js').catch(err => console.log('Service Worker failed', err));
     });
+    
+    // Auto-actualización silenciosa para Melisa
+    let refreshing = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+        if (!refreshing) {
+            refreshing = true;
+            window.location.reload();
+        }
+    });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
