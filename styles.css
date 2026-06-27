@@ -599,7 +599,7 @@ html, body {
     height: 220px;
     border-radius: 50%;
     object-fit: cover;
-    object-position: center top;
+    object-position: center center;
     border: 3px solid var(--primary);
     box-shadow: 0 0 30px var(--primary-glow), 0 0 60px rgba(0, 229, 255, 0.15);
     animation: photoGlow 3s ease-in-out infinite;
@@ -1551,8 +1551,8 @@ html, body {
     .ring-2 { width: 240px; height: 240px; }
     .ring-3 { width: 340px; height: 340px; }
 
-    .universe-nav { gap: 8px; padding: 12px 12px 20px; }
-    .nav-btn { min-width: 75px; padding: 8px 10px; }
+    .universe-nav { gap: 5px; padding: 12px 5px 20px; }
+    .nav-btn { flex: 1; min-width: 0; padding: 8px 2px; }
     
     .pin-input-container { gap: 10px; }
     .pin-digit { width: 45px; height: 55px; font-size: 1.4rem; }
