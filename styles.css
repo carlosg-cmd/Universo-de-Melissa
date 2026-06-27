@@ -50,6 +50,41 @@ html, body {
     -webkit-user-select: none;
 }
 
+/* ===== FLOATING TOP NAV ===== */
+.top-right-nav {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    z-index: 100;
+}
+
+.floating-btn {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid var(--primary-soft);
+    border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    backdrop-filter: blur(5px);
+    transition: all 0.3s ease;
+    color: var(--text-primary);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+}
+
+.floating-btn:hover {
+    background: var(--primary-soft);
+    border-color: var(--primary);
+    transform: scale(1.05);
+    box-shadow: 0 0 15px var(--primary-glow);
+}
+
+.floating-btn:active {
+    transform: scale(0.95);
+}
+
 /* ===== SCREEN SYSTEM ===== */
 .screen {
     position: fixed;

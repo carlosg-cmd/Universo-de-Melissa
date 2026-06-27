@@ -124,7 +124,17 @@ const DailyContent = (function() {
                     { q: 'La maniguita que me diste me la diste en el éxito.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Falso, no fue ahí.' },
                     { q: 'Alquilé una sala de cine solo para los dos.', options: ['Falso', 'Verdadero'], correct: 1, explanation: '¡Lo hice por ti!' },
                     { q: 'Por eso las operan.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nuestra frase.' },
-                    { q: 'Morat es de nuestros cantantes favoritos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nos encantan.' }
+                    { q: 'Morat es de nuestros cantantes favoritos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nos encantan.' },
+                    { q: 'El primer ramo de flores que te di eran rojas.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Fueron amarillas.' },
+                    { q: '¿En qué parque nos tomamos las fotos de los alumbrados navideños?', options: ['Parque Bolívar', 'El Palmar', 'Parque de la Vida', 'Parque Central'], correct: 1, explanation: '¡En El Palmar!' },
+                    { q: 'Mi lady me estaba enseñando a bailar.', options: ['Falso', 'Verdadero'], correct: 1, explanation: 'Así es jaja.' },
+                    { q: 'Hemos desayunado juntos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Sí, deliciosos desayunos.' },
+                    { q: 'Nos hemos bañado juntos.', options: ['Falso', 'Verdadero'], correct: 1, explanation: 'Sí lo hemos hecho.' },
+                    { q: 'Hemos dormido juntos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'De los mejores momentos.' },
+                    { q: 'Ambos tenemos pasaporte.', options: ['Falso', 'Verdadero'], correct: 1, explanation: 'Listos para viajar.' },
+                    { q: 'Lugar donde te entregué tu manillita.', options: ['En el parque', 'En tu casa', 'Heladería', 'Restaurante'], correct: 2, explanation: 'Fue en la heladería.' },
+                    { q: 'Lugar donde nos comimos una ensalada de frutas.', options: ['Yireth', 'Cosechas', 'Frutera del Centro', 'Plaza'], correct: 0, explanation: 'En Yireth.' },
+                    { q: '¿A cuál de mis hermanas conociste primero?', options: ['Ana', 'María', 'Isabel', 'Laura'], correct: 2, explanation: 'Fue a Isabel.' }
                 ]
             }
         },

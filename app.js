@@ -713,6 +713,14 @@
             openLetterModal();
         });
 
+        // Library button
+        const libraryBtn = document.getElementById('nav-library');
+        if (libraryBtn) {
+            libraryBtn.addEventListener('click', () => {
+                openLibraryModal();
+            });
+        }
+
         // Close buttons
         document.getElementById('close-surprise').addEventListener('click', () => {
             closeModal('surprise-modal');
@@ -730,6 +738,8 @@
         }
         document.getElementById('close-letter').addEventListener('click', () => closeModal('letter-modal'));
         document.getElementById('close-journal').addEventListener('click', () => closeModal('journal-modal'));
+        const closeLibraryBtn = document.getElementById('close-library');
+        if (closeLibraryBtn) closeLibraryBtn.addEventListener('click', () => closeModal('library-modal'));
         document.getElementById('close-game').addEventListener('click', () => {
             if (currentGameInstance && currentGameInstance.destroy) {
                 currentGameInstance.destroy();
@@ -750,6 +760,44 @@
                 }
             });
         });
+    }
+
+    function openLibraryModal() {
+        const libraryList = document.getElementById('library-list');
+        if (!libraryList) return;
+        libraryList.innerHTML = '';
+        
+        const currentDay = typeof DailyContent !== 'undefined' ? DailyContent.getCurrentDay() : 1;
+        
+        for (let i = currentDay; i >= 1; i--) {
+            const dayData = typeof DailyContent !== 'undefined' ? DailyContent.getDay(i) : null;
+            if (!dayData) continue;
+            
+            const card = document.createElement('div');
+            card.style.background = 'rgba(0, 229, 255, 0.1)';
+            card.style.padding = '15px';
+            card.style.borderRadius = '8px';
+            card.style.borderLeft = '3px solid var(--primary)';
+            card.style.textAlign = 'left';
+            
+            const shareText = encodeURIComponent(`Carta del Día ${i} - Universo de Melisa\n\n"${dayData.letter}"\n\n¡Leída en mi aplicación especial! ✨`);
+            const shareUrl = `https://wa.me/?text=${shareText}`;
+            
+            card.innerHTML = `
+                <h3 style="color: var(--primary); margin-bottom: 10px;">${dayData.title} ${dayData.emoji}</h3>
+                <p style="white-space: pre-wrap; font-size: 0.95rem; line-height: 1.5; color: #fff;">${dayData.letter}</p>
+                <div style="margin-top: 15px; display: flex; justify-content: flex-end;">
+                    <a href="${shareUrl}" target="_blank" style="text-decoration: none;">
+                        <button class="modal-btn" style="padding: 8px 15px; font-size: 0.85rem; display: flex; align-items: center; gap: 5px; background: #25D366; color: white;">
+                            <span style="font-size: 1.1rem;">📱</span> WhatsApp
+                        </button>
+                    </a>
+                </div>
+            `;
+            libraryList.appendChild(card);
+        }
+        
+        openModal('library-modal');
     }
 
     function openSurpriseModal() {

@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="styles.css">
     <link rel="manifest" href="manifest.json">
     <meta name="theme-color" content="#00e5ff">
-    <link rel="apple-touch-icon" href="nosotros.jpg">
+    <link rel="apple-touch-icon" href="fotos/foto (186).jpeg">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 </head>
@@ -77,6 +77,13 @@
         <!-- Floating Phrases Container -->
         <div id="phrases-container" class="phrases-container"></div>
 
+        <!-- Top Right Floating Buttons -->
+        <div class="top-right-nav">
+            <button id="nav-library" class="floating-btn nav-library" title="Biblioteca de Recuerdos">
+                <span class="nav-icon">📚</span>
+            </button>
+        </div>
+
         <!-- Center Photo/Heart -->
         <div id="center-heart" class="center-heart">
             <!-- Corazón brillante de fondo siempre visible -->
@@ -100,7 +107,7 @@
             </svg>
             
             <div class="center-photo-frame">
-                <img id="center-photo" src="nosotros.jpg" alt="Nosotros" class="center-photo" 
+                <img id="center-photo" src="fotos/foto (139).jpeg" alt="Nosotros" class="center-photo" 
                      onerror="this.style.display='none'; document.getElementById('center-fallback-icon').style.display='block';">
                 
                 <div id="center-fallback-icon" class="couple-icon" style="display:none;">
@@ -234,6 +241,23 @@
             <div class="modal-body">
                 <p id="custom-alert-text" style="font-size: 1.1rem; margin-bottom: 25px; line-height: 1.4; color: var(--text-primary);"></p>
                 <button id="custom-alert-ok" class="modal-btn" style="width: 100%;">¡Lo prometo!</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- ===== MODAL: LIBRARY OF MEMORIES ===== -->
+    <div id="library-modal" class="modal-overlay hidden" style="z-index: 1000;">
+        <div class="modal-content library-modal-content" style="max-height: 80vh; overflow-y: auto;">
+            <button class="modal-close" id="close-library">&times;</button>
+            <div class="modal-header">
+                <span class="modal-emoji">📚</span>
+                <h2 class="modal-title">Biblioteca de Recuerdos</h2>
+            </div>
+            <div class="modal-body">
+                <p class="modal-text" style="margin-bottom: 20px; font-size: 0.9rem;">Aquí están guardadas todas tus cartas para que las leas cuando quieras.</p>
+                <div id="library-list" style="display: flex; flex-direction: column; gap: 15px;">
+                    <!-- Javascript will populate past letters -->
+                </div>
             </div>
         </div>
     </div>
