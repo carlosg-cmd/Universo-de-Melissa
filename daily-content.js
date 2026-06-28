@@ -285,6 +285,11 @@ const DailyContent = (function() {
                             'PROMETEME TU Y YO POR UN LARGO RATO'
                         ]
                     }
+                },
+                {
+                    name: 'Ruleta Sorpresa',
+                    type: 'roulette',
+                    config: {}
                 }
             ]
         },

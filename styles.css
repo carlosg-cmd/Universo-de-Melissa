@@ -1559,3 +1559,43 @@ html, body {
     
     .game-trivia-option { padding: 12px 16px; font-size: 0.85rem; }
 }
+
+/* ===== CUSTOM TOAST NOTIFICATION ===== */
+.custom-toast {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: rgba(10, 20, 40, 0.95);
+    border: 1px solid var(--primary);
+    box-shadow: 0 4px 20px var(--primary-glow);
+    padding: 15px 25px;
+    border-radius: var(--radius-lg);
+    z-index: 10000;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    opacity: 0;
+    transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    max-width: 90%;
+    text-align: center;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.custom-toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.custom-toast-icon {
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.custom-toast-text {
+    font-family: var(--font-body);
+    font-size: 1rem;
+    color: var(--text-primary);
+    font-weight: 500;
+}

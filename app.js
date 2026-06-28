@@ -919,6 +919,9 @@
                 case 'hangman':
                     titleEl.textContent = '🌸 Descubre la Frase';
                     return UniverseGames.startHangman(container, gConfig);
+                case 'roulette':
+                    titleEl.textContent = '🎡 Ruleta de Premios';
+                    return UniverseGames.startRoulette(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
@@ -1004,6 +1007,26 @@
         if (modal) {
             modal.classList.add('hidden');
         }
+    }
+
+    function showCustomNotification(message, duration = 8000) {
+        const toast = document.createElement('div');
+        toast.className = 'custom-toast';
+        toast.innerHTML = `
+            <div class="custom-toast-icon">💌</div>
+            <div class="custom-toast-text">${message}</div>
+        `;
+        document.body.appendChild(toast);
+        
+        // Trigger reflow to ensure animation works
+        toast.offsetHeight; 
+        
+        toast.classList.add('show');
+        
+        setTimeout(() => {
+            toast.classList.remove('show');
+            setTimeout(() => toast.remove(), 600);
+        }, duration);
     }
 
     // =============================================
@@ -1098,6 +1121,17 @@ document.addEventListener('DOMContentLoaded', () => {
                     localStorage.setItem('melisa_update_v4_seen', 'true');
                     updateModal.classList.add('hidden');
                 });
+            }
+        }
+
+        // Day 4 Custom Notification (15s after opening)
+        if (typeof DailyContent !== 'undefined' && DailyContent.getCurrentDay() === 4) {
+            if (!localStorage.getItem('melisa_day4_notified')) {
+                setTimeout(() => {
+                    showCustomNotification("Mañana será un gran día, así que no faltes mi amor 💕", 10000);
+                    localStorage.setItem('melisa_day4_notified', 'true');
+                    if (window.notifyCarlos) window.notifyCarlos("Se le mostró la notificación especial del Día 4 a Melisa.");
+                }, 15000);
             }
         }
     });

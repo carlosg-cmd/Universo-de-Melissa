@@ -831,12 +831,232 @@ const UniverseGames = (function() {
         return { destroy: () => { container.innerHTML = ''; } };
     }
 
+    // ==========================================
+    // 6. ROULETTE (RULETA)
+    // ==========================================
+    function startRoulette(container, config) {
+        container.innerHTML = '';
+        
+        let spins = parseInt(localStorage.getItem('melisa_roulette_spins') || '0');
+        const WIN_TARGET = 50;
+        
+        const slices = [
+            { text: 'Sigue\\nintentando', color: '#ff4081', isWin: false },
+            { text: 'Uy\\ncasi', color: '#b388ff', isWin: false },
+            { text: 'Por eso\\nlas operan', color: '#00e5ff', isWin: false },
+            { text: 'Beso de\\nconsuelo', color: '#ffd54f', isWin: false },
+            { text: 'Intenta\\nde nuevo', color: '#ff4081', isWin: false },
+            { text: 'PREMIO\\nSORPRESA', color: '#ffd700', isWin: true }, // The winning slice
+            { text: 'Sigue\\nparticipando', color: '#00e5ff', isWin: false },
+            { text: 'No creo que\\nte rindas', color: '#b388ff', isWin: false }
+        ];
+        
+        const numSlices = slices.length;
+        const sliceAngle = 360 / numSlices;
+        
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.gap = '20px';
+        wrapper.style.width = '100%';
+        wrapper.style.position = 'relative';
+        
+        // Pointer
+        const pointer = document.createElement('div');
+        pointer.innerHTML = '▼';
+        pointer.style.fontSize = '40px';
+        pointer.style.color = 'white';
+        pointer.style.textShadow = '0 2px 10px rgba(0,0,0,0.5)';
+        pointer.style.position = 'absolute';
+        pointer.style.top = '-10px';
+        pointer.style.zIndex = '10';
+        
+        // Wheel Container
+        const wheelContainer = document.createElement('div');
+        wheelContainer.style.width = '280px';
+        wheelContainer.style.height = '280px';
+        wheelContainer.style.position = 'relative';
+        wheelContainer.style.borderRadius = '50%';
+        wheelContainer.style.overflow = 'hidden';
+        wheelContainer.style.boxShadow = '0 0 20px rgba(0, 229, 255, 0.5), inset 0 0 10px rgba(0,0,0,0.5)';
+        wheelContainer.style.border = '4px solid var(--primary)';
+        
+        // The Wheel (SVG)
+        const wheel = document.createElement('div');
+        wheel.style.width = '100%';
+        wheel.style.height = '100%';
+        wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
+        wheel.style.transform = 'rotate(0deg)';
+        
+        let svgHTML = \`<svg viewBox="0 0 200 200" width="100%" height="100%">\`;
+        const center = 100;
+        const radius = 100;
+        
+        slices.forEach((slice, i) => {
+            const startAngle = i * sliceAngle;
+            const endAngle = (i + 1) * sliceAngle;
+            
+            // To start from top, we shift by -90
+            const startX = center + radius * Math.cos(Math.PI * (startAngle - 90) / 180);
+            const startY = center + radius * Math.sin(Math.PI * (startAngle - 90) / 180);
+            const endX = center + radius * Math.cos(Math.PI * (endAngle - 90) / 180);
+            const endY = center + radius * Math.sin(Math.PI * (endAngle - 90) / 180);
+            
+            const largeArcFlag = sliceAngle > 180 ? 1 : 0;
+            
+            const d = [
+                \`M \${center} \${center}\`,
+                \`L \${startX} \${startY}\`,
+                \`A \${radius} \${radius} 0 \${largeArcFlag} 1 \${endX} \${endY}\`,
+                \`Z\`
+            ].join(' ');
+            
+            svgHTML += \`<path d="\${d}" fill="\${slice.color}" stroke="rgba(0,0,0,0.2)" stroke-width="1"></path>\`;
+            
+            // Text
+            const textAngle = startAngle + (sliceAngle / 2);
+            const textRadius = 65;
+            const textX = center + textRadius * Math.cos(Math.PI * (textAngle - 90) / 180);
+            const textY = center + textRadius * Math.sin(Math.PI * (textAngle - 90) / 180);
+            
+            let tspanHTML = '';
+            const words = slice.text.split('\\n');
+            words.forEach((word, idx) => {
+                tspanHTML += \`<tspan x="0" dy="\${idx === 0 ? '-0.5em' : '1.2em'}">\${word}</tspan>\`;
+            });
+            
+            svgHTML += \`
+                <g transform="translate(\${textX}, \${textY}) rotate(\${textAngle})">
+                    <text x="0" y="0" font-family="Outfit, sans-serif" font-size="\${slice.isWin ? '10' : '11'}" font-weight="bold" fill="\${slice.isWin ? '#000' : '#fff'}" text-anchor="middle" dominant-baseline="middle">
+                        \${tspanHTML}
+                    </text>
+                </g>
+            \`;
+        });
+        
+        svgHTML += \`
+            <circle cx="100" cy="100" r="15" fill="#fff" filter="drop-shadow(0 0 5px rgba(0,0,0,0.5))"></circle>
+            <circle cx="100" cy="100" r="10" fill="var(--bg-dark)"></circle>
+        </svg>\`;
+        
+        wheel.innerHTML = svgHTML;
+        wheelContainer.appendChild(wheel);
+        
+        // Spin Button
+        const spinBtn = document.createElement('button');
+        spinBtn.className = 'btn';
+        spinBtn.style.padding = '15px 40px';
+        spinBtn.style.fontSize = '1.2rem';
+        spinBtn.style.marginTop = '20px';
+        spinBtn.style.background = 'var(--pink)';
+        spinBtn.innerHTML = '¡GIRAR RULETA! 🎡';
+        
+        let isSpinning = false;
+        let currentRotation = 0;
+        
+        spinBtn.onclick = () => {
+            if (isSpinning) return;
+            isSpinning = true;
+            spinBtn.style.opacity = '0.5';
+            spinBtn.style.cursor = 'not-allowed';
+            
+            spins++;
+            localStorage.setItem('melisa_roulette_spins', spins);
+            
+            if (window.notifyCarlos) {
+                window.notifyCarlos(\`🎰 Melisa giró la ruleta (Intento \${spins}/\${WIN_TARGET})\`);
+            }
+            
+            let targetIndex;
+            if (spins >= WIN_TARGET) {
+                targetIndex = 5; // Premio sorpresa
+            } else {
+                const nonWinIndices = [0, 1, 2, 3, 4, 6, 7];
+                targetIndex = nonWinIndices[Math.floor(Math.random() * nonWinIndices.length)];
+            }
+            
+            const targetAngle = targetIndex * sliceAngle + (sliceAngle / 2);
+            const offsetToTop = 360 - targetAngle;
+            
+            const extraSpins = 360 * 5;
+            
+            currentRotation += extraSpins;
+            currentRotation = Math.floor(currentRotation / 360) * 360 + offsetToTop;
+            
+            const randomJitter = (Math.random() - 0.5) * (sliceAngle * 0.6);
+            currentRotation += randomJitter;
+            
+            wheel.style.transform = \`rotate(\${currentRotation}deg)\`;
+            
+            setTimeout(() => {
+                isSpinning = false;
+                spinBtn.style.opacity = '1';
+                spinBtn.style.cursor = 'pointer';
+                
+                const landedSlice = slices[targetIndex];
+                
+                if (landedSlice.isWin) {
+                    celebrate(wrapper, '¡GANASTE EL PREMIO SORPRESA! 🎉');
+                    if (window.notifyCarlos) window.notifyCarlos(\`🏆 ¡MELISA GANÓ EL PREMIO EN LA RULETA (Intento \${spins})!\`);
+                    spinBtn.style.display = 'none';
+                    
+                    const winMsg = document.createElement('div');
+                    winMsg.style.background = 'rgba(255, 215, 0, 0.2)';
+                    winMsg.style.border = '2px solid var(--gold)';
+                    winMsg.style.padding = '20px';
+                    winMsg.style.borderRadius = 'var(--radius-md)';
+                    winMsg.style.marginTop = '20px';
+                    winMsg.style.textAlign = 'center';
+                    winMsg.innerHTML = \`
+                        <h3 style="color: var(--gold); margin-bottom:10px;">¡FELICITACIONES!</h3>
+                        <p>Has sido muy persistente. Tómale pantallazo a esto y mándaselo a Carlos para reclamar tu <strong>PREMIO SORPRESA</strong>.</p>
+                    \`;
+                    wrapper.appendChild(winMsg);
+                } else {
+                    const resultMsg = document.createElement('div');
+                    resultMsg.style.position = 'absolute';
+                    resultMsg.style.top = '50%';
+                    resultMsg.style.left = '50%';
+                    resultMsg.style.transform = 'translate(-50%, -50%)';
+                    resultMsg.style.background = 'var(--bg-card)';
+                    resultMsg.style.border = \`2px solid \${landedSlice.color}\`;
+                    resultMsg.style.padding = '15px 25px';
+                    resultMsg.style.borderRadius = 'var(--radius-lg)';
+                    resultMsg.style.boxShadow = '0 10px 30px rgba(0,0,0,0.8)';
+                    resultMsg.style.zIndex = '20';
+                    resultMsg.style.fontWeight = 'bold';
+                    resultMsg.style.fontSize = '1.2rem';
+                    resultMsg.style.color = landedSlice.color;
+                    resultMsg.style.textAlign = 'center';
+                    resultMsg.innerHTML = landedSlice.text.replace('\\n', '<br>');
+                    
+                    wrapper.appendChild(resultMsg);
+                    
+                    setTimeout(() => {
+                        resultMsg.style.opacity = '0';
+                        resultMsg.style.transition = 'opacity 0.5s';
+                        setTimeout(() => resultMsg.remove(), 500);
+                    }, 2500);
+                }
+                
+            }, 4100);
+        };
+        
+        wrapper.appendChild(pointer);
+        wrapper.appendChild(wheelContainer);
+        wrapper.appendChild(spinBtn);
+        
+        container.appendChild(wrapper);
+    }
+
     return {
         startMemory,
         startWordSearch,
         startTrivia,
         startPuzzle,
         startRiddle,
-        startHangman
+        startHangman,
+        startRoulette
     };
 })();
