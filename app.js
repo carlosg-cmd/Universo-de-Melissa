@@ -31,6 +31,23 @@
 
     // ===== LOVE PHRASES (expanded to 60+) =====
     const PHRASES = [
+        // Respuestas de Trivia
+        { text: "Nuestra oficina 🏢" },
+        { text: "Un jueves de junio 🗓️" },
+        { text: "Nuestro helado 🍦" },
+        { text: "Febrero nos unió ❤️" },
+        { text: "El Milo, ¡obvio! 🥤" },
+        { text: "Eres mi 2025 🎆" },
+        { text: "Maratón de Bridgerton 📺" },
+        { text: "Viendo Lupin 🎬" },
+        { text: "Nota en la servilleta 📝" },
+        { text: "Paseo a Santa Elmo 🏞️" },
+        { text: "Paseo a Medellín 🏙️" },
+        { text: "Viaje a Montería 🌄" },
+        { text: "Vamos a La Perra 🐾" },
+        { text: "Vamos a Piedra 🪨" },
+        { text: "Vamos a La Cauchera 🌲" },
+        
         // Memorias especiales
         { text: "Por eso las operan 😂" },
         { text: "Octubre 19 📅" },
