@@ -176,10 +176,11 @@ const DailyContent = (function() {
         },
         {
             day: 5,
-            title: "Día 5 - Festival de Nuestro Primer Beso",
-            emoji: "🎡",
-            letter: "Hola mi amor,\n\nHoy es 5, una fecha súper especial porque me recuerda a nuestro primer beso. Un 5 de junio que cambió mi vida para siempre.\n\nPor eso, hoy no tienes un solo juego... ¡tienes un Festival de Juegos entero dedicado a nosotros!\n\nTe amo con todo mi ser.",
-            funPhrase: "¡Un día mágico para recordar! ✨",
+            title: "Día 5 - Festival de Juegos 🎪",
+            emoji: "🎠",
+            song: "musica/cancion5.mp3",
+            letter: "Mi amor,\n\nHoy es una fecha especial, 5 de junio, el día en que nos dimos nuestro primer beso en la oficina, que fue un jueves y nos comimos un helado. Para celebrar esta fecha, he preparado un festival de juegos solo para ti.\n\nDisfruta de todos tus juegos favoritos y recuerda todos nuestros hermosos momentos.",
+            funPhrase: "¡Gira la ruleta y prueba tu suerte! 🎡",
             recoveryQuote: "Cada día es una nueva oportunidad para sonreír.",
             games: [
                 {
