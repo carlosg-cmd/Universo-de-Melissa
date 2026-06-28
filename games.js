@@ -422,8 +422,144 @@ const UniverseGames = (function() {
     // 4. PUZZLE
     // ==========================================
     function startPuzzle(container, config) {
-         container.innerHTML = '<p style="text-align:center; padding: 20px;">Rompecabezas en construcción... 🚧</p>';
-         return { destroy: () => { container.innerHTML = ''; } };
+        container.innerHTML = '';
+        
+        const size = config.gridSize || 3;
+        const imageUrl = config.image || 'fotos/foto_139.jpeg';
+        
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.gap = '15px';
+        
+        const instructions = document.createElement('p');
+        instructions.textContent = 'Desliza las piezas para formar nuestra foto ❤️';
+        instructions.style.color = '#fff';
+        instructions.style.fontSize = '0.9rem';
+        instructions.style.marginBottom = '10px';
+        
+        const board = document.createElement('div');
+        // Usamos un tamaño responsivo maximo de 300px
+        board.style.width = '280px';
+        board.style.height = '280px';
+        board.style.display = 'grid';
+        board.style.gridTemplateColumns = `repeat(${size}, 1fr)`;
+        board.style.gridTemplateRows = `repeat(${size}, 1fr)`;
+        board.style.gap = '2px';
+        board.style.backgroundColor = 'rgba(0,229,255,0.3)';
+        board.style.border = '2px solid var(--primary)';
+        board.style.borderRadius = '8px';
+        board.style.overflow = 'hidden';
+        
+        // Estado del juego
+        const numTiles = size * size;
+        let tiles = [];
+        
+        // Inicializar piezas ordenadas (0 a 8) donde size*size-1 es el vacio
+        for (let i = 0; i < numTiles; i++) {
+            tiles.push(i);
+        }
+        
+        // Función para verificar si se puede resolver
+        function isSolvable(arr) {
+            let inversions = 0;
+            for (let i = 0; i < arr.length - 1; i++) {
+                for (let j = i + 1; j < arr.length; j++) {
+                    if (arr[i] !== numTiles - 1 && arr[j] !== numTiles - 1 && arr[i] > arr[j]) {
+                        inversions++;
+                    }
+                }
+            }
+            return inversions % 2 === 0;
+        }
+        
+        // Mezclar hasta que sea resoluble
+        do {
+            for (let i = tiles.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [tiles[i], tiles[j]] = [tiles[j], tiles[i]];
+            }
+        } while (!isSolvable(tiles) || checkWin(tiles));
+        
+        function checkWin(currentTiles) {
+            for (let i = 0; i < numTiles - 1; i++) {
+                if (currentTiles[i] !== i) return false;
+            }
+            return true;
+        }
+        
+        function renderBoard() {
+            board.innerHTML = '';
+            tiles.forEach((tileIndex, position) => {
+                const cell = document.createElement('div');
+                cell.style.width = '100%';
+                cell.style.height = '100%';
+                
+                if (tileIndex === numTiles - 1) {
+                    // Pieza vacía
+                    cell.style.backgroundColor = 'transparent';
+                } else {
+                    cell.style.backgroundImage = `url('${imageUrl}')`;
+                    cell.style.backgroundSize = `${size * 100}% ${size * 100}%`;
+                    
+                    // Calcular posicion X e Y basada en el valor real de la pieza
+                    const bgX = (tileIndex % size) * (100 / (size - 1));
+                    const bgY = Math.floor(tileIndex / size) * (100 / (size - 1));
+                    
+                    cell.style.backgroundPosition = `${bgX}% ${bgY}%`;
+                    cell.style.cursor = 'pointer';
+                    cell.style.borderRadius = '4px';
+                    cell.style.transition = 'transform 0.1s';
+                    
+                    cell.addEventListener('click', () => moveTile(position));
+                }
+                board.appendChild(cell);
+            });
+            
+            if (checkWin(tiles)) {
+                setTimeout(() => {
+                    board.innerHTML = '';
+                    board.style.display = 'block';
+                    board.style.backgroundImage = `url('${imageUrl}')`;
+                    board.style.backgroundSize = 'cover';
+                    board.style.backgroundPosition = 'center';
+                    
+                    const winMsg = document.createElement('div');
+                    winMsg.innerHTML = '<h3 style="color:var(--gold); margin-bottom:10px;">¡Lo lograste! 🧩</h3><p>Encajamos perfectamente.</p>';
+                    winMsg.style.textAlign = 'center';
+                    winMsg.style.marginTop = '20px';
+                    wrapper.appendChild(winMsg);
+                }, 300);
+            }
+        }
+        
+        function moveTile(pos) {
+            const emptyPos = tiles.indexOf(numTiles - 1);
+            
+            // Validar adyacencia
+            const row = Math.floor(pos / size);
+            const col = pos % size;
+            const emptyRow = Math.floor(emptyPos / size);
+            const emptyCol = emptyPos % size;
+            
+            const isAdjacent = (Math.abs(row - emptyRow) === 1 && col === emptyCol) || 
+                               (Math.abs(col - emptyCol) === 1 && row === emptyRow);
+            
+            if (isAdjacent) {
+                // Intercambiar
+                [tiles[pos], tiles[emptyPos]] = [tiles[emptyPos], tiles[pos]];
+                renderBoard();
+            }
+        }
+        
+        wrapper.appendChild(instructions);
+        wrapper.appendChild(board);
+        container.appendChild(wrapper);
+        
+        renderBoard();
+        
+        return { destroy: () => { container.innerHTML = ''; } };
     }
 
     // ==========================================
