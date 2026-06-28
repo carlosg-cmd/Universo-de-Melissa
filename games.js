@@ -937,19 +937,23 @@ const UniverseGames = (function() {
             
             // Text
             const textAngle = startAngle + (sliceAngle / 2);
-            const textRadius = 65;
+            const textRadius = 72; // Move text further out where slice is wider
             const textX = center + textRadius * Math.cos(Math.PI * (textAngle - 90) / 180);
             const textY = center + textRadius * Math.sin(Math.PI * (textAngle - 90) / 180);
             
             let tspanHTML = '';
             const words = slice.text.split('\\n');
             words.forEach((word, idx) => {
-                tspanHTML += `<tspan x="0" dy="${idx === 0 ? '-0.5em' : '1.2em'}">${word}</tspan>`;
+                // Adjust dy to tighten line spacing slightly and center vertically better
+                const dy = idx === 0 ? (words.length > 1 ? '-0.4em' : '0') : '1.1em';
+                tspanHTML += `<tspan x="0" dy="${dy}">${word}</tspan>`;
             });
+            
+            const fontSize = slice.isWin ? '9' : '8';
             
             svgHTML += `
                 <g transform="translate(${textX}, ${textY}) rotate(${textAngle})">
-                    <text x="0" y="0" font-family="Outfit, sans-serif" font-size="${slice.isWin ? '11' : '10'}" font-weight="700" fill="${slice.textColor}" text-anchor="middle" dominant-baseline="middle">
+                    <text x="0" y="0" font-family="Outfit, sans-serif" font-size="${fontSize}" font-weight="700" fill="${slice.textColor}" text-anchor="middle" dominant-baseline="middle" style="letter-spacing: -0.2px;">
                         ${tspanHTML}
                     </text>
                 </g>

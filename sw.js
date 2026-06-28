@@ -1,4 +1,4 @@
-const CACHE_NAME = 'melisa-store-v10';
+const CACHE_NAME = 'melisa-store-v11';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
