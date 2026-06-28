@@ -647,12 +647,137 @@ const UniverseGames = (function() {
 
         return { destroy: () => { container.innerHTML = ''; } };
     }
+    // ==========================================
+    // 6. HANGMAN (DESCUBRE LA FRASE)
+    // ==========================================
+    function startHangman(container, config) {
+        container.innerHTML = '';
+        
+        const phrase = (config.phrase || 'TE AMO').toUpperCase();
+        let guessed = new Set();
+        let mistakes = 0;
+        const maxMistakes = 12;
+        
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.gap = '20px';
+        
+        // Girasol animado (SVG)
+        const petals = [];
+        for (let i = 0; i < maxMistakes; i++) {
+            petals.push(`<ellipse cx="50" cy="20" rx="6" ry="18" fill="#FFD700" transform="rotate(${i * 30} 50 50)" id="petal-${i}" style="transition: transform 1s, opacity 1s;" />`);
+        }
+        const svgHTML = `
+        <svg viewBox="0 0 100 100" width="120" height="120">
+          <line x1="50" y1="50" x2="50" y2="100" stroke="#228B22" stroke-width="4" />
+          ${petals.join('')}
+          <circle cx="50" cy="50" r="15" fill="#8B4513" />
+        </svg>
+        `;
+        const flowerDiv = document.createElement('div');
+        flowerDiv.innerHTML = svgHTML;
+        wrapper.appendChild(flowerDiv);
+        
+        // Frase a adivinar
+        const phraseDiv = document.createElement('div');
+        phraseDiv.style.display = 'flex';
+        phraseDiv.style.flexWrap = 'wrap';
+        phraseDiv.style.justifyContent = 'center';
+        phraseDiv.style.gap = '10px';
+        phraseDiv.style.fontSize = '1.5rem';
+        phraseDiv.style.fontWeight = 'bold';
+        phraseDiv.style.letterSpacing = '5px';
+        wrapper.appendChild(phraseDiv);
+        
+        function renderPhrase() {
+            phraseDiv.innerHTML = '';
+            let won = true;
+            for (let char of phrase) {
+                if (char === ' ') {
+                    phraseDiv.innerHTML += '<span style="width: 20px;"></span>';
+                } else {
+                    const span = document.createElement('span');
+                    span.style.borderBottom = '2px solid white';
+                    span.style.minWidth = '20px';
+                    span.style.textAlign = 'center';
+                    span.style.display = 'inline-block';
+                    if (guessed.has(char)) {
+                        span.textContent = char;
+                    } else {
+                        span.textContent = '_';
+                        won = false;
+                    }
+                    phraseDiv.appendChild(span);
+                }
+            }
+            if (won) {
+                if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de descubrir la frase secreta del girasol.");
+                keyboardDiv.style.display = 'none';
+                setTimeout(() => celebrate(wrapper, '¡Descubriste la frase secreta!'), 500);
+            }
+        }
+        
+        // Teclado virtual
+        const keyboardDiv = document.createElement('div');
+        keyboardDiv.style.display = 'flex';
+        keyboardDiv.style.flexWrap = 'wrap';
+        keyboardDiv.style.justifyContent = 'center';
+        keyboardDiv.style.gap = '5px';
+        keyboardDiv.style.maxWidth = '300px';
+        
+        const letters = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
+        for (let char of letters) {
+            const btn = document.createElement('button');
+            btn.textContent = char;
+            btn.className = 'btn';
+            btn.style.padding = '10px';
+            btn.style.minWidth = '35px';
+            btn.onclick = () => {
+                if (guessed.has(char)) return;
+                guessed.add(char);
+                btn.disabled = true;
+                btn.style.opacity = '0.5';
+                
+                if (!phrase.includes(char)) {
+                    // Error: quitar un pétalo
+                    if (mistakes < maxMistakes) {
+                        const petal = flowerDiv.querySelector(`#petal-${mistakes}`);
+                        if (petal) {
+                            petal.style.transform = `rotate(${mistakes * 30}deg) translateY(20px) scale(0)`;
+                            petal.style.opacity = '0';
+                        }
+                        mistakes++;
+                    }
+                    if (mistakes >= maxMistakes) {
+                        keyboardDiv.style.display = 'none';
+                        phraseDiv.innerHTML = `<span style="color:var(--danger)">¡Oh no, el girasol se quedó sin pétalos!</span>`;
+                        setTimeout(() => {
+                            container.innerHTML = '';
+                            startHangman(container, config);
+                        }, 3000);
+                    }
+                }
+                renderPhrase();
+            };
+            keyboardDiv.appendChild(btn);
+        }
+        
+        wrapper.appendChild(keyboardDiv);
+        container.appendChild(wrapper);
+        
+        renderPhrase();
+        
+        return { destroy: () => { container.innerHTML = ''; } };
+    }
 
     return {
         startMemory,
         startWordSearch,
         startTrivia,
         startPuzzle,
-        startRiddle
+        startRiddle,
+        startHangman
     };
 })();

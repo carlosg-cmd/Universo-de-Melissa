@@ -882,36 +882,81 @@
         }
         gameArea.innerHTML = '';
 
-        if (today && today.gameType && typeof UniverseGames !== 'undefined') {
-            const gameType = today.gameType;
-            const gameConfig = today.gameConfig || {};
-            
-            if (window.notifyCarlos) window.notifyCarlos(`Melisa acaba de abrir el juego del Día ${dayNumber}.`);
-
-            switch (gameType) {
+        function launchGame(gType, gConfig, container) {
+            switch (gType) {
                 case 'memory':
                     titleEl.textContent = '🧠 Juego de Memoria';
-                    currentGameInstance = UniverseGames.startMemory(gameArea, gameConfig);
-                    break;
+                    return UniverseGames.startMemory(container, gConfig);
                 case 'wordsearch':
                     titleEl.textContent = '🔤 Sopa de Letras';
-                    currentGameInstance = UniverseGames.startWordSearch(gameArea, gameConfig);
-                    break;
+                    return UniverseGames.startWordSearch(container, gConfig);
                 case 'trivia':
                     titleEl.textContent = '❓ Trivia del Amor';
-                    currentGameInstance = UniverseGames.startTrivia(gameArea, gameConfig);
-                    break;
+                    return UniverseGames.startTrivia(container, gConfig);
                 case 'puzzle':
                     titleEl.textContent = '🧩 Rompecabezas';
-                    currentGameInstance = UniverseGames.startPuzzle(gameArea, gameConfig);
-                    break;
+                    return UniverseGames.startPuzzle(container, gConfig);
                 case 'riddle':
                     titleEl.textContent = '💭 Adivinanza';
-                    currentGameInstance = UniverseGames.startRiddle(gameArea, gameConfig);
-                    break;
+                    return UniverseGames.startRiddle(container, gConfig);
+                case 'hangman':
+                    titleEl.textContent = '🌸 Descubre la Frase';
+                    return UniverseGames.startHangman(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
-                    gameArea.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Hoy es un día especial sin juego! Disfruta tu carta 💌</p>';
+                    container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
+                    return null;
+            }
+        }
+
+        if (today && typeof UniverseGames !== 'undefined') {
+            if (today.games && Array.isArray(today.games)) {
+                titleEl.textContent = '🎡 Festival de Juegos';
+                if (window.notifyCarlos) window.notifyCarlos(`Melisa abrió el Festival de Juegos del Día ${dayNumber}.`);
+                
+                const menuDiv = document.createElement('div');
+                menuDiv.className = 'game-menu';
+                menuDiv.style.display = 'flex';
+                menuDiv.style.flexDirection = 'column';
+                menuDiv.style.gap = '15px';
+                menuDiv.style.padding = '10px';
+                
+                const emojis = ['🧠', '🔤', '❓', '🧩', '🌸', '🎁'];
+                
+                today.games.forEach((game, index) => {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    const emoji = emojis[index % emojis.length];
+                    btn.textContent = `${emoji} Juego ${index + 1}: ${game.name || 'Sorpresa'}`;
+                    btn.onclick = () => {
+                        gameArea.innerHTML = '';
+                        
+                        const backBtn = document.createElement('button');
+                        backBtn.className = 'btn';
+                        backBtn.style.marginBottom = '20px';
+                        backBtn.style.backgroundColor = 'rgba(255,255,255,0.1)';
+                        backBtn.style.border = '1px solid var(--text-secondary)';
+                        backBtn.innerHTML = '⬅️ Volver al Menú de Juegos';
+                        backBtn.onclick = () => openGameModal(); // re-render
+                        
+                        gameArea.appendChild(backBtn);
+                        
+                        const gameContainer = document.createElement('div');
+                        gameArea.appendChild(gameContainer);
+                        
+                        if (window.notifyCarlos) window.notifyCarlos(`Melisa empezó el juego: ${game.name}.`);
+                        currentGameInstance = launchGame(game.type, game.config, gameContainer);
+                    };
+                    menuDiv.appendChild(btn);
+                });
+                
+                gameArea.appendChild(menuDiv);
+            } else if (today.gameType) {
+                if (window.notifyCarlos) window.notifyCarlos(`Melisa acaba de abrir el juego del Día ${dayNumber}.`);
+                currentGameInstance = launchGame(today.gameType, today.gameConfig || {}, gameArea);
+            } else {
+                titleEl.textContent = '🎮 Juego del Día';
+                gameArea.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Hoy es un día especial sin juego! Disfruta tu carta 💌</p>';
             }
         } else {
             titleEl.textContent = '🎮 Juego del Día';

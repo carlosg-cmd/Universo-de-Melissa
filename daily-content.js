@@ -176,17 +176,62 @@ const DailyContent = (function() {
         },
         {
             day: 5,
-            title: "Día 5 - Un acertijo",
-            emoji: "❓",
-            letter: "Hola mi amor,\n\nHoy quise ponerme un poco misterioso y preparé una adivinanza para ti. Eres lo más bonito que me ha pasado y me encanta verte sonreír, incluso si es a través de una pantalla.\n\nYa falta menos para volver a vernos.\n\nTe amo con todo mi ser.",
-            funPhrase: "Las cicatrices son tatuajes de valentía ⚡",
-            recoveryQuote: "Cada día estás más fuerte.",
-            gameType: 'riddle',
-            gameConfig: {
-                riddle: 'Soy invisible pero me sientes, no tengo forma pero lleno tu pecho. ¿Qué soy?',
-                answer: 'amor',
-                hint: 'Es lo que siento por ti.'
-            }
+            title: "Día 5 - Festival de Nuestro Primer Beso",
+            emoji: "🎡",
+            letter: "Hola mi amor,\n\nHoy es 5, una fecha súper especial porque me recuerda a nuestro primer beso. Un 5 de junio que cambió mi vida para siempre.\n\nPor eso, hoy no tienes un solo juego... ¡tienes un Festival de Juegos entero dedicado a nosotros!\n\nTe amo con todo mi ser.",
+            funPhrase: "¡Un día mágico para recordar! ✨",
+            recoveryQuote: "Cada día es una nueva oportunidad para sonreír.",
+            games: [
+                {
+                    name: 'Memoria de Aniversario',
+                    type: 'memory',
+                    config: {
+                        pairs: 8,
+                        emojiFallback: ['💋', '💕', '🥰', '🌻', '🎬', '🍦', '🎡', '💌']
+                    }
+                },
+                {
+                    name: 'Sopa de Letras Especial',
+                    type: 'wordsearch',
+                    config: {
+                        words: ['OFICINA', 'JUNIO', 'JUEVES', 'HELADO', 'BESO', 'CRISPETAS', 'DIEZDIECINUEVE', 'MARGARITAS', 'AMOR'],
+                        gridSize: 12
+                    }
+                },
+                {
+                    name: 'Trivia del Primer Beso',
+                    type: 'trivia',
+                    config: [
+                        { q: '¿En qué mes empezamos a hablar?', options: ['Enero', 'Febrero', 'Marzo', 'Abril'], correct: 1, explanation: 'En febrero comenzó todo.' },
+                        { q: '¿Dónde fue nuestro primer beso?', options: ['Cine', 'Parque', 'Tu oficina', 'Mi casa'], correct: 2, explanation: 'Fue en tu oficina.' },
+                        { q: '¿En qué mes fue nuestro primer beso?', options: ['Mayo', 'Junio', 'Julio', 'Agosto'], correct: 1, explanation: 'En junio.' },
+                        { q: '¿Dónde fue nuestro segundo beso?', options: ['Cine', 'Tu oficina', 'Restaurante', 'Carro'], correct: 1, explanation: 'También fue en tu oficina.' },
+                        { q: '¿Qué día de la semana fue nuestro primer beso?', options: ['Lunes', 'Miércoles', 'Jueves', 'Viernes'], correct: 2, explanation: 'Fue un hermoso jueves.' },
+                        { q: '¿Con qué fue nuestro primer beso?', options: ['Crispetas', 'Helado', 'Jugo', 'Chocolate'], correct: 1, explanation: 'Con un rico helado.' }
+                    ]
+                },
+                {
+                    name: 'Rompecabezas del Recuerdo',
+                    type: 'puzzle',
+                    config: {
+                        images: [
+                            'fotos/foto (6).jpeg', 'fotos/foto (7).jpeg', 'fotos/foto (37).jpeg',
+                            'fotos/foto (44).jpeg', 'fotos/foto (47).jpeg', 'fotos/foto (51).jpeg',
+                            'fotos/foto (52).jpeg', 'fotos/foto (53).jpeg', 'fotos/foto (71).jpeg',
+                            'fotos/foto (72).jpeg', 'fotos/foto (146).jpeg', 'fotos/foto_139.jpeg'
+                        ],
+                        gridSize: 3,
+                        fallbackEmoji: '💕'
+                    }
+                },
+                {
+                    name: 'Descubre la Frase',
+                    type: 'hangman',
+                    config: {
+                        phrase: 'NUESTRO PRIMER BESO CINCO DE JUNIO'
+                    }
+                }
+            ]
         },
         // Days 6-29 are placeholders for Carlos to customize
         ...Array.from({length: 24}, (_, i) => ({
