@@ -673,7 +673,12 @@ const UniverseGames = (function() {
             document.head.appendChild(style);
         }
 
-        const phrase = (config.phrase || 'TE AMO').toUpperCase();
+        let phrase = 'TE AMO';
+        if (config.phrases && config.phrases.length > 0) {
+            phrase = config.phrases[Math.floor(Math.random() * config.phrases.length)].toUpperCase();
+        } else if (config.phrase) {
+            phrase = config.phrase.toUpperCase();
+        }
         let guessed = new Set();
         let mistakes = 0;
         const maxMistakes = 12;
@@ -750,7 +755,20 @@ const UniverseGames = (function() {
             if (won) {
                 if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de descubrir la frase secreta del girasol.");
                 keyboardDiv.style.display = 'none';
-                setTimeout(() => celebrate(wrapper, '¡Descubriste la frase secreta!'), 500);
+                setTimeout(() => {
+                    celebrate(wrapper, '¡Descubriste la frase secreta!');
+                    if (config.phrases && config.phrases.length > 1) {
+                        const retryBtn = document.createElement('button');
+                        retryBtn.className = 'btn';
+                        retryBtn.style.marginTop = '15px';
+                        retryBtn.textContent = 'Jugar con otra frase 🔄';
+                        retryBtn.onclick = () => {
+                            container.innerHTML = '';
+                            startHangman(container, config);
+                        };
+                        wrapper.appendChild(retryBtn);
+                    }
+                }, 500);
             }
         }
         

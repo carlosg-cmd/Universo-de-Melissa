@@ -41,7 +41,7 @@
         { text: "Maratón de Bridgerton 📺" },
         { text: "Viendo Lupin 🎬" },
         { text: "Nota en la servilleta 📝" },
-        { text: "Paseo a Santa Elmo 🏞️" },
+        { text: "Paseo a Santelmo 🏞️" },
         { text: "Paseo a Medellín 🏙️" },
         { text: "Viaje a Montería 🌄" },
         { text: "Vamos a La Perra 🐾" },

@@ -104,7 +104,7 @@ const DailyContent = (function() {
                     { q: '¿Qué serie nos hemos visto?', options: ['The Crown', 'Bridgerton', 'Elite', 'Stranger Things'], correct: 1, explanation: 'Bridgerton.' },
                     { q: '¿Qué serie nos hemos visto?', options: ['Lupin', 'La Casa de Papel', 'Dark', 'Peaky Blinders'], correct: 0, explanation: 'Lupin.' },
                     { q: '¿En dónde estaba escrita la nota que te dejé en tu oficina?', options: ['En un post-it', 'En una hoja de cuaderno', 'En tu mano', 'En una servilleta'], correct: 3, explanation: 'Fue en una servilleta.' },
-                    { q: '¿A cuál de estos lugares hemos ido?', options: ['Santa Elmo', 'París', 'Roma', 'Miami'], correct: 0, explanation: '¡A Santa Elmo!' },
+                    { q: '¿A cuál de estos lugares hemos ido?', options: ['Santelmo', 'París', 'Roma', 'Miami'], correct: 0, explanation: '¡A Santelmo!' },
                     { q: '¿A cuál de estos lugares hemos ido?', options: ['Tarazá', 'Bogotá', 'Cartagena', 'San Andrés'], correct: 0, explanation: '¡A Tarazá!' },
                     { q: '¿A cuál de estos lugares hemos ido?', options: ['Cali', 'Medellín', 'Barranquilla', 'Santa Marta'], correct: 1, explanation: '¡A Medellín!' },
                     { q: '¿A cuál de estos lugares hemos ido?', options: ['Bucaramanga', 'Cúcuta', 'Montería', 'Pereira'], correct: 2, explanation: '¡A Montería!' },
@@ -121,7 +121,7 @@ const DailyContent = (function() {
                     { q: 'Eres una niña consentida y mimosa.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Y me encanta que lo seas.' },
                     { q: 'Yo soy tu macho.', options: ['Verdadero', 'Falso'], correct: 0, explanation: '¡Claro que sí!' },
                     { q: 'A veces cuando nos vamos a ver eres muy puntual.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Sueles llegar tarde a veces jeje.' },
-                    { q: 'La maniguita que me diste me la diste en el éxito.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Falso, no fue ahí.' },
+                    { q: 'La manillita que me diste me la diste en el éxito.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Falso, no fue ahí.' },
                     { q: 'Alquilé una sala de cine solo para los dos.', options: ['Falso', 'Verdadero'], correct: 1, explanation: '¡Lo hice por ti!' },
                     { q: 'Por eso las operan.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nuestra frase.' },
                     { q: 'Morat es de nuestros cantantes favoritos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nos encantan.' },
@@ -210,7 +210,7 @@ const DailyContent = (function() {
                             { q: '¿Qué serie nos hemos visto?', options: ['The Crown', 'Bridgerton', 'Elite', 'Stranger Things'], correct: 1, explanation: 'Bridgerton.' },
                             { q: '¿Qué serie nos hemos visto?', options: ['Lupin', 'La Casa de Papel', 'Dark', 'Peaky Blinders'], correct: 0, explanation: 'Lupin.' },
                             { q: '¿En dónde estaba escrita la nota que te dejé en tu oficina?', options: ['En un post-it', 'En una hoja de cuaderno', 'En tu mano', 'En una servilleta'], correct: 3, explanation: 'Fue en una servilleta.' },
-                            { q: '¿A cuál de estos lugares hemos ido?', options: ['Santa Elmo', 'París', 'Roma', 'Miami'], correct: 0, explanation: '¡A Santa Elmo!' },
+                            { q: '¿A cuál de estos lugares hemos ido?', options: ['Santelmo', 'París', 'Roma', 'Miami'], correct: 0, explanation: '¡A Santelmo!' },
                             { q: '¿A cuál de estos lugares hemos ido?', options: ['Tarazá', 'Bogotá', 'Cartagena', 'San Andrés'], correct: 0, explanation: '¡A Tarazá!' },
                             { q: '¿A cuál de estos lugares hemos ido?', options: ['Cali', 'Medellín', 'Barranquilla', 'Santa Marta'], correct: 1, explanation: '¡A Medellín!' },
                             { q: '¿A cuál de estos lugares hemos ido?', options: ['Bucaramanga', 'Cúcuta', 'Montería', 'Pereira'], correct: 2, explanation: '¡A Montería!' },
@@ -227,7 +227,7 @@ const DailyContent = (function() {
                             { q: 'Eres una niña consentida y mimosa.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Y me encanta que lo seas.' },
                             { q: 'Yo soy tu macho.', options: ['Verdadero', 'Falso'], correct: 0, explanation: '¡Claro que sí!' },
                             { q: 'A veces cuando nos vamos a ver eres muy puntual.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Sueles llegar tarde a veces jeje.' },
-                            { q: 'La maniguita que me diste me la diste en el éxito.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Falso, no fue ahí.' },
+                            { q: 'La manillita que me diste me la diste en el éxito.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Falso, no fue ahí.' },
                             { q: 'Alquilé una sala de cine solo para los dos.', options: ['Falso', 'Verdadero'], correct: 1, explanation: '¡Lo hice por ti!' },
                             { q: 'Por eso las operan.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nuestra frase.' },
                             { q: 'Morat es de nuestros cantantes favoritos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nos encantan.' },
@@ -268,7 +268,22 @@ const DailyContent = (function() {
                     name: 'Descubre la Frase',
                     type: 'hangman',
                     config: {
-                        phrase: 'NUESTRO PRIMER BESO CINCO DE JUNIO'
+                        phrases: [
+                            'NUESTRO PRIMER BESO CINCO DE JUNIO',
+                            'VIAJANDO EN MOTO A TARAZA UN FIN DE SEMANA JUNTOS',
+                            'NUESTRA PRIMERA NAVIDAD JUNTOS',
+                            'MARATON DE LA SERIE LUPIN',
+                            'VIENDO ONE PIECE PERO DICES QUE SON MUCHOS CAPITULOS',
+                            'VISTE YO TE DIJE POR ESO LAS OPERAN',
+                            'CARLOS Y MELISSA VEINTE VEINTICINCO',
+                            'VIAJANDO A MEDELLIN POR LA VIA VIEJA',
+                            'VIAJANDO A MEDELLIN POR LA VIA NUEVA',
+                            'VIAJANDO A PLAYA HASTA QUE TE CONQUISTE',
+                            'VIENDO LA SAGA DE QUE PASO AYER',
+                            'COCINANDO JUNTOS O BUENO YO COCINANDOTE A TI',
+                            'ERES MUY BUENA ENFERMERA ME RECUPERE RAPIDO',
+                            'PROMETEME TU Y YO POR UN LARGO RATO'
+                        ]
                     }
                 }
             ]
