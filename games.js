@@ -841,14 +841,14 @@ const UniverseGames = (function() {
         const WIN_TARGET = 50;
         
         const slices = [
-            { text: 'Sigue\\nintentando', color: '#ff4081', isWin: false },
-            { text: 'Uy\\ncasi', color: '#b388ff', isWin: false },
-            { text: 'Por eso\\nlas operan', color: '#00e5ff', isWin: false },
-            { text: 'Beso de\\nconsuelo', color: '#ffd54f', isWin: false },
-            { text: 'Intenta\\nde nuevo', color: '#ff4081', isWin: false },
-            { text: 'PREMIO\\nSORPRESA', color: '#ffd700', isWin: true }, // The winning slice
-            { text: 'Sigue\\nparticipando', color: '#00e5ff', isWin: false },
-            { text: 'No creo que\\nte rindas', color: '#b388ff', isWin: false }
+            { text: 'Sigue\\nintentando', color: '#fdf4da', textColor: '#6b1c11', isWin: false },
+            { text: 'Uy\\ncasi', color: '#fff9eb', textColor: '#6b1c11', isWin: false },
+            { text: 'Por eso\\nlas operan', color: '#fdf4da', textColor: '#6b1c11', isWin: false },
+            { text: 'Beso de\\nconsuelo', color: '#fff9eb', textColor: '#6b1c11', isWin: false },
+            { text: 'Intenta\\nde nuevo', color: '#fdf4da', textColor: '#6b1c11', isWin: false },
+            { text: 'PREMIO\\nSORPRESA', color: '#ff5722', textColor: '#ffffff', isWin: true }, // The winning slice
+            { text: 'Sigue\\nparticipando', color: '#fdf4da', textColor: '#6b1c11', isWin: false },
+            { text: 'No creo que\\nte rindas', color: '#fff9eb', textColor: '#6b1c11', isWin: false }
         ];
         
         const numSlices = slices.length;
@@ -862,16 +862,30 @@ const UniverseGames = (function() {
         wrapper.style.width = '100%';
         wrapper.style.position = 'relative';
         
-        // Pointer
+        // Pointer (Temu style gold pin)
         const pointer = document.createElement('div');
-        pointer.innerHTML = '▼';
-        pointer.style.fontSize = '40px';
-        pointer.style.color = 'white';
-        pointer.style.textShadow = '0 2px 10px rgba(0,0,0,0.5)';
         pointer.style.position = 'absolute';
-        pointer.style.top = '-10px';
-        pointer.style.zIndex = '10';
-        
+        pointer.style.top = '-20px';
+        pointer.style.zIndex = '20';
+        pointer.style.width = '30px';
+        pointer.style.height = '45px';
+        pointer.style.background = 'radial-gradient(ellipse at center, #ffd700 0%, #b8860b 100%)';
+        pointer.style.clipPath = 'polygon(50% 100%, 0 40%, 0 0, 100% 0, 100% 40%)';
+        pointer.style.borderRadius = '5px 5px 50% 50%';
+        pointer.style.boxShadow = '0 4px 10px rgba(0,0,0,0.5)';
+        // Center inner dot for the pointer
+        const pointerInner = document.createElement('div');
+        pointerInner.style.width = '12px';
+        pointerInner.style.height = '12px';
+        pointerInner.style.background = '#fff';
+        pointerInner.style.borderRadius = '50%';
+        pointerInner.style.position = 'absolute';
+        pointerInner.style.top = '8px';
+        pointerInner.style.left = '50%';
+        pointerInner.style.transform = 'translateX(-50%)';
+        pointerInner.style.boxShadow = 'inset 0 2px 4px rgba(0,0,0,0.3)';
+        pointer.appendChild(pointerInner);
+
         // Wheel Container
         const wheelContainer = document.createElement('div');
         wheelContainer.style.width = '280px';
@@ -879,8 +893,7 @@ const UniverseGames = (function() {
         wheelContainer.style.position = 'relative';
         wheelContainer.style.borderRadius = '50%';
         wheelContainer.style.overflow = 'hidden';
-        wheelContainer.style.boxShadow = '0 0 20px rgba(0, 229, 255, 0.5), inset 0 0 10px rgba(0,0,0,0.5)';
-        wheelContainer.style.border = '4px solid var(--primary)';
+        wheelContainer.style.boxShadow = '0 10px 30px rgba(0,0,0,0.5), 0 0 0 8px #2c1a17, 0 0 0 10px #d4af37';
         
         // The Wheel (SVG)
         const wheel = document.createElement('div');
@@ -889,7 +902,14 @@ const UniverseGames = (function() {
         wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
         wheel.style.transform = 'rotate(0deg)';
         
-        let svgHTML = `<svg viewBox="0 0 200 200" width="100%" height="100%">`;
+        let svgHTML = `<svg viewBox="0 0 200 200" width="100%" height="100%">
+            <defs>
+                <radialGradient id="gradOrange" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" style="stop-color:#ff8a50;stop-opacity:1" />
+                    <stop offset="100%" style="stop-color:#ff5722;stop-opacity:1" />
+                </radialGradient>
+            </defs>`;
+        
         const center = 100;
         const radius = 100;
         
@@ -912,7 +932,8 @@ const UniverseGames = (function() {
                 `Z`
             ].join(' ');
             
-            svgHTML += `<path d="${d}" fill="${slice.color}" stroke="rgba(0,0,0,0.2)" stroke-width="1"></path>`;
+            const fillColor = slice.isWin ? 'url(#gradOrange)' : slice.color;
+            svgHTML += `<path d="${d}" fill="${fillColor}" stroke="#d4af37" stroke-width="1.5"></path>`;
             
             // Text
             const textAngle = startAngle + (sliceAngle / 2);
@@ -928,16 +949,23 @@ const UniverseGames = (function() {
             
             svgHTML += `
                 <g transform="translate(${textX}, ${textY}) rotate(${textAngle})">
-                    <text x="0" y="0" font-family="Outfit, sans-serif" font-size="${slice.isWin ? '10' : '11'}" font-weight="bold" fill="${slice.isWin ? '#000' : '#fff'}" text-anchor="middle" dominant-baseline="middle">
+                    <text x="0" y="0" font-family="Outfit, sans-serif" font-size="${slice.isWin ? '11' : '10'}" font-weight="700" fill="${slice.textColor}" text-anchor="middle" dominant-baseline="middle">
                         ${tspanHTML}
                     </text>
                 </g>
             `;
         });
         
+        // Outer pins
+        slices.forEach((slice, i) => {
+            const angle = i * sliceAngle;
+            const pinX = center + 92 * Math.cos(Math.PI * (angle - 90) / 180);
+            const pinY = center + 92 * Math.sin(Math.PI * (angle - 90) / 180);
+            svgHTML += `<circle cx="${pinX}" cy="${pinY}" r="4" fill="#ffdf73" stroke="#b8860b" stroke-width="0.5" filter="drop-shadow(0 1px 2px rgba(0,0,0,0.4))"></circle>`;
+        });
+
         svgHTML += `
-            <circle cx="100" cy="100" r="15" fill="#fff" filter="drop-shadow(0 0 5px rgba(0,0,0,0.5))"></circle>
-            <circle cx="100" cy="100" r="10" fill="var(--bg-dark)"></circle>
+            <circle cx="100" cy="100" r="16" fill="#2c2c2c" stroke="#d4af37" stroke-width="4" filter="drop-shadow(0 2px 5px rgba(0,0,0,0.5))"></circle>
         </svg>`;
         
         wheel.innerHTML = svgHTML;
