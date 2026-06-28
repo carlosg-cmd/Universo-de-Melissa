@@ -653,6 +653,26 @@ const UniverseGames = (function() {
     function startHangman(container, config) {
         container.innerHTML = '';
         
+        // Add styles for the sunflower animations
+        if (!document.getElementById('hangman-styles')) {
+            const style = document.createElement('style');
+            style.id = 'hangman-styles';
+            style.innerHTML = `
+                @keyframes sway {
+                    0%, 100% { transform: rotate(-5deg); }
+                    50% { transform: rotate(5deg); }
+                }
+                .sunflower-body {
+                    transform-origin: 50px 100px;
+                    animation: sway 4s ease-in-out infinite;
+                }
+                .falling-petal {
+                    transition: transform 1.5s cubic-bezier(0.55, 0.085, 0.68, 0.53), opacity 1.5s;
+                }
+            `;
+            document.head.appendChild(style);
+        }
+
         const phrase = (config.phrase || 'TE AMO').toUpperCase();
         let guessed = new Set();
         let mistakes = 0;
@@ -662,18 +682,33 @@ const UniverseGames = (function() {
         wrapper.style.display = 'flex';
         wrapper.style.flexDirection = 'column';
         wrapper.style.alignItems = 'center';
-        wrapper.style.gap = '20px';
+        wrapper.style.gap = '10px';
         
         // Girasol animado (SVG)
         const petals = [];
         for (let i = 0; i < maxMistakes; i++) {
-            petals.push(`<ellipse cx="50" cy="20" rx="6" ry="18" fill="#FFD700" transform="rotate(${i * 30} 50 50)" id="petal-${i}" style="transition: transform 1s, opacity 1s;" />`);
+            // Group handles the initial rotation so the ellipse's local axes can be transformed for falling
+            petals.push(`
+                <g transform="rotate(${i * 30} 50 50)">
+                    <ellipse cx="50" cy="20" rx="6" ry="18" fill="#FFD700" id="petal-${i}" class="falling-petal" style="transform-origin: 50px 20px;" />
+                </g>
+            `);
         }
         const svgHTML = `
-        <svg viewBox="0 0 100 100" width="120" height="120">
-          <line x1="50" y1="50" x2="50" y2="100" stroke="#228B22" stroke-width="4" />
-          ${petals.join('')}
-          <circle cx="50" cy="50" r="15" fill="#8B4513" />
+        <svg viewBox="0 0 100 120" width="120" height="140" style="overflow: visible;">
+          <g class="sunflower-body">
+              <!-- Tallo y hojas -->
+              <path d="M 50 50 Q 40 80 50 120" stroke="#228B22" stroke-width="4" fill="none" />
+              <path d="M 45 90 Q 20 80 30 60 Q 40 70 45 90" fill="#228B22" />
+              <path d="M 53 100 Q 80 110 70 80 Q 60 90 53 100" fill="#228B22" />
+              
+              <!-- Pétalos -->
+              ${petals.join('')}
+              
+              <!-- Centro del girasol -->
+              <circle cx="50" cy="50" r="16" fill="#654321" />
+              <circle cx="50" cy="50" r="12" fill="#3E2723" stroke="#8D6E63" stroke-width="1.5" stroke-dasharray="2,2" />
+          </g>
         </svg>
         `;
         const flowerDiv = document.createElement('div');
@@ -685,10 +720,10 @@ const UniverseGames = (function() {
         phraseDiv.style.display = 'flex';
         phraseDiv.style.flexWrap = 'wrap';
         phraseDiv.style.justifyContent = 'center';
-        phraseDiv.style.gap = '10px';
-        phraseDiv.style.fontSize = '1.5rem';
+        phraseDiv.style.gap = '5px';
+        phraseDiv.style.fontSize = '1.1rem';
         phraseDiv.style.fontWeight = 'bold';
-        phraseDiv.style.letterSpacing = '5px';
+        phraseDiv.style.letterSpacing = '3px';
         wrapper.appendChild(phraseDiv);
         
         function renderPhrase() {
@@ -696,11 +731,11 @@ const UniverseGames = (function() {
             let won = true;
             for (let char of phrase) {
                 if (char === ' ') {
-                    phraseDiv.innerHTML += '<span style="width: 20px;"></span>';
+                    phraseDiv.innerHTML += '<span style="width: 15px;"></span>';
                 } else {
                     const span = document.createElement('span');
                     span.style.borderBottom = '2px solid white';
-                    span.style.minWidth = '20px';
+                    span.style.minWidth = '15px';
                     span.style.textAlign = 'center';
                     span.style.display = 'inline-block';
                     if (guessed.has(char)) {
@@ -724,28 +759,34 @@ const UniverseGames = (function() {
         keyboardDiv.style.display = 'flex';
         keyboardDiv.style.flexWrap = 'wrap';
         keyboardDiv.style.justifyContent = 'center';
-        keyboardDiv.style.gap = '5px';
-        keyboardDiv.style.maxWidth = '300px';
+        keyboardDiv.style.gap = '4px';
+        keyboardDiv.style.maxWidth = '340px';
         
         const letters = 'ABCDEFGHIJKLMNÑOPQRSTUVWXYZ';
         for (let char of letters) {
             const btn = document.createElement('button');
             btn.textContent = char;
             btn.className = 'btn';
-            btn.style.padding = '10px';
-            btn.style.minWidth = '35px';
+            btn.style.padding = '8px 5px';
+            btn.style.minWidth = '30px';
+            btn.style.fontSize = '0.9rem';
             btn.onclick = () => {
                 if (guessed.has(char)) return;
                 guessed.add(char);
                 btn.disabled = true;
-                btn.style.opacity = '0.5';
+                btn.style.opacity = '0.4';
                 
                 if (!phrase.includes(char)) {
-                    // Error: quitar un pétalo
+                    // Error: quitar un pétalo haciendo que caiga
                     if (mistakes < maxMistakes) {
                         const petal = flowerDiv.querySelector(`#petal-${mistakes}`);
                         if (petal) {
-                            petal.style.transform = `rotate(${mistakes * 30}deg) translateY(20px) scale(0)`;
+                            // Translate inward to simulate falling relative to its rotated position, 
+                            // or translate down in unrotated coords.
+                            // The petal is rotated so the top points away from center. 
+                            // Translating Y by 150 pushes it "up" and "away" in its local coordinates.
+                            // It looks like it flies off and fades.
+                            petal.style.transform = `translateY(100px) rotate(45deg) scale(0.5)`;
                             petal.style.opacity = '0';
                         }
                         mistakes++;
