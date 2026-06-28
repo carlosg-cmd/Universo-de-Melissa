@@ -889,7 +889,7 @@ const UniverseGames = (function() {
         wheel.style.transition = 'transform 4s cubic-bezier(0.17, 0.67, 0.12, 0.99)';
         wheel.style.transform = 'rotate(0deg)';
         
-        let svgHTML = \`<svg viewBox="0 0 200 200" width="100%" height="100%">\`;
+        let svgHTML = `<svg viewBox="0 0 200 200" width="100%" height="100%">`;
         const center = 100;
         const radius = 100;
         
@@ -906,13 +906,13 @@ const UniverseGames = (function() {
             const largeArcFlag = sliceAngle > 180 ? 1 : 0;
             
             const d = [
-                \`M \${center} \${center}\`,
-                \`L \${startX} \${startY}\`,
-                \`A \${radius} \${radius} 0 \${largeArcFlag} 1 \${endX} \${endY}\`,
-                \`Z\`
+                `M ${center} ${center}`,
+                `L ${startX} ${startY}`,
+                `A ${radius} ${radius} 0 ${largeArcFlag} 1 ${endX} ${endY}`,
+                `Z`
             ].join(' ');
             
-            svgHTML += \`<path d="\${d}" fill="\${slice.color}" stroke="rgba(0,0,0,0.2)" stroke-width="1"></path>\`;
+            svgHTML += `<path d="${d}" fill="${slice.color}" stroke="rgba(0,0,0,0.2)" stroke-width="1"></path>`;
             
             // Text
             const textAngle = startAngle + (sliceAngle / 2);
@@ -923,22 +923,22 @@ const UniverseGames = (function() {
             let tspanHTML = '';
             const words = slice.text.split('\\n');
             words.forEach((word, idx) => {
-                tspanHTML += \`<tspan x="0" dy="\${idx === 0 ? '-0.5em' : '1.2em'}">\${word}</tspan>\`;
+                tspanHTML += `<tspan x="0" dy="${idx === 0 ? '-0.5em' : '1.2em'}">${word}</tspan>`;
             });
             
-            svgHTML += \`
-                <g transform="translate(\${textX}, \${textY}) rotate(\${textAngle})">
-                    <text x="0" y="0" font-family="Outfit, sans-serif" font-size="\${slice.isWin ? '10' : '11'}" font-weight="bold" fill="\${slice.isWin ? '#000' : '#fff'}" text-anchor="middle" dominant-baseline="middle">
-                        \${tspanHTML}
+            svgHTML += `
+                <g transform="translate(${textX}, ${textY}) rotate(${textAngle})">
+                    <text x="0" y="0" font-family="Outfit, sans-serif" font-size="${slice.isWin ? '10' : '11'}" font-weight="bold" fill="${slice.isWin ? '#000' : '#fff'}" text-anchor="middle" dominant-baseline="middle">
+                        ${tspanHTML}
                     </text>
                 </g>
-            \`;
+            `;
         });
         
-        svgHTML += \`
+        svgHTML += `
             <circle cx="100" cy="100" r="15" fill="#fff" filter="drop-shadow(0 0 5px rgba(0,0,0,0.5))"></circle>
             <circle cx="100" cy="100" r="10" fill="var(--bg-dark)"></circle>
-        </svg>\`;
+        </svg>`;
         
         wheel.innerHTML = svgHTML;
         wheelContainer.appendChild(wheel);
@@ -965,7 +965,7 @@ const UniverseGames = (function() {
             localStorage.setItem('melisa_roulette_spins', spins);
             
             if (window.notifyCarlos) {
-                window.notifyCarlos(\`🎰 Melisa giró la ruleta (Intento \${spins}/\${WIN_TARGET})\`);
+                window.notifyCarlos(`🎰 Melisa giró la ruleta (Intento ${spins}/${WIN_TARGET})`);
             }
             
             let targetIndex;
@@ -987,7 +987,7 @@ const UniverseGames = (function() {
             const randomJitter = (Math.random() - 0.5) * (sliceAngle * 0.6);
             currentRotation += randomJitter;
             
-            wheel.style.transform = \`rotate(\${currentRotation}deg)\`;
+            wheel.style.transform = `rotate(${currentRotation}deg)`;
             
             setTimeout(() => {
                 isSpinning = false;
@@ -998,7 +998,7 @@ const UniverseGames = (function() {
                 
                 if (landedSlice.isWin) {
                     celebrate(wrapper, '¡GANASTE EL PREMIO SORPRESA! 🎉');
-                    if (window.notifyCarlos) window.notifyCarlos(\`🏆 ¡MELISA GANÓ EL PREMIO EN LA RULETA (Intento \${spins})!\`);
+                    if (window.notifyCarlos) window.notifyCarlos(`🏆 ¡MELISA GANÓ EL PREMIO EN LA RULETA (Intento ${spins})!`);
                     spinBtn.style.display = 'none';
                     
                     const winMsg = document.createElement('div');
@@ -1008,10 +1008,10 @@ const UniverseGames = (function() {
                     winMsg.style.borderRadius = 'var(--radius-md)';
                     winMsg.style.marginTop = '20px';
                     winMsg.style.textAlign = 'center';
-                    winMsg.innerHTML = \`
+                    winMsg.innerHTML = `
                         <h3 style="color: var(--gold); margin-bottom:10px;">¡FELICITACIONES!</h3>
                         <p>Has sido muy persistente. Tómale pantallazo a esto y mándaselo a Carlos para reclamar tu <strong>PREMIO SORPRESA</strong>.</p>
-                    \`;
+                    `;
                     wrapper.appendChild(winMsg);
                 } else {
                     const resultMsg = document.createElement('div');
@@ -1020,7 +1020,7 @@ const UniverseGames = (function() {
                     resultMsg.style.left = '50%';
                     resultMsg.style.transform = 'translate(-50%, -50%)';
                     resultMsg.style.background = 'var(--bg-card)';
-                    resultMsg.style.border = \`2px solid \${landedSlice.color}\`;
+                    resultMsg.style.border = `2px solid ${landedSlice.color}`;
                     resultMsg.style.padding = '15px 25px';
                     resultMsg.style.borderRadius = 'var(--radius-lg)';
                     resultMsg.style.boxShadow = '0 10px 30px rgba(0,0,0,0.8)';
