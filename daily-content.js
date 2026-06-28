@@ -147,7 +147,21 @@ const DailyContent = (function() {
             recoveryQuote: "La paciencia es la mejor medicina.",
             gameType: 'puzzle',
             gameConfig: {
-                image: 'nosotros.jpg',
+                images: [
+                    'fotos/foto (7).jpeg',
+                    'fotos/foto (31).jpeg',
+                    'fotos/foto (32).jpeg',
+                    'fotos/foto (33).jpeg',
+                    'fotos/foto (34).jpeg',
+                    'fotos/foto (35).jpeg',
+                    'fotos/foto (36).jpeg',
+                    'fotos/foto (49).jpeg',
+                    'fotos/foto (76).jpeg',
+                    'fotos/foto (129).jpeg',
+                    'fotos/foto (130).jpeg',
+                    'fotos/foto (131).jpeg',
+                    'fotos/foto (132).jpeg'
+                ],
                 gridSize: 3,
                 fallbackEmoji: '💕'
             }

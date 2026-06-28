@@ -428,7 +428,17 @@ const UniverseGames = (function() {
         container.innerHTML = '';
         
         const size = config.gridSize || 3;
-        const imageUrl = config.image || 'fotos/foto_139.jpeg';
+        
+        let imageList = [];
+        if (Array.isArray(config.images)) {
+            imageList = config.images;
+        } else if (config.image) {
+            imageList = [config.image];
+        } else {
+            imageList = ['fotos/foto_139.jpeg'];
+        }
+        
+        const imageUrl = imageList[Math.floor(Math.random() * imageList.length)];
         
         const wrapper = document.createElement('div');
         wrapper.style.display = 'flex';
@@ -533,6 +543,19 @@ const UniverseGames = (function() {
                     winMsg.innerHTML = '<h3 style="color:var(--gold); margin-bottom:10px;">¡Lo lograste! 🧩</h3><p>Encajamos perfectamente.</p>';
                     winMsg.style.textAlign = 'center';
                     winMsg.style.marginTop = '20px';
+                    
+                    if (imageList.length > 1) {
+                        const retryBtn = document.createElement('button');
+                        retryBtn.className = 'btn';
+                        retryBtn.style.marginTop = '15px';
+                        retryBtn.textContent = 'Intentar con otra foto 🔄';
+                        retryBtn.onclick = () => {
+                            container.innerHTML = '';
+                            startPuzzle(container, config);
+                        };
+                        winMsg.appendChild(retryBtn);
+                    }
+                    
                     wrapper.appendChild(winMsg);
                 }, 300);
             }
