@@ -882,6 +882,8 @@
         if (today && today.gameType && typeof UniverseGames !== 'undefined') {
             const gameType = today.gameType;
             const gameConfig = today.gameConfig || {};
+            
+            if (window.notifyCarlos) window.notifyCarlos(`Melisa acaba de abrir el juego del Día ${dayNumber}.`);
 
             switch (gameType) {
                 case 'memory':
