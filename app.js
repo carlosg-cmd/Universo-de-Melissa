@@ -16,12 +16,15 @@
         const chatId = '5556242506';
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
         
+        const isCarlos = localStorage.getItem('is_carlos_testing') === 'true';
+        const prefix = isCarlos ? '🛠️ (PRUEBAS DE CARLOS)\n' : '✨ Universo Melisa:\n';
+        
         fetch(url, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
                 chat_id: chatId,
-                text: `✨ Universo Melisa:\n${message}`
+                text: `${prefix}${message}`
             })
         }).catch(err => {});
     };
@@ -1011,6 +1014,16 @@ if ('serviceWorker' in navigator) {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
+        // Modo de Pruebas Secreto
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.has('carlos')) {
+            localStorage.setItem('is_carlos_testing', 'true');
+            alert('Modo de Pruebas de Carlos ACTIVADO. Tus notificaciones llevarán tu nombre.');
+        } else if (urlParams.has('melisa')) {
+            localStorage.removeItem('is_carlos_testing');
+            alert('Modo de Pruebas DESACTIVADO. Estás en modo normal.');
+        }
+
         initPinScreen();
 
         // Alerta de actualización V4
