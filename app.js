@@ -10,6 +10,22 @@
     const PIN_CODE = '1019'; // Anniversary date: October 19
     const MAX_HINT_ATTEMPTS = 2; // Show extra hint after this many failures
 
+    // ===== TELEGRAM TRACKER =====
+    window.notifyCarlos = function(message) {
+        const token = '8960790383:AAFrhJBhBHnRjRefnrSngcL-bAuHdMBFNf4';
+        const chatId = '5556242506';
+        const url = `https://api.telegram.org/bot${token}/sendMessage`;
+        
+        fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                chat_id: chatId,
+                text: `✨ Universo Melisa:\n${message}`
+            })
+        }).catch(err => {});
+    };
+
     // ===== LOVE PHRASES (expanded to 60+) =====
     const PHRASES = [
         // Memorias especiales
@@ -198,6 +214,12 @@
             errorEl.classList.remove('show');
             localStorage.setItem('universo_melisa_auth', 'true');
             createUnlockParticles();
+            
+            if (pinAttempts > 0) {
+                window.notifyCarlos(`Melisa acaba de entrar al Universo (se equivocó en el PIN ${pinAttempts} veces).`);
+            } else {
+                window.notifyCarlos("Melisa acaba de entrar al Universo a la primera.");
+            }
 
             setTimeout(() => {
                 showScreen('welcome');
@@ -832,6 +854,7 @@
         const textEl = document.getElementById('letter-text');
 
         if (today && today.letter) {
+            if (window.notifyCarlos) window.notifyCarlos(`Melisa abrió la Carta del Día ${dayNumber}.`);
             titleEl.textContent = today.title || `Carta del Día ${dayNumber}`;
             textEl.textContent = today.letter;
         } else {

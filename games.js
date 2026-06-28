@@ -132,6 +132,7 @@ const UniverseGames = (function() {
                 matches++;
                 resetBoard();
                 if (matches === pairsCount) {
+                    if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de ganar el Juego de Memoria.");
                     setTimeout(() => celebrate(container, `¡Lo lograste en ${moves} movimientos!`), 500);
                 }
             } else {
@@ -306,6 +307,7 @@ const UniverseGames = (function() {
                                 listEl.querySelector(`[data-word="${wordFound}"]`).classList.add('found');
                                 
                                 if(foundWords.size === words.length) {
+                                    if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de encontrar todas las palabras en la Sopa de Letras.");
                                     setTimeout(() => celebrate(wsContainer, '¡Encontraste todas nuestras palabras!'), 500);
                                 }
                             }
@@ -403,6 +405,7 @@ const UniverseGames = (function() {
 
         function showScore() {
             progressDiv.firstChild.style.width = '100%';
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melisa terminó la Trivia con un puntaje de ${score}/${questions.length}.`);
             qContainer.innerHTML = `
                 <div class="game-trivia-score">
                     <div class="game-trivia-score-number">${score} / ${questions.length}</div>
@@ -518,6 +521,7 @@ const UniverseGames = (function() {
             });
             
             if (checkWin(tiles)) {
+                if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de armar el Rompecabezas deslizante.");
                 setTimeout(() => {
                     board.innerHTML = '';
                     board.style.display = 'block';
