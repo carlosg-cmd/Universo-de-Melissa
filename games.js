@@ -1322,7 +1322,7 @@ const UniverseGames = (function() {
             
             const totalAttempts = parseInt(localStorage.getItem('melisa_attempts_catchhearts') || '0', 10);
             
-            if (win || score >= 1000 || totalAttempts >= 15) {
+            if (win || score >= 1000) {
                 celebrate(wrapper, '¡OBJETIVO CUMPLIDO! 🎉');
                 if (window.notifyCarlos) window.notifyCarlos(`💖 Melisa desbloqueó el premio real de Atrapa mi Corazón (${score} pts, ${totalAttempts} partidas).`);
                 overlay.innerHTML = `
@@ -1333,11 +1333,10 @@ const UniverseGames = (function() {
                     </div>
                 `;
             } else {
-                const faltantes = Math.max(0, 15 - totalAttempts);
                 overlay.innerHTML = `
                     <h2 style="color:var(--pink); margin-bottom:10px; font-size:1.3rem;">¡BUEN INTENTO! 💪</h2>
                     <p style="margin-bottom:8px;">Hiciste <span style="color:var(--gold); font-weight:bold;">${score}</span> puntos en esta ronda.</p>
-                    <p style="margin-bottom:15px; color:#ddd; font-size:0.9rem;">Partidas jugadas: <strong style="color:var(--gold)">${totalAttempts} / 15</strong><br>(¡Te faltan ${faltantes} partidas o llegar a 1000 puntos para tu premio oficial!)</p>
+                    <p style="margin-bottom:15px; color:#ddd; font-size:0.9rem;">Partidas jugadas: <strong style="color:var(--gold)">${totalAttempts} / 15</strong><br>(¡Sigue intentando hasta alcanzar la meta de 1000 puntos!)</p>
                 `;
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'btn';
@@ -1542,28 +1541,10 @@ const UniverseGames = (function() {
                     score = Math.max(0, score - 1);
                     updateUI();
                     showFloatingScore('-1', '#ff4444');
-                    
-                    if (attempts >= 15) {
-                        statusEl.innerHTML = '<span style="color:var(--gold)">¡OBJETIVO CUMPLIDO (15 PARTIDAS)! 🎉</span>';
-                        celebrate(wrapper, '¡ERES PERSEVERANTE!');
-                        if (window.notifyCarlos) window.notifyCarlos(`🧠 Melisa ganó Simón Dice por perseverancia (${attempts} partidas).`);
-                        
-                        const winMsg = document.createElement('div');
-                        winMsg.style.background = 'rgba(255, 215, 0, 0.15)';
-                        winMsg.style.border = '1px solid var(--gold)';
-                        winMsg.style.padding = '15px';
-                        winMsg.style.borderRadius = '10px';
-                        winMsg.style.marginTop = '10px';
-                        winMsg.style.textAlign = 'center';
-                        winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold; font-size:0.95rem;">🏆 ¡PREMIO REAL #2 DESBLOQUEADO!<br>🎁 Tómale pantallazo y mándaselo a Carlos diciendo: <br><em>"¡Desbloqueé el Regalo Real #2 (Simón Dice)!"</em> 👑</p>';
-                        wrapper.appendChild(winMsg);
-                        startBtn.style.display = 'none';
-                    } else {
-                        statusEl.textContent = `¡Ups! Secuencia incorrecta (-1 pt) 💔`;
-                        statusEl.style.color = '#ff4081';
-                        startBtn.style.display = 'inline-block';
-                        startBtn.textContent = 'Reintentar 🔄';
-                    }
+                    statusEl.textContent = `¡Ups! Secuencia incorrecta (-1 pt) 💔`;
+                    statusEl.style.color = '#ff4081';
+                    startBtn.style.display = 'inline-block';
+                    startBtn.textContent = 'Reintentar 🔄';
                     sequence = [];
                     round = 0;
                     return;
@@ -1576,7 +1557,7 @@ const UniverseGames = (function() {
                     updateUI();
                     showFloatingScore('+2', '#ffd700');
                     
-                    if (score >= 1000 || attempts >= 15) {
+                    if (score >= 1000) {
                         // WIN!
                         setTimeout(() => {
                             statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE TU PREMIO REAL #2! 🎉</span>';
