@@ -898,6 +898,8 @@
             currentGameInstance = null;
         }
         gameArea.innerHTML = '';
+        gameArea.style.width = '100%';
+        gameArea.style.alignItems = 'stretch';
 
         function launchGame(gType, gConfig, container) {
             switch (gType) {
