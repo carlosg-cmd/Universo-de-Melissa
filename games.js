@@ -1326,10 +1326,10 @@ const UniverseGames = (function() {
                 celebrate(wrapper, '¡OBJETIVO CUMPLIDO! 🎉');
                 if (window.notifyCarlos) window.notifyCarlos(`💖 Melisa desbloqueó el premio real de Atrapa mi Corazón (${score} pts, ${totalAttempts} partidas).`);
                 overlay.innerHTML = `
-                    <h2 style="color:var(--gold); margin-bottom:12px; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size:1.4rem;">¡FELICIDADES MI REINA! 🎉</h2>
-                    <p style="margin-bottom:10px; font-size:0.95rem;">Has superado el reto (Puntos: ${score}/1000 | Partidas: ${totalAttempts}/15).</p>
-                    <div style="background:rgba(255,215,0,0.15); border:1px solid var(--gold); padding:15px; border-radius:10px; margin-bottom:15px; max-width:90%;">
-                        <p style="color:var(--gold); font-weight:bold; font-size:0.95rem;">¡Desbloqueaste tu PREMIO REAL! 🎁 Tómale pantallazo y mándaselo a Carlos para reclamarlo 💕</p>
+                    <h2 style="color:var(--gold); margin-bottom:10px; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size:1.35rem;">¡PREMIO REAL #1 DESBLOQUEADO! 🎉</h2>
+                    <p style="margin-bottom:8px; font-size:0.9rem;">Reto: Atrapa mi Corazón (Puntos: ${score}/1000 | Partidas: ${totalAttempts}/15).</p>
+                    <div style="background:rgba(255,215,0,0.15); border:1px solid var(--gold); padding:12px; border-radius:10px; margin-bottom:15px; max-width:90%;">
+                        <p style="color:var(--gold); font-weight:bold; font-size:0.95rem;">🎁 Tómale pantallazo y mándaselo a Carlos diciendo: <br><em>"¡Desbloqueé el Regalo Real #1 (Corazones)!"</em> 💕</p>
                     </div>
                 `;
             } else {
@@ -1555,7 +1555,7 @@ const UniverseGames = (function() {
                         winMsg.style.borderRadius = '10px';
                         winMsg.style.marginTop = '10px';
                         winMsg.style.textAlign = 'center';
-                        winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold;">¡Demostraste tu perseverancia jugando 15 veces! 🎁 Tómale pantallazo y mándaselo a Carlos para tu PREMIO REAL</p>';
+                        winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold; font-size:0.95rem;">🏆 ¡PREMIO REAL #2 DESBLOQUEADO!<br>🎁 Tómale pantallazo y mándaselo a Carlos diciendo: <br><em>"¡Desbloqueé el Regalo Real #2 (Simón Dice)!"</em> 👑</p>';
                         wrapper.appendChild(winMsg);
                         startBtn.style.display = 'none';
                     } else {
@@ -1579,7 +1579,7 @@ const UniverseGames = (function() {
                     if (score >= 1000 || attempts >= 15) {
                         // WIN!
                         setTimeout(() => {
-                            statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE TU PREMIO REAL! 🎉</span>';
+                            statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE TU PREMIO REAL #2! 🎉</span>';
                             celebrate(wrapper, '¡INCREÍBLE!');
                             if (window.notifyCarlos) window.notifyCarlos(`🧠 Melisa ganó Simón Dice del Amor (${score} pts, ${attempts} partidas).`);
                             
@@ -1590,7 +1590,7 @@ const UniverseGames = (function() {
                             winMsg.style.borderRadius = '10px';
                             winMsg.style.marginTop = '10px';
                             winMsg.style.textAlign = 'center';
-                            winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold;">¡Lograste el objetivo oficial! 🎁 Tómale pantallazo y mándaselo a Carlos para tu PREMIO REAL</p>';
+                            winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold; font-size:0.95rem;">🏆 ¡PREMIO REAL #2 DESBLOQUEADO!<br>🎁 Tómale pantallazo y mándaselo a Carlos diciendo: <br><em>"¡Desbloqueé el Regalo Real #2 (Simón Dice)!"</em> 👑</p>';
                             wrapper.appendChild(winMsg);
                             
                             startBtn.style.display = 'none';

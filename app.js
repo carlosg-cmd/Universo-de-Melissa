@@ -1097,7 +1097,9 @@
     // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js').catch(err => console.log('Service Worker failed', err));
+        navigator.serviceWorker.register('sw.js?v=19').then(reg => {
+            reg.update();
+        }).catch(err => console.log('Service Worker failed', err));
     });
     
     // Auto-actualización silenciosa para Melisa
