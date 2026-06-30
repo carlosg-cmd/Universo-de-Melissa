@@ -983,10 +983,15 @@ html, body {
 }
 
 .game-area {
+    width: 100%;
     min-height: 300px;
     display: flex;
     flex-direction: column;
     align-items: center;
+}
+
+.game-area > div {
+    width: 100%;
 }
 
 /* ===================================================================

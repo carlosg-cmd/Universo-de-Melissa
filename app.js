@@ -968,6 +968,10 @@
                         gameArea.appendChild(backBtn);
                         
                         const gameContainer = document.createElement('div');
+                        gameContainer.style.width = '100%';
+                        gameContainer.style.display = 'flex';
+                        gameContainer.style.flexDirection = 'column';
+                        gameContainer.style.alignItems = 'center';
                         gameArea.appendChild(gameContainer);
                         
                         if (window.notifyCarlos) window.notifyCarlos(`Melisa empezó el juego: ${game.name}.`);

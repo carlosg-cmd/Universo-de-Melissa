@@ -1091,6 +1091,7 @@ const UniverseGames = (function() {
         const wrapper = document.createElement('div');
         wrapper.style.position = 'relative';
         wrapper.style.width = '100%';
+        wrapper.style.minWidth = '280px';
         wrapper.style.height = '420px';
         wrapper.style.background = 'linear-gradient(to bottom, #0a1128, #1a2a6c)';
         wrapper.style.borderRadius = 'var(--radius-lg)';
