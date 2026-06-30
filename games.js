@@ -1091,28 +1091,44 @@ const UniverseGames = (function() {
         const wrapper = document.createElement('div');
         wrapper.style.position = 'relative';
         wrapper.style.width = '100%';
-        wrapper.style.height = '450px';
+        wrapper.style.height = '420px';
         wrapper.style.background = 'linear-gradient(to bottom, #0a1128, #1a2a6c)';
         wrapper.style.borderRadius = 'var(--radius-lg)';
         wrapper.style.overflow = 'hidden';
         wrapper.style.border = '2px solid var(--primary)';
         wrapper.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.5)';
+        wrapper.style.touchAction = 'none'; // Prevent scroll while playing
+        wrapper.style.webkitUserSelect = 'none';
+        wrapper.style.userSelect = 'none';
+        
+        // Progress bar (visual indicator toward 1000)
+        const progressBar = document.createElement('div');
+        progressBar.style.position = 'absolute';
+        progressBar.style.bottom = '0';
+        progressBar.style.left = '0';
+        progressBar.style.height = '4px';
+        progressBar.style.width = '0%';
+        progressBar.style.background = 'linear-gradient(90deg, #ff4081, #ffd700)';
+        progressBar.style.transition = 'width 0.3s';
+        progressBar.style.zIndex = '10';
+        wrapper.appendChild(progressBar);
         
         const scoreboard = document.createElement('div');
         scoreboard.style.position = 'absolute';
-        scoreboard.style.top = '15px';
-        scoreboard.style.left = '15px';
-        scoreboard.style.right = '15px';
+        scoreboard.style.top = '10px';
+        scoreboard.style.left = '12px';
+        scoreboard.style.right = '12px';
         scoreboard.style.display = 'flex';
         scoreboard.style.justifyContent = 'space-between';
         scoreboard.style.color = '#fff';
         scoreboard.style.fontFamily = 'Outfit, sans-serif';
-        scoreboard.style.fontSize = '1.2rem';
+        scoreboard.style.fontSize = '1rem';
         scoreboard.style.fontWeight = 'bold';
         scoreboard.style.zIndex = '10';
+        scoreboard.style.textShadow = '0 1px 4px rgba(0,0,0,0.8)';
         
         const scoreEl = document.createElement('div');
-        scoreEl.innerHTML = 'Puntos: <span style="color:var(--gold)">0</span> / 1000';
+        scoreEl.innerHTML = '💖 0 / 1000';
         
         const timeEl = document.createElement('div');
         timeEl.innerHTML = '⏱️ 60s';
@@ -1121,179 +1137,240 @@ const UniverseGames = (function() {
         scoreboard.appendChild(timeEl);
         wrapper.appendChild(scoreboard);
         
-        const startScreen = document.createElement('div');
-        startScreen.style.position = 'absolute';
-        startScreen.style.inset = '0';
-        startScreen.style.background = 'rgba(0,0,0,0.8)';
-        startScreen.style.display = 'flex';
-        startScreen.style.flexDirection = 'column';
-        startScreen.style.alignItems = 'center';
-        startScreen.style.justifyContent = 'center';
-        startScreen.style.zIndex = '20';
-        startScreen.style.textAlign = 'center';
-        startScreen.style.padding = '20px';
+        // Start / End overlay
+        const overlay = document.createElement('div');
+        overlay.style.position = 'absolute';
+        overlay.style.inset = '0';
+        overlay.style.background = 'rgba(0,0,0,0.85)';
+        overlay.style.display = 'flex';
+        overlay.style.flexDirection = 'column';
+        overlay.style.alignItems = 'center';
+        overlay.style.justifyContent = 'center';
+        overlay.style.zIndex = '30';
+        overlay.style.textAlign = 'center';
+        overlay.style.padding = '20px';
+        overlay.style.color = '#fff';
         
-        startScreen.innerHTML = `
-            <h2 style="color:var(--pink); margin-bottom:10px;">Atrapa mi Corazón</h2>
-            <p style="margin-bottom:20px; font-size:1rem;">Toca los corazones rosados y rojos para sumar puntos.<br><span style="color:#aaa;">¡Cuidado con los corazones grises rotos!</span> Te restan puntos.</p>
-            <p style="color:var(--gold); font-weight:bold; margin-bottom:20px;">Llega a 1000 puntos para tu premio sorpresa.</p>
+        overlay.innerHTML = `
+            <h2 style="color:var(--pink); margin-bottom:10px; font-size:1.4rem;">💖 Atrapa mi Corazón</h2>
+            <p style="margin-bottom:8px; font-size:0.9rem;">Toca los corazones de colores para sumar puntos.</p>
+            <p style="color:#aaa; margin-bottom:8px; font-size:0.85rem;">¡Cuidado con los 💔 grises! Te restan puntos.</p>
+            <p style="color:var(--gold); font-weight:bold; margin-bottom:20px; font-size:0.95rem;">Meta: ¡1000 puntos!</p>
         `;
         
-        const startBtn = document.createElement('button');
-        startBtn.className = 'btn';
-        startBtn.textContent = '¡JUGAR!';
-        startScreen.appendChild(startBtn);
-        wrapper.appendChild(startScreen);
+        const playBtn = document.createElement('button');
+        playBtn.className = 'btn';
+        playBtn.textContent = '¡JUGAR!';
+        playBtn.style.fontSize = '1.1rem';
+        playBtn.style.padding = '12px 40px';
+        overlay.appendChild(playBtn);
+        wrapper.appendChild(overlay);
         
         container.appendChild(wrapper);
         
+        // ---- Game state ----
         let score = 0;
         let timeLeft = 60;
-        let gameInterval;
-        let spawnInterval;
+        let timerInterval = null;
+        let spawnTimer = null;
+        let animFrame = null;
         let isPlaying = false;
+        let hearts = []; // Array of active heart objects
         
-        function spawnHeart() {
+        function updateScore() {
+            scoreEl.innerHTML = `💖 ${score} / 1000`;
+            progressBar.style.width = Math.min(100, (score / 1000) * 100) + '%';
+        }
+        
+        function createHeart() {
             if (!isPlaying) return;
             
-            const heart = document.createElement('div');
-            const isTrap = Math.random() < 0.25; // 25% chance of trap
-            const size = Math.floor(Math.random() * 20) + 30; // 30px to 50px
-            const startX = Math.random() * (wrapper.offsetWidth - size);
-            const duration = Math.random() * 2000 + 1500; // 1.5s to 3.5s falling
+            const isTrap = Math.random() < 0.25;
+            const size = Math.floor(Math.random() * 18) + 28;
+            const wrapperW = wrapper.offsetWidth || 300;
+            const x = Math.random() * (wrapperW - size - 10) + 5;
+            const speed = (Math.random() * 1.5 + 1); // px per frame (~60fps)
             
-            heart.style.position = 'absolute';
-            heart.style.left = startX + 'px';
-            heart.style.top = '-50px';
-            heart.style.fontSize = size + 'px';
-            heart.style.cursor = 'pointer';
-            heart.style.userSelect = 'none';
-            heart.style.transition = `top ${duration}ms linear`;
-            heart.style.zIndex = '5';
+            const el = document.createElement('div');
+            el.style.position = 'absolute';
+            el.style.left = x + 'px';
+            el.style.top = '-50px';
+            el.style.fontSize = size + 'px';
+            el.style.lineHeight = '1';
+            el.style.cursor = 'pointer';
+            el.style.zIndex = '5';
+            el.style.pointerEvents = 'auto';
             
             if (isTrap) {
-                heart.innerHTML = '💔';
-                heart.style.filter = 'grayscale(100%)';
+                el.textContent = '💔';
+                el.style.filter = 'grayscale(80%) brightness(0.7)';
             } else {
                 const emojis = ['💖', '💗', '💓', '❤️', '💕'];
-                heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+                el.textContent = emojis[Math.floor(Math.random() * emojis.length)];
             }
             
-            let isClicked = false;
+            let caught = false;
             
-            const clickHandler = (e) => {
+            const onTap = (e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                if (isClicked || !isPlaying) return;
-                isClicked = true;
+                if (caught || !isPlaying) return;
+                caught = true;
                 
-                // Float up and fade out animation
-                heart.style.transition = 'all 0.3s ease-out';
-                heart.style.transform = 'scale(1.5) translateY(-20px)';
-                heart.style.opacity = '0';
+                el.style.transition = 'transform 0.25s ease-out, opacity 0.25s';
+                el.style.transform = 'scale(1.6)';
+                el.style.opacity = '0';
+                el.style.pointerEvents = 'none';
                 
                 if (isTrap) {
-                    score = Math.max(0, score - 100); // Penalti
-                    wrapper.style.boxShadow = 'inset 0 0 30px rgba(255,0,0,0.8)';
-                    setTimeout(() => wrapper.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.5)', 200);
+                    score = Math.max(0, score - 100);
+                    // Red flash
+                    wrapper.style.boxShadow = 'inset 0 0 40px rgba(255,0,0,0.7)';
+                    setTimeout(() => { wrapper.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.5)'; }, 250);
+                    // Show -100 floating text
+                    showFloating(el, '-100', '#ff4444');
                 } else {
-                    const points = size < 35 ? 100 : 50; // Smaller hearts give more points
-                    score += points;
+                    const pts = size < 35 ? 100 : 50;
+                    score += pts;
+                    showFloating(el, '+' + pts, '#ffd700');
                 }
                 
-                scoreEl.innerHTML = `Puntos: <span style="color:var(--gold)">${score}</span> / 1000`;
+                updateScore();
                 
-                setTimeout(() => { if (heart.parentNode) heart.remove(); }, 300);
+                setTimeout(() => removeHeart(heartObj), 300);
                 
                 if (score >= 1000) {
                     endGame(true);
                 }
             };
             
-            heart.addEventListener('mousedown', clickHandler);
-            heart.addEventListener('touchstart', clickHandler);
+            el.addEventListener('touchstart', onTap, { passive: false });
+            el.addEventListener('mousedown', onTap);
             
-            wrapper.appendChild(heart);
+            wrapper.appendChild(el);
             
-            // Trigger reflow for animation
-            heart.offsetHeight;
-            heart.style.top = (wrapper.offsetHeight + 50) + 'px';
+            const heartObj = { el, y: -50, speed, caught };
+            hearts.push(heartObj);
+        }
+        
+        function showFloating(refEl, text, color) {
+            const f = document.createElement('div');
+            f.textContent = text;
+            f.style.position = 'absolute';
+            f.style.left = refEl.style.left;
+            f.style.top = (parseFloat(refEl.style.top) - 10) + 'px';
+            f.style.color = color;
+            f.style.fontWeight = 'bold';
+            f.style.fontSize = '1.1rem';
+            f.style.fontFamily = 'Outfit, sans-serif';
+            f.style.zIndex = '15';
+            f.style.pointerEvents = 'none';
+            f.style.textShadow = '0 1px 3px rgba(0,0,0,0.7)';
+            f.style.transition = 'all 0.6s ease-out';
+            wrapper.appendChild(f);
+            requestAnimationFrame(() => {
+                f.style.top = (parseFloat(f.style.top) - 40) + 'px';
+                f.style.opacity = '0';
+            });
+            setTimeout(() => { if (f.parentNode) f.remove(); }, 700);
+        }
+        
+        function removeHeart(hObj) {
+            const idx = hearts.indexOf(hObj);
+            if (idx !== -1) hearts.splice(idx, 1);
+            if (hObj.el.parentNode) hObj.el.remove();
+        }
+        
+        function gameLoop() {
+            if (!isPlaying) return;
             
-            setTimeout(() => {
-                if (heart.parentNode && !isClicked) {
-                    heart.remove();
+            const wrapperH = wrapper.offsetHeight || 420;
+            
+            for (let i = hearts.length - 1; i >= 0; i--) {
+                const h = hearts[i];
+                if (h.caught) continue;
+                h.y += h.speed;
+                h.el.style.top = h.y + 'px';
+                
+                // Off-screen removal
+                if (h.y > wrapperH + 30) {
+                    removeHeart(h);
                 }
-            }, duration);
+            }
+            
+            animFrame = requestAnimationFrame(gameLoop);
         }
         
         function endGame(win) {
             isPlaying = false;
-            clearInterval(gameInterval);
-            clearInterval(spawnInterval);
+            if (timerInterval) clearInterval(timerInterval);
+            if (spawnTimer) clearTimeout(spawnTimer);
+            if (animFrame) cancelAnimationFrame(animFrame);
             
             // Remove remaining hearts
-            Array.from(wrapper.children).forEach(child => {
-                if (child !== scoreboard && child !== startScreen) {
-                    child.style.display = 'none';
-                }
-            });
+            hearts.forEach(h => { if (h.el.parentNode) h.el.remove(); });
+            hearts = [];
             
-            startScreen.innerHTML = '';
-            startScreen.style.display = 'flex';
+            overlay.innerHTML = '';
+            overlay.style.display = 'flex';
             
             if (win) {
                 celebrate(wrapper, '¡OBJETIVO CUMPLIDO! 🎉');
-                if (window.notifyCarlos) window.notifyCarlos(`💖 Melisa ganó Atrapa mi Corazón (1000 puntos).`);
-                
-                startScreen.innerHTML = `
-                    <h2 style="color:var(--gold); margin-bottom:15px; text-shadow: 0 0 10px rgba(255,215,0,0.5);">¡ERES INCREÍBLE!</h2>
-                    <p style="margin-bottom:20px;">Atrapaste todos mis corazones.</p>
-                    <div style="background:rgba(255,215,0,0.1); border:1px solid var(--gold); padding:15px; border-radius:10px; margin-bottom:20px;">
-                        <p style="color:var(--gold); font-weight:bold;">Tómale pantallazo y mándaselo a Carlos para otro premio sorpresa.</p>
+                if (window.notifyCarlos) window.notifyCarlos('💖 Melisa ganó Atrapa mi Corazón (1000 puntos).');
+                overlay.innerHTML = `
+                    <h2 style="color:var(--gold); margin-bottom:15px; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size:1.4rem;">¡ERES INCREÍBLE! 🎉</h2>
+                    <p style="margin-bottom:15px;">Atrapaste todos mis corazones.</p>
+                    <div style="background:rgba(255,215,0,0.1); border:1px solid var(--gold); padding:15px; border-radius:10px; margin-bottom:15px;">
+                        <p style="color:var(--gold); font-weight:bold;">Tómale pantallazo y mándaselo a Carlos para tu premio sorpresa 🎁</p>
                     </div>
                 `;
             } else {
-                startScreen.innerHTML = `
-                    <h2 style="color:var(--pink); margin-bottom:15px;">¡TIEMPO AGOTADO!</h2>
-                    <p style="margin-bottom:20px;">Hiciste <span style="color:var(--gold); font-weight:bold;">${score}</span> puntos.</p>
+                overlay.innerHTML = `
+                    <h2 style="color:var(--pink); margin-bottom:15px; font-size:1.3rem;">¡TIEMPO AGOTADO! ⏱️</h2>
+                    <p style="margin-bottom:15px;">Hiciste <span style="color:var(--gold); font-weight:bold;">${score}</span> puntos.</p>
+                    <p style="margin-bottom:20px; color:#aaa; font-size:0.9rem;">¡Inténtalo de nuevo, tú puedes!</p>
                 `;
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'btn';
                 retryBtn.textContent = 'Intentar de nuevo 🔄';
+                retryBtn.style.fontSize = '1rem';
+                retryBtn.style.padding = '12px 35px';
                 retryBtn.onclick = startGame;
-                startScreen.appendChild(retryBtn);
+                overlay.appendChild(retryBtn);
             }
         }
         
         function startGame() {
-            startScreen.style.display = 'none';
+            overlay.style.display = 'none';
             score = 0;
             timeLeft = 60;
             isPlaying = true;
-            scoreEl.innerHTML = `Puntos: <span style="color:var(--gold)">0</span> / 1000`;
+            hearts = [];
+            updateScore();
             timeEl.innerHTML = '⏱️ 60s';
             
-            gameInterval = setInterval(() => {
+            // Timer
+            timerInterval = setInterval(() => {
                 if (!isPlaying) return;
                 timeLeft--;
                 timeEl.innerHTML = `⏱️ ${timeLeft}s`;
-                
-                if (timeLeft <= 0) {
-                    endGame(false);
-                }
+                if (timeLeft <= 0) endGame(false);
             }, 1000);
             
-            // Spawn hearts faster as time goes on
-            const spawnLoop = () => {
+            // Spawn loop with increasing frequency
+            const scheduleSpawn = () => {
                 if (!isPlaying) return;
-                spawnHeart();
-                const currentDelay = Math.max(300, 800 - (60 - timeLeft) * 10);
-                spawnInterval = setTimeout(spawnLoop, currentDelay);
+                createHeart();
+                const delay = Math.max(250, 700 - (60 - timeLeft) * 8);
+                spawnTimer = setTimeout(scheduleSpawn, delay);
             };
-            spawnLoop();
+            scheduleSpawn();
+            
+            // Animation loop
+            animFrame = requestAnimationFrame(gameLoop);
         }
         
-        startBtn.onclick = startGame;
+        playBtn.onclick = startGame;
     }
 
     // ==========================================
