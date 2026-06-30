@@ -1183,6 +1183,7 @@ const UniverseGames = (function() {
         let animFrame = null;
         let isPlaying = false;
         let hearts = []; // Array of active heart objects
+        let streak = 0; // Combo streak
         
         function updateScore() {
             scoreEl.innerHTML = `💖 ${score} / 1000`;
@@ -1230,16 +1231,24 @@ const UniverseGames = (function() {
                 el.style.pointerEvents = 'none';
                 
                 if (isTrap) {
+                    streak = 0;
                     score = Math.max(0, score - 1);
                     // Red flash
                     wrapper.style.boxShadow = 'inset 0 0 40px rgba(255,0,0,0.7)';
                     setTimeout(() => { wrapper.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.5)'; }, 250);
                     // Show -1 floating text
-                    showFloating(el, '-1', '#ff4444');
+                    showFloating(el, '-1 (Racha rota)', '#ff4444');
                 } else {
-                    const pts = 2;
+                    streak++;
+                    let pts = 2;
+                    let text = '+2';
+                    let col = '#ffd700';
+                    if (streak === 5) { pts = 5; text = '🔥 COMBO x5! (+5)'; col = '#ff9100'; }
+                    else if (streak === 10) { pts = 10; text = '⚡ COMBO x10! (+10)'; col = '#00e5ff'; }
+                    else if (streak === 20) { pts = 20; text = '🌟 COMBO x20! (+20)'; col = '#ff4081'; }
+                    else if (streak >= 30 && streak % 10 === 0) { pts = 50; text = `👑 RACHA x${streak}! (+50)`; col = '#b388ff'; }
                     score += pts;
-                    showFloating(el, '+' + pts, '#ffd700');
+                    showFloating(el, text, col);
                 }
                 
                 updateScore();
@@ -1354,6 +1363,7 @@ const UniverseGames = (function() {
             
             overlay.style.display = 'none';
             score = 0;
+            streak = 0;
             isPlaying = true;
             hearts = [];
             updateScore();
@@ -1462,6 +1472,7 @@ const UniverseGames = (function() {
         
         let score = 0;
         let round = 0;
+        let streak = 0;
         let sequence = [];
         let playerSequence = [];
         let isWaitingForPlayer = false;
@@ -1529,9 +1540,10 @@ const UniverseGames = (function() {
                 if (playerSequence[currentIndex] !== sequence[currentIndex]) {
                     // Wrong! Lose 1 point
                     isWaitingForPlayer = false;
+                    streak = 0;
                     score = Math.max(0, score - 1);
                     updateUI();
-                    showFloatingScore('-1', '#ff4444');
+                    showFloatingScore('-1 (Racha rota)', '#ff4444');
                     statusEl.textContent = `¡Ups! Secuencia incorrecta (-1 pt) 💔`;
                     statusEl.style.color = '#ff4081';
                     startBtn.style.display = 'inline-block';
@@ -1548,9 +1560,18 @@ const UniverseGames = (function() {
                 if (playerSequence.length === sequence.length) {
                     // Completed this round!
                     isWaitingForPlayer = false;
-                    score += 25;
+                    streak++;
+                    let bono = 20;
+                    let text = '+20 Bono';
+                    let col = '#ffd700';
+                    if (streak === 2) { bono = 35; text = '🔥 COMBO x5! (+35)'; col = '#ff9100'; }
+                    else if (streak === 3) { bono = 50; text = '⚡ COMBO x10! (+50)'; col = '#00e5ff'; }
+                    else if (streak === 4) { bono = 80; text = '🌟 COMBO x20! (+80)'; col = '#ff4081'; }
+                    else if (streak >= 5) { bono = 120; text = `👑 RACHA x50! (+120)`; col = '#b388ff'; }
+                    
+                    score += bono;
                     updateUI();
-                    showFloatingScore('+25 Bono', '#ffd700');
+                    showFloatingScore(text, col);
                     
                     if (sequence.length >= 7) {
                         sequence = [];
@@ -1577,8 +1598,8 @@ const UniverseGames = (function() {
                         }, 500);
                     } else {
                         const messages = [
-                            '¡Muy bien! (+25 bono) 🌟', '¡Excelente! (+25 bono) 💪', '¡Increíble! (+25 bono) ✨',
-                            '¡Sigue así! (+25 bono) 🔥', '¡Eres genial! (+25 bono) 💖'
+                            `¡Muy bien! (${text}) 🌟`, `¡Excelente! (${text}) 💪`, `¡Increíble! (${text}) ✨`,
+                            `¡Sigue así! (${text}) 🔥`, `¡Eres genial! (${text}) 💖`
                         ];
                         statusEl.textContent = messages[Math.floor(Math.random() * messages.length)];
                         statusEl.style.color = 'var(--gold)';
