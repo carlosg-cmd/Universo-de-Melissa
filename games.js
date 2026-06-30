@@ -1374,7 +1374,7 @@ const UniverseGames = (function() {
     }
 
     // ==========================================
-    // 8. SIMON SAYS (SIMÓN DICE)
+    // 8. SIMON SAYS (SIMÓN DICE) - META: 1000 PUNTOS
     // ==========================================
     function startSimonSays(container, config) {
         container.innerHTML = '';
@@ -1384,35 +1384,115 @@ const UniverseGames = (function() {
         wrapper.style.flexDirection = 'column';
         wrapper.style.alignItems = 'center';
         wrapper.style.width = '100%';
-        wrapper.style.gap = '20px';
+        wrapper.style.gap = '15px';
+        wrapper.style.position = 'relative';
         
-        const statusEl = document.createElement('h3');
-        statusEl.style.color = 'var(--text-primary)';
+        // Scoreboard
+        const scoreboard = document.createElement('div');
+        scoreboard.style.display = 'flex';
+        scoreboard.style.justifyContent = 'space-between';
+        scoreboard.style.width = '100%';
+        scoreboard.style.maxWidth = '280px';
+        scoreboard.style.fontFamily = 'Outfit, sans-serif';
+        scoreboard.style.fontWeight = 'bold';
+        scoreboard.style.fontSize = '1rem';
+        scoreboard.style.color = 'var(--text-primary)';
+        
+        const scoreEl = document.createElement('div');
+        scoreEl.innerHTML = '🧠 0 / 1000';
+        
+        const levelEl = document.createElement('div');
+        levelEl.innerHTML = 'Nivel 0';
+        
+        scoreboard.appendChild(scoreEl);
+        scoreboard.appendChild(levelEl);
+        wrapper.appendChild(scoreboard);
+        
+        // Progress bar
+        const progressWrap = document.createElement('div');
+        progressWrap.style.width = '100%';
+        progressWrap.style.maxWidth = '280px';
+        progressWrap.style.height = '6px';
+        progressWrap.style.background = 'rgba(255,255,255,0.1)';
+        progressWrap.style.borderRadius = '3px';
+        progressWrap.style.overflow = 'hidden';
+        
+        const progressBar = document.createElement('div');
+        progressBar.style.height = '100%';
+        progressBar.style.width = '0%';
+        progressBar.style.background = 'linear-gradient(90deg, #b388ff, #ffd700)';
+        progressBar.style.transition = 'width 0.4s ease';
+        progressBar.style.borderRadius = '3px';
+        progressWrap.appendChild(progressBar);
+        wrapper.appendChild(progressWrap);
+        
+        // Status text
+        const statusEl = document.createElement('div');
+        statusEl.style.color = 'var(--text-secondary)';
         statusEl.style.textAlign = 'center';
-        statusEl.style.height = '30px';
+        statusEl.style.minHeight = '24px';
+        statusEl.style.fontSize = '0.95rem';
         statusEl.textContent = 'Presiona INICIAR para jugar';
         wrapper.appendChild(statusEl);
         
+        // Grid of 4 buttons
         const grid = document.createElement('div');
         grid.style.display = 'grid';
         grid.style.gridTemplateColumns = '1fr 1fr';
-        grid.style.gap = '15px';
+        grid.style.gap = '12px';
         grid.style.width = '260px';
         grid.style.height = '260px';
         
-        const WIN_TARGET = 7;
+        let score = 0;
+        let round = 0;
         let sequence = [];
         let playerSequence = [];
         let isWaitingForPlayer = false;
         
         const buttonsData = [
-            { id: 0, color: '#ff4081', glow: 'rgba(255,64,129,0.8)', emoji: '💖' }, // Pink
-            { id: 1, color: '#00e5ff', glow: 'rgba(0,229,255,0.8)', emoji: '✨' }, // Cyan
-            { id: 2, color: '#ffd54f', glow: 'rgba(255,213,79,0.8)', emoji: '🌻' }, // Gold
-            { id: 3, color: '#b388ff', glow: 'rgba(179,136,255,0.8)', emoji: '💌' }  // Purple
+            { id: 0, color: '#ff4081', glow: 'rgba(255,64,129,0.8)', emoji: '💖' },
+            { id: 1, color: '#00e5ff', glow: 'rgba(0,229,255,0.8)', emoji: '✨' },
+            { id: 2, color: '#ffd54f', glow: 'rgba(255,213,79,0.8)', emoji: '🌻' },
+            { id: 3, color: '#b388ff', glow: 'rgba(179,136,255,0.8)', emoji: '💌' }
         ];
         
         const btnElements = [];
+        
+        function updateUI() {
+            scoreEl.innerHTML = `🧠 ${score} / 1000`;
+            levelEl.innerHTML = `Nivel ${round}`;
+            progressBar.style.width = Math.min(100, (score / 1000) * 100) + '%';
+        }
+        
+        // Points per round: increases as rounds go up
+        function pointsForRound(r) {
+            // Round 1=50, 2=75, 3=100, 4=125, 5=150, 6=175, 7=200, etc.
+            return 50 + (r - 1) * 25;
+        }
+        
+        // Floating score indicator
+        function showFloatingScore(text, color) {
+            const f = document.createElement('div');
+            f.textContent = text;
+            f.style.position = 'absolute';
+            f.style.top = '50%';
+            f.style.left = '50%';
+            f.style.transform = 'translate(-50%, -50%)';
+            f.style.color = color;
+            f.style.fontWeight = 'bold';
+            f.style.fontSize = '1.8rem';
+            f.style.fontFamily = 'Outfit, sans-serif';
+            f.style.zIndex = '20';
+            f.style.pointerEvents = 'none';
+            f.style.textShadow = '0 2px 8px rgba(0,0,0,0.6)';
+            f.style.transition = 'all 0.8s ease-out';
+            wrapper.appendChild(f);
+            requestAnimationFrame(() => {
+                f.style.transform = 'translate(-50%, -120%)';
+                f.style.opacity = '0';
+            });
+            setTimeout(() => { if (f.parentNode) f.remove(); }, 900);
+        }
         
         buttonsData.forEach(data => {
             const btn = document.createElement('div');
@@ -1434,40 +1514,59 @@ const UniverseGames = (function() {
                 flashButton(data.id, 200);
                 playerSequence.push(data.id);
                 
-                // Check sequence
                 const currentIndex = playerSequence.length - 1;
                 if (playerSequence[currentIndex] !== sequence[currentIndex]) {
-                    // Wrong!
+                    // Wrong! Lose points
                     isWaitingForPlayer = false;
+                    const penalty = Math.min(score, 75);
+                    score = Math.max(0, score - penalty);
+                    updateUI();
+                    showFloatingScore('-' + penalty, '#ff4444');
                     statusEl.textContent = '¡Ups! Secuencia incorrecta 💔';
                     statusEl.style.color = '#ff4081';
                     startBtn.style.display = 'inline-block';
                     startBtn.textContent = 'Reintentar 🔄';
+                    // Reset sequence for next attempt
+                    sequence = [];
+                    round = 0;
                     return;
                 }
                 
                 if (playerSequence.length === sequence.length) {
+                    // Completed this round!
                     isWaitingForPlayer = false;
+                    const pts = pointsForRound(round);
+                    score += pts;
+                    updateUI();
+                    showFloatingScore('+' + pts, '#ffd700');
                     
-                    if (sequence.length === WIN_TARGET) {
+                    if (score >= 1000) {
+                        // WIN!
                         setTimeout(() => {
-                            statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE! 🎉</span>';
+                            statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE! 🎉 1000 PUNTOS</span>';
                             celebrate(wrapper, '¡TIENES UNA MEMORIA INCREÍBLE!');
-                            if (window.notifyCarlos) window.notifyCarlos('🧠 Melisa ganó el Simón Dice del Amor.');
+                            if (window.notifyCarlos) window.notifyCarlos('🧠 Melisa ganó el Simón Dice del Amor (1000 pts).');
                             
                             const winMsg = document.createElement('div');
                             winMsg.style.background = 'rgba(255, 215, 0, 0.1)';
                             winMsg.style.border = '1px solid var(--gold)';
                             winMsg.style.padding = '15px';
                             winMsg.style.borderRadius = '10px';
-                            winMsg.style.marginTop = '15px';
+                            winMsg.style.marginTop = '10px';
                             winMsg.style.textAlign = 'center';
-                            winMsg.innerHTML = '<p>Conectados de mente y corazón.</p>';
+                            winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold;">Tómale pantallazo y mándaselo a Carlos para tu premio sorpresa 🎁</p>';
                             wrapper.appendChild(winMsg);
+                            
+                            startBtn.style.display = 'none';
                         }, 500);
                     } else {
-                        statusEl.textContent = '¡Correcto! Siguiente nivel...';
-                        setTimeout(nextRound, 1000);
+                        const messages = [
+                            '¡Muy bien! 🌟', '¡Excelente! 💪', '¡Increíble! ✨',
+                            '¡Sigue así! 🔥', '¡Eres genial! 💖', '¡Casi llegas! 👑'
+                        ];
+                        statusEl.textContent = messages[Math.floor(Math.random() * messages.length)];
+                        statusEl.style.color = 'var(--gold)';
+                        setTimeout(nextRound, 1200);
                     }
                 }
             };
@@ -1480,8 +1579,8 @@ const UniverseGames = (function() {
             const btn = btnElements[id];
             const data = buttonsData[id];
             btn.style.opacity = '1';
-            btn.style.transform = 'scale(0.95)';
-            btn.style.boxShadow = `0 0 20px ${data.glow}, inset 0 0 10px rgba(255,255,255,0.5)`;
+            btn.style.transform = 'scale(0.93)';
+            btn.style.boxShadow = `0 0 25px ${data.glow}, inset 0 0 10px rgba(255,255,255,0.5)`;
             
             setTimeout(() => {
                 btn.style.opacity = '0.6';
@@ -1492,7 +1591,7 @@ const UniverseGames = (function() {
         
         async function playSequence() {
             isWaitingForPlayer = false;
-            statusEl.textContent = `Nivel ${sequence.length} / ${WIN_TARGET} - Observa... 👀`;
+            statusEl.textContent = `Nivel ${round} - Observa... 👀`;
             statusEl.style.color = 'var(--text-primary)';
             
             for (let i = 0; i < sequence.length; i++) {
@@ -1507,6 +1606,8 @@ const UniverseGames = (function() {
         
         function nextRound() {
             playerSequence = [];
+            round++;
+            updateUI();
             sequence.push(Math.floor(Math.random() * 4));
             playSequence();
         }
@@ -1517,14 +1618,18 @@ const UniverseGames = (function() {
         startBtn.className = 'btn';
         startBtn.textContent = '¡INICIAR!';
         startBtn.style.marginTop = '10px';
+        startBtn.style.fontSize = '1rem';
+        startBtn.style.padding = '12px 35px';
         
         startBtn.onclick = () => {
             startBtn.style.display = 'none';
-            // Clear any extra messages
-            if (wrapper.children.length > 3) {
-                wrapper.removeChild(wrapper.lastChild);
-            }
+            // Remove win message if present
+            const extras = wrapper.querySelectorAll('div[style*="border: 1px solid"]');
+            extras.forEach(e => e.remove());
             sequence = [];
+            round = 0;
+            score = 0;
+            updateUI();
             nextRound();
         };
         
