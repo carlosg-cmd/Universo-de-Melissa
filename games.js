@@ -1196,7 +1196,7 @@ const UniverseGames = (function() {
             const size = Math.floor(Math.random() * 18) + 28;
             const wrapperW = wrapper.offsetWidth || 300;
             const x = Math.random() * (wrapperW - size - 10) + 5;
-            const speed = (Math.random() * 1.5 + 1); // px per frame (~60fps)
+            const speed = (Math.random() * 1.5 + 1.1) + (score * 0.0035); // px per frame (~60fps)
             
             const el = document.createElement('div');
             el.style.position = 'absolute';
@@ -1354,25 +1354,16 @@ const UniverseGames = (function() {
             
             overlay.style.display = 'none';
             score = 0;
-            timeLeft = 60;
             isPlaying = true;
             hearts = [];
             updateScore();
-            timeEl.innerHTML = '⏱️ 60s';
+            timeEl.innerHTML = '👑 Modo Maratón';
             
-            // Timer
-            timerInterval = setInterval(() => {
-                if (!isPlaying) return;
-                timeLeft--;
-                timeEl.innerHTML = `⏱️ ${timeLeft}s`;
-                if (timeLeft <= 0) endGame(false);
-            }, 1000);
-            
-            // Spawn loop with increasing frequency
+            // Spawn loop progressive based on score
             const scheduleSpawn = () => {
                 if (!isPlaying) return;
                 createHeart();
-                const delay = Math.max(250, 700 - (60 - timeLeft) * 8);
+                const delay = Math.max(220, 650 - (score * 0.35));
                 spawnTimer = setTimeout(scheduleSpawn, delay);
             };
             scheduleSpawn();
@@ -1550,12 +1541,20 @@ const UniverseGames = (function() {
                     return;
                 }
                 
+                // Correct tap!
+                score += 2;
+                updateUI();
+                
                 if (playerSequence.length === sequence.length) {
                     // Completed this round!
                     isWaitingForPlayer = false;
-                    score += 2;
+                    score += 25;
                     updateUI();
-                    showFloatingScore('+2', '#ffd700');
+                    showFloatingScore('+25 Bono', '#ffd700');
+                    
+                    if (sequence.length >= 7) {
+                        sequence = [];
+                    }
                     
                     if (score >= 1000) {
                         // WIN!
@@ -1578,8 +1577,8 @@ const UniverseGames = (function() {
                         }, 500);
                     } else {
                         const messages = [
-                            '¡Muy bien! (+2 pts) 🌟', '¡Excelente! (+2 pts) 💪', '¡Increíble! (+2 pts) ✨',
-                            '¡Sigue así! (+2 pts) 🔥', '¡Eres genial! (+2 pts) 💖'
+                            '¡Muy bien! (+25 bono) 🌟', '¡Excelente! (+25 bono) 💪', '¡Increíble! (+25 bono) ✨',
+                            '¡Sigue así! (+25 bono) 🔥', '¡Eres genial! (+25 bono) 💖'
                         ];
                         statusEl.textContent = messages[Math.floor(Math.random() * messages.length)];
                         statusEl.style.color = 'var(--gold)';
