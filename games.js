@@ -1152,11 +1152,17 @@ const UniverseGames = (function() {
         overlay.style.padding = '20px';
         overlay.style.color = '#fff';
         
+        let attempts = parseInt(localStorage.getItem('melisa_attempts_catchhearts') || '0', 10);
+        
         overlay.innerHTML = `
-            <h2 style="color:var(--pink); margin-bottom:10px; font-size:1.4rem;">💖 Atrapa mi Corazón</h2>
-            <p style="margin-bottom:8px; font-size:0.9rem;">Toca los corazones de colores para sumar puntos.</p>
-            <p style="color:#aaa; margin-bottom:8px; font-size:0.85rem;">¡Cuidado con los 💔 grises! Te restan puntos.</p>
-            <p style="color:var(--gold); font-weight:bold; margin-bottom:20px; font-size:0.95rem;">Meta: ¡1000 puntos!</p>
+            <div style="background:rgba(255, 64, 129, 0.15); border:1px solid var(--pink); padding:10px; border-radius:8px; margin-bottom:12px; text-align:left; font-size:0.8rem; max-width:90%;">
+                <strong>📢 AVISO OFICIAL (Desde las 5:30 PM):</strong><br>
+                Los premios anteriores eran de prueba 😉. ¡Desde ahora empiezan los <strong>verdaderos premios</strong>!<br>
+                Sumas de 2 en 2 y restas 1 por error. Ganas al llegar a <strong>1000 puntos</strong> o al jugar <strong>15 veces</strong>. ¡Tú puedes! 👑
+            </div>
+            <h2 style="color:var(--pink); margin-bottom:6px; font-size:1.3rem;">💖 Atrapa mi Corazón</h2>
+            <p style="margin-bottom:6px; font-size:0.85rem;">Toca los corazones (+2 pts). Evita los 💔 grises (-1 pt).</p>
+            <p style="color:var(--gold); font-weight:bold; margin-bottom:15px; font-size:0.95rem;">🎯 Meta: 1000 pts o 15 partidas (Llevas: ${attempts}/15)</p>
         `;
         
         const playBtn = document.createElement('button');
@@ -1224,14 +1230,14 @@ const UniverseGames = (function() {
                 el.style.pointerEvents = 'none';
                 
                 if (isTrap) {
-                    score = Math.max(0, score - 100);
+                    score = Math.max(0, score - 1);
                     // Red flash
                     wrapper.style.boxShadow = 'inset 0 0 40px rgba(255,0,0,0.7)';
                     setTimeout(() => { wrapper.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.5)'; }, 250);
-                    // Show -100 floating text
-                    showFloating(el, '-100', '#ff4444');
+                    // Show -1 floating text
+                    showFloating(el, '-1', '#ff4444');
                 } else {
-                    const pts = size < 35 ? 100 : 50;
+                    const pts = 2;
                     score += pts;
                     showFloating(el, '+' + pts, '#ffd700');
                 }
@@ -1259,21 +1265,20 @@ const UniverseGames = (function() {
             f.textContent = text;
             f.style.position = 'absolute';
             f.style.left = refEl.style.left;
-            f.style.top = (parseFloat(refEl.style.top) - 10) + 'px';
+            f.style.top = refEl.style.top;
             f.style.color = color;
             f.style.fontWeight = 'bold';
-            f.style.fontSize = '1.1rem';
+            f.style.fontSize = '1.3rem';
             f.style.fontFamily = 'Outfit, sans-serif';
             f.style.zIndex = '15';
             f.style.pointerEvents = 'none';
-            f.style.textShadow = '0 1px 3px rgba(0,0,0,0.7)';
             f.style.transition = 'all 0.6s ease-out';
             wrapper.appendChild(f);
             requestAnimationFrame(() => {
-                f.style.top = (parseFloat(f.style.top) - 40) + 'px';
+                f.style.transform = 'translateY(-30px)';
                 f.style.opacity = '0';
             });
-            setTimeout(() => { if (f.parentNode) f.remove(); }, 700);
+            setTimeout(() => { if (f.parentNode) f.remove(); }, 650);
         }
         
         function removeHeart(hObj) {
@@ -1315,25 +1320,28 @@ const UniverseGames = (function() {
             overlay.innerHTML = '';
             overlay.style.display = 'flex';
             
-            if (win) {
+            const totalAttempts = parseInt(localStorage.getItem('melisa_attempts_catchhearts') || '0', 10);
+            
+            if (win || score >= 1000 || totalAttempts >= 15) {
                 celebrate(wrapper, '¡OBJETIVO CUMPLIDO! 🎉');
-                if (window.notifyCarlos) window.notifyCarlos('💖 Melisa ganó Atrapa mi Corazón (1000 puntos).');
+                if (window.notifyCarlos) window.notifyCarlos(`💖 Melisa desbloqueó el premio real de Atrapa mi Corazón (${score} pts, ${totalAttempts} partidas).`);
                 overlay.innerHTML = `
-                    <h2 style="color:var(--gold); margin-bottom:15px; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size:1.4rem;">¡ERES INCREÍBLE! 🎉</h2>
-                    <p style="margin-bottom:15px;">Atrapaste todos mis corazones.</p>
-                    <div style="background:rgba(255,215,0,0.1); border:1px solid var(--gold); padding:15px; border-radius:10px; margin-bottom:15px;">
-                        <p style="color:var(--gold); font-weight:bold;">Tómale pantallazo y mándaselo a Carlos para tu premio sorpresa 🎁</p>
+                    <h2 style="color:var(--gold); margin-bottom:12px; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size:1.4rem;">¡FELICIDADES MI REINA! 🎉</h2>
+                    <p style="margin-bottom:10px; font-size:0.95rem;">Has superado el reto (Puntos: ${score}/1000 | Partidas: ${totalAttempts}/15).</p>
+                    <div style="background:rgba(255,215,0,0.15); border:1px solid var(--gold); padding:15px; border-radius:10px; margin-bottom:15px; max-width:90%;">
+                        <p style="color:var(--gold); font-weight:bold; font-size:0.95rem;">¡Desbloqueaste tu PREMIO REAL! 🎁 Tómale pantallazo y mándaselo a Carlos para reclamarlo 💕</p>
                     </div>
                 `;
             } else {
+                const faltantes = Math.max(0, 15 - totalAttempts);
                 overlay.innerHTML = `
-                    <h2 style="color:var(--pink); margin-bottom:15px; font-size:1.3rem;">¡TIEMPO AGOTADO! ⏱️</h2>
-                    <p style="margin-bottom:15px;">Hiciste <span style="color:var(--gold); font-weight:bold;">${score}</span> puntos.</p>
-                    <p style="margin-bottom:20px; color:#aaa; font-size:0.9rem;">¡Inténtalo de nuevo, tú puedes!</p>
+                    <h2 style="color:var(--pink); margin-bottom:10px; font-size:1.3rem;">¡BUEN INTENTO! 💪</h2>
+                    <p style="margin-bottom:8px;">Hiciste <span style="color:var(--gold); font-weight:bold;">${score}</span> puntos en esta ronda.</p>
+                    <p style="margin-bottom:15px; color:#ddd; font-size:0.9rem;">Partidas jugadas: <strong style="color:var(--gold)">${totalAttempts} / 15</strong><br>(¡Te faltan ${faltantes} partidas o llegar a 1000 puntos para tu premio oficial!)</p>
                 `;
                 const retryBtn = document.createElement('button');
                 retryBtn.className = 'btn';
-                retryBtn.textContent = 'Intentar de nuevo 🔄';
+                retryBtn.textContent = 'Jugar otra vez 🔄';
                 retryBtn.style.fontSize = '1rem';
                 retryBtn.style.padding = '12px 35px';
                 retryBtn.onclick = startGame;
@@ -1342,6 +1350,9 @@ const UniverseGames = (function() {
         }
         
         function startGame() {
+            attempts = parseInt(localStorage.getItem('melisa_attempts_catchhearts') || '0', 10) + 1;
+            localStorage.setItem('melisa_attempts_catchhearts', attempts);
+            
             overlay.style.display = 'none';
             score = 0;
             timeLeft = 60;
@@ -1388,6 +1399,19 @@ const UniverseGames = (function() {
         wrapper.style.gap = '15px';
         wrapper.style.position = 'relative';
         
+        // VIP Notice banner
+        const vipNotice = document.createElement('div');
+        vipNotice.style.background = 'rgba(255, 64, 129, 0.15)';
+        vipNotice.style.border = '1px solid var(--pink)';
+        vipNotice.style.padding = '10px';
+        vipNotice.style.borderRadius = '8px';
+        vipNotice.style.fontSize = '0.8rem';
+        vipNotice.style.color = '#fff';
+        vipNotice.style.maxWidth = '280px';
+        vipNotice.style.textAlign = 'left';
+        vipNotice.innerHTML = `<strong>📢 AVISO OFICIAL (Desde las 5:30 PM):</strong><br>Los premios anteriores eran de prueba 😉. ¡Empiezan los <strong>verdaderos premios</strong>!<br>Sumas de 2 en 2 y restas 1 por error. Ganas al llegar a <strong>1000 puntos</strong> o al jugar <strong>15 veces</strong>.`;
+        wrapper.appendChild(vipNotice);
+
         // Scoreboard
         const scoreboard = document.createElement('div');
         scoreboard.style.display = 'flex';
@@ -1396,14 +1420,16 @@ const UniverseGames = (function() {
         scoreboard.style.maxWidth = '280px';
         scoreboard.style.fontFamily = 'Outfit, sans-serif';
         scoreboard.style.fontWeight = 'bold';
-        scoreboard.style.fontSize = '1rem';
+        scoreboard.style.fontSize = '0.95rem';
         scoreboard.style.color = 'var(--text-primary)';
         
+        let attempts = parseInt(localStorage.getItem('melisa_attempts_simonsays') || '0', 10);
+        
         const scoreEl = document.createElement('div');
-        scoreEl.innerHTML = '🧠 0 / 1000';
+        scoreEl.innerHTML = `🧠 0 / 1000`;
         
         const levelEl = document.createElement('div');
-        levelEl.innerHTML = 'Nivel 0';
+        levelEl.innerHTML = `🎮 Partidas: ${attempts}/15`;
         
         scoreboard.appendChild(scoreEl);
         scoreboard.appendChild(levelEl);
@@ -1461,14 +1487,8 @@ const UniverseGames = (function() {
         
         function updateUI() {
             scoreEl.innerHTML = `🧠 ${score} / 1000`;
-            levelEl.innerHTML = `Nivel ${round}`;
+            levelEl.innerHTML = `🎮 Partidas: ${attempts}/15`;
             progressBar.style.width = Math.min(100, (score / 1000) * 100) + '%';
-        }
-        
-        // Points per round: increases as rounds go up
-        function pointsForRound(r) {
-            // Round 1=50, 2=75, 3=100, 4=125, 5=150, 6=175, 7=200, etc.
-            return 50 + (r - 1) * 25;
         }
         
         // Floating score indicator
@@ -1517,17 +1537,33 @@ const UniverseGames = (function() {
                 
                 const currentIndex = playerSequence.length - 1;
                 if (playerSequence[currentIndex] !== sequence[currentIndex]) {
-                    // Wrong! Lose points
+                    // Wrong! Lose 1 point
                     isWaitingForPlayer = false;
-                    const penalty = Math.min(score, 75);
-                    score = Math.max(0, score - penalty);
+                    score = Math.max(0, score - 1);
                     updateUI();
-                    showFloatingScore('-' + penalty, '#ff4444');
-                    statusEl.textContent = '¡Ups! Secuencia incorrecta 💔';
-                    statusEl.style.color = '#ff4081';
-                    startBtn.style.display = 'inline-block';
-                    startBtn.textContent = 'Reintentar 🔄';
-                    // Reset sequence for next attempt
+                    showFloatingScore('-1', '#ff4444');
+                    
+                    if (attempts >= 15) {
+                        statusEl.innerHTML = '<span style="color:var(--gold)">¡OBJETIVO CUMPLIDO (15 PARTIDAS)! 🎉</span>';
+                        celebrate(wrapper, '¡ERES PERSEVERANTE!');
+                        if (window.notifyCarlos) window.notifyCarlos(`🧠 Melisa ganó Simón Dice por perseverancia (${attempts} partidas).`);
+                        
+                        const winMsg = document.createElement('div');
+                        winMsg.style.background = 'rgba(255, 215, 0, 0.15)';
+                        winMsg.style.border = '1px solid var(--gold)';
+                        winMsg.style.padding = '15px';
+                        winMsg.style.borderRadius = '10px';
+                        winMsg.style.marginTop = '10px';
+                        winMsg.style.textAlign = 'center';
+                        winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold;">¡Demostraste tu perseverancia jugando 15 veces! 🎁 Tómale pantallazo y mándaselo a Carlos para tu PREMIO REAL</p>';
+                        wrapper.appendChild(winMsg);
+                        startBtn.style.display = 'none';
+                    } else {
+                        statusEl.textContent = `¡Ups! Secuencia incorrecta (-1 pt) 💔`;
+                        statusEl.style.color = '#ff4081';
+                        startBtn.style.display = 'inline-block';
+                        startBtn.textContent = 'Reintentar 🔄';
+                    }
                     sequence = [];
                     round = 0;
                     return;
@@ -1536,34 +1572,33 @@ const UniverseGames = (function() {
                 if (playerSequence.length === sequence.length) {
                     // Completed this round!
                     isWaitingForPlayer = false;
-                    const pts = pointsForRound(round);
-                    score += pts;
+                    score += 2;
                     updateUI();
-                    showFloatingScore('+' + pts, '#ffd700');
+                    showFloatingScore('+2', '#ffd700');
                     
-                    if (score >= 1000) {
+                    if (score >= 1000 || attempts >= 15) {
                         // WIN!
                         setTimeout(() => {
-                            statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE! 🎉 1000 PUNTOS</span>';
-                            celebrate(wrapper, '¡TIENES UNA MEMORIA INCREÍBLE!');
-                            if (window.notifyCarlos) window.notifyCarlos('🧠 Melisa ganó el Simón Dice del Amor (1000 pts).');
+                            statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE TU PREMIO REAL! 🎉</span>';
+                            celebrate(wrapper, '¡INCREÍBLE!');
+                            if (window.notifyCarlos) window.notifyCarlos(`🧠 Melisa ganó Simón Dice del Amor (${score} pts, ${attempts} partidas).`);
                             
                             const winMsg = document.createElement('div');
-                            winMsg.style.background = 'rgba(255, 215, 0, 0.1)';
+                            winMsg.style.background = 'rgba(255, 215, 0, 0.15)';
                             winMsg.style.border = '1px solid var(--gold)';
                             winMsg.style.padding = '15px';
                             winMsg.style.borderRadius = '10px';
                             winMsg.style.marginTop = '10px';
                             winMsg.style.textAlign = 'center';
-                            winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold;">Tómale pantallazo y mándaselo a Carlos para tu premio sorpresa 🎁</p>';
+                            winMsg.innerHTML = '<p style="color:var(--gold); font-weight:bold;">¡Lograste el objetivo oficial! 🎁 Tómale pantallazo y mándaselo a Carlos para tu PREMIO REAL</p>';
                             wrapper.appendChild(winMsg);
                             
                             startBtn.style.display = 'none';
                         }, 500);
                     } else {
                         const messages = [
-                            '¡Muy bien! 🌟', '¡Excelente! 💪', '¡Increíble! ✨',
-                            '¡Sigue así! 🔥', '¡Eres genial! 💖', '¡Casi llegas! 👑'
+                            '¡Muy bien! (+2 pts) 🌟', '¡Excelente! (+2 pts) 💪', '¡Increíble! (+2 pts) ✨',
+                            '¡Sigue así! (+2 pts) 🔥', '¡Eres genial! (+2 pts) 💖'
                         ];
                         statusEl.textContent = messages[Math.floor(Math.random() * messages.length)];
                         statusEl.style.color = 'var(--gold)';
@@ -1623,10 +1658,12 @@ const UniverseGames = (function() {
         startBtn.style.padding = '12px 35px';
         
         startBtn.onclick = () => {
+            attempts = parseInt(localStorage.getItem('melisa_attempts_simonsays') || '0', 10) + 1;
+            localStorage.setItem('melisa_attempts_simonsays', attempts);
+            
             startBtn.style.display = 'none';
-            // Remove win message if present
             const extras = wrapper.querySelectorAll('div[style*="border: 1px solid"]');
-            extras.forEach(e => e.remove());
+            extras.forEach(e => { if (e !== vipNotice) e.remove(); });
             sequence = [];
             round = 0;
             score = 0;

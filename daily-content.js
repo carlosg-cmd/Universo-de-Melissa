@@ -299,9 +299,9 @@ const DailyContent = (function() {
             title: "Día 6 - Conexión de Corazones 💖",
             emoji: "✨",
             song: "musica/cancion6.mp3",
-            letter: "Mi amor,\n\nSigues demostrando lo fuerte y valiente que eres en tu recuperación. Cada día que pasa te admiro más. Hoy preparé dos juegos nuevos muy especiales para ti.\n\nDemuestra qué tan ágil eres atrapando mis corazones y qué tan conectados estamos en nuestro Simón Dice del Amor.\n\n¡Sigue sonriendo que te amo muchísimo!",
-            funPhrase: "¡Concéntrate y diviértete mi reina! 👑",
-            recoveryQuote: "Eres más fuerte de lo que imaginas. ¡Vamos por esos 1000 puntos!",
+            letter: "Mi amor,\n\n📢 **AVISO OFICIAL (Desde las 5:30 PM):**\n¡Hola hermosa! Los premios que habías ganado jugando anteriormente eran solamente de prueba para calentar motores 😉.\n\n¡Pero desde hoy a las 5:30 PM empiezan los **VERDADEROS PREMIOS SORPRESA**! 🎁\n\nEl nivel de dificultad ha aumentado: ahora sumas puntos de **2 en 2** y si te equivocas pierdes **1 punto**.\n\nPara ganar tu premio real y desbloquear el regalo, debes lograr una de dos cosas (lo que suceda primero):\n1️⃣ Llegar a la meta de **1000 puntos**.\n2️⃣ Demostrar tu perseverancia jugando al menos **15 veces**.\n\n¡Esfuérzate mucho mi reina, tú puedes ganar los verdaderos regalos! Te amo muchísimo 💖",
+            funPhrase: "🚨 ¡Desde las 5:30 PM valen los premios reales! Juega 15 veces o llega a 1000 puntos 👑",
+            recoveryQuote: "La constancia y el esfuerzo tienen su gran recompensa. ¡A jugar mi amor!",
             games: [
                 {
                     name: 'Atrapa mi Corazón',
