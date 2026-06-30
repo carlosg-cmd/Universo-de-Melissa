@@ -922,6 +922,12 @@
                 case 'roulette':
                     titleEl.textContent = '🎡 Ruleta de Premios';
                     return UniverseGames.startRoulette(container, gConfig);
+                case 'catchhearts':
+                    titleEl.textContent = '💖 Atrapa mi Corazón';
+                    return UniverseGames.startCatchHearts(container, gConfig);
+                case 'simonsays':
+                    titleEl.textContent = '🧠 Simón Dice del Amor';
+                    return UniverseGames.startSimonSays(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';

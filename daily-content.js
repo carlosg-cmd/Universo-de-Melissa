@@ -294,10 +294,31 @@ const DailyContent = (function() {
                 }
             ]
         },
-        // Days 6-29 are placeholders for Carlos to customize
-        ...Array.from({length: 24}, (_, i) => ({
-            day: i + 6,
-            title: `Día ${i + 6} - Sorpresa`,
+        {
+            day: 6,
+            title: "Día 6 - Conexión de Corazones 💖",
+            emoji: "✨",
+            song: "musica/cancion1.mp3",
+            letter: "Mi amor,\n\nSigues demostrando lo fuerte y valiente que eres en tu recuperación. Cada día que pasa te admiro más. Hoy preparé dos juegos nuevos muy especiales para ti.\n\nDemuestra qué tan ágil eres atrapando mis corazones y qué tan conectados estamos en nuestro Simón Dice del Amor.\n\n¡Sigue sonriendo que te amo muchísimo!",
+            funPhrase: "¡Concéntrate y diviértete mi reina! 👑",
+            recoveryQuote: "Eres más fuerte de lo que imaginas. ¡Vamos por esos 1000 puntos!",
+            games: [
+                {
+                    name: 'Atrapa mi Corazón',
+                    type: 'catchhearts',
+                    config: {}
+                },
+                {
+                    name: 'Simón Dice del Amor',
+                    type: 'simonsays',
+                    config: {}
+                }
+            ]
+        },
+        // Days 7-29 are placeholders for Carlos to customize
+        ...Array.from({length: 23}, (_, i) => ({
+            day: i + 7,
+            title: `Día ${i + 7} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

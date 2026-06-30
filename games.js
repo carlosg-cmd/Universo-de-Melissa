@@ -1082,6 +1082,379 @@ const UniverseGames = (function() {
         container.appendChild(wrapper);
     }
 
+    // ==========================================
+    // 7. CATCH HEARTS (ATRAPA MI CORAZÓN)
+    // ==========================================
+    function startCatchHearts(container, config) {
+        container.innerHTML = '';
+        
+        const wrapper = document.createElement('div');
+        wrapper.style.position = 'relative';
+        wrapper.style.width = '100%';
+        wrapper.style.height = '450px';
+        wrapper.style.background = 'linear-gradient(to bottom, #0a1128, #1a2a6c)';
+        wrapper.style.borderRadius = 'var(--radius-lg)';
+        wrapper.style.overflow = 'hidden';
+        wrapper.style.border = '2px solid var(--primary)';
+        wrapper.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.5)';
+        
+        const scoreboard = document.createElement('div');
+        scoreboard.style.position = 'absolute';
+        scoreboard.style.top = '15px';
+        scoreboard.style.left = '15px';
+        scoreboard.style.right = '15px';
+        scoreboard.style.display = 'flex';
+        scoreboard.style.justifyContent = 'space-between';
+        scoreboard.style.color = '#fff';
+        scoreboard.style.fontFamily = 'Outfit, sans-serif';
+        scoreboard.style.fontSize = '1.2rem';
+        scoreboard.style.fontWeight = 'bold';
+        scoreboard.style.zIndex = '10';
+        
+        const scoreEl = document.createElement('div');
+        scoreEl.innerHTML = 'Puntos: <span style="color:var(--gold)">0</span> / 1000';
+        
+        const timeEl = document.createElement('div');
+        timeEl.innerHTML = '⏱️ 60s';
+        
+        scoreboard.appendChild(scoreEl);
+        scoreboard.appendChild(timeEl);
+        wrapper.appendChild(scoreboard);
+        
+        const startScreen = document.createElement('div');
+        startScreen.style.position = 'absolute';
+        startScreen.style.inset = '0';
+        startScreen.style.background = 'rgba(0,0,0,0.8)';
+        startScreen.style.display = 'flex';
+        startScreen.style.flexDirection = 'column';
+        startScreen.style.alignItems = 'center';
+        startScreen.style.justifyContent = 'center';
+        startScreen.style.zIndex = '20';
+        startScreen.style.textAlign = 'center';
+        startScreen.style.padding = '20px';
+        
+        startScreen.innerHTML = `
+            <h2 style="color:var(--pink); margin-bottom:10px;">Atrapa mi Corazón</h2>
+            <p style="margin-bottom:20px; font-size:1rem;">Toca los corazones rosados y rojos para sumar puntos.<br><span style="color:#aaa;">¡Cuidado con los corazones grises rotos!</span> Te restan puntos.</p>
+            <p style="color:var(--gold); font-weight:bold; margin-bottom:20px;">Llega a 1000 puntos para tu premio sorpresa.</p>
+        `;
+        
+        const startBtn = document.createElement('button');
+        startBtn.className = 'btn';
+        startBtn.textContent = '¡JUGAR!';
+        startScreen.appendChild(startBtn);
+        wrapper.appendChild(startScreen);
+        
+        container.appendChild(wrapper);
+        
+        let score = 0;
+        let timeLeft = 60;
+        let gameInterval;
+        let spawnInterval;
+        let isPlaying = false;
+        
+        function spawnHeart() {
+            if (!isPlaying) return;
+            
+            const heart = document.createElement('div');
+            const isTrap = Math.random() < 0.25; // 25% chance of trap
+            const size = Math.floor(Math.random() * 20) + 30; // 30px to 50px
+            const startX = Math.random() * (wrapper.offsetWidth - size);
+            const duration = Math.random() * 2000 + 1500; // 1.5s to 3.5s falling
+            
+            heart.style.position = 'absolute';
+            heart.style.left = startX + 'px';
+            heart.style.top = '-50px';
+            heart.style.fontSize = size + 'px';
+            heart.style.cursor = 'pointer';
+            heart.style.userSelect = 'none';
+            heart.style.transition = `top ${duration}ms linear`;
+            heart.style.zIndex = '5';
+            
+            if (isTrap) {
+                heart.innerHTML = '💔';
+                heart.style.filter = 'grayscale(100%)';
+            } else {
+                const emojis = ['💖', '💗', '💓', '❤️', '💕'];
+                heart.innerHTML = emojis[Math.floor(Math.random() * emojis.length)];
+            }
+            
+            let isClicked = false;
+            
+            const clickHandler = (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (isClicked || !isPlaying) return;
+                isClicked = true;
+                
+                // Float up and fade out animation
+                heart.style.transition = 'all 0.3s ease-out';
+                heart.style.transform = 'scale(1.5) translateY(-20px)';
+                heart.style.opacity = '0';
+                
+                if (isTrap) {
+                    score = Math.max(0, score - 100); // Penalti
+                    wrapper.style.boxShadow = 'inset 0 0 30px rgba(255,0,0,0.8)';
+                    setTimeout(() => wrapper.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.5)', 200);
+                } else {
+                    const points = size < 35 ? 100 : 50; // Smaller hearts give more points
+                    score += points;
+                }
+                
+                scoreEl.innerHTML = `Puntos: <span style="color:var(--gold)">${score}</span> / 1000`;
+                
+                setTimeout(() => { if (heart.parentNode) heart.remove(); }, 300);
+                
+                if (score >= 1000) {
+                    endGame(true);
+                }
+            };
+            
+            heart.addEventListener('mousedown', clickHandler);
+            heart.addEventListener('touchstart', clickHandler);
+            
+            wrapper.appendChild(heart);
+            
+            // Trigger reflow for animation
+            heart.offsetHeight;
+            heart.style.top = (wrapper.offsetHeight + 50) + 'px';
+            
+            setTimeout(() => {
+                if (heart.parentNode && !isClicked) {
+                    heart.remove();
+                }
+            }, duration);
+        }
+        
+        function endGame(win) {
+            isPlaying = false;
+            clearInterval(gameInterval);
+            clearInterval(spawnInterval);
+            
+            // Remove remaining hearts
+            Array.from(wrapper.children).forEach(child => {
+                if (child !== scoreboard && child !== startScreen) {
+                    child.style.display = 'none';
+                }
+            });
+            
+            startScreen.innerHTML = '';
+            startScreen.style.display = 'flex';
+            
+            if (win) {
+                celebrate(wrapper, '¡OBJETIVO CUMPLIDO! 🎉');
+                if (window.notifyCarlos) window.notifyCarlos(`💖 Melisa ganó Atrapa mi Corazón (1000 puntos).`);
+                
+                startScreen.innerHTML = `
+                    <h2 style="color:var(--gold); margin-bottom:15px; text-shadow: 0 0 10px rgba(255,215,0,0.5);">¡ERES INCREÍBLE!</h2>
+                    <p style="margin-bottom:20px;">Atrapaste todos mis corazones.</p>
+                    <div style="background:rgba(255,215,0,0.1); border:1px solid var(--gold); padding:15px; border-radius:10px; margin-bottom:20px;">
+                        <p style="color:var(--gold); font-weight:bold;">Tómale pantallazo y mándaselo a Carlos para otro premio sorpresa.</p>
+                    </div>
+                `;
+            } else {
+                startScreen.innerHTML = `
+                    <h2 style="color:var(--pink); margin-bottom:15px;">¡TIEMPO AGOTADO!</h2>
+                    <p style="margin-bottom:20px;">Hiciste <span style="color:var(--gold); font-weight:bold;">${score}</span> puntos.</p>
+                `;
+                const retryBtn = document.createElement('button');
+                retryBtn.className = 'btn';
+                retryBtn.textContent = 'Intentar de nuevo 🔄';
+                retryBtn.onclick = startGame;
+                startScreen.appendChild(retryBtn);
+            }
+        }
+        
+        function startGame() {
+            startScreen.style.display = 'none';
+            score = 0;
+            timeLeft = 60;
+            isPlaying = true;
+            scoreEl.innerHTML = `Puntos: <span style="color:var(--gold)">0</span> / 1000`;
+            timeEl.innerHTML = '⏱️ 60s';
+            
+            gameInterval = setInterval(() => {
+                if (!isPlaying) return;
+                timeLeft--;
+                timeEl.innerHTML = `⏱️ ${timeLeft}s`;
+                
+                if (timeLeft <= 0) {
+                    endGame(false);
+                }
+            }, 1000);
+            
+            // Spawn hearts faster as time goes on
+            const spawnLoop = () => {
+                if (!isPlaying) return;
+                spawnHeart();
+                const currentDelay = Math.max(300, 800 - (60 - timeLeft) * 10);
+                spawnInterval = setTimeout(spawnLoop, currentDelay);
+            };
+            spawnLoop();
+        }
+        
+        startBtn.onclick = startGame;
+    }
+
+    // ==========================================
+    // 8. SIMON SAYS (SIMÓN DICE)
+    // ==========================================
+    function startSimonSays(container, config) {
+        container.innerHTML = '';
+        
+        const wrapper = document.createElement('div');
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.width = '100%';
+        wrapper.style.gap = '20px';
+        
+        const statusEl = document.createElement('h3');
+        statusEl.style.color = 'var(--text-primary)';
+        statusEl.style.textAlign = 'center';
+        statusEl.style.height = '30px';
+        statusEl.textContent = 'Presiona INICIAR para jugar';
+        wrapper.appendChild(statusEl);
+        
+        const grid = document.createElement('div');
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = '1fr 1fr';
+        grid.style.gap = '15px';
+        grid.style.width = '260px';
+        grid.style.height = '260px';
+        
+        const WIN_TARGET = 7;
+        let sequence = [];
+        let playerSequence = [];
+        let isWaitingForPlayer = false;
+        
+        const buttonsData = [
+            { id: 0, color: '#ff4081', glow: 'rgba(255,64,129,0.8)', emoji: '💖' }, // Pink
+            { id: 1, color: '#00e5ff', glow: 'rgba(0,229,255,0.8)', emoji: '✨' }, // Cyan
+            { id: 2, color: '#ffd54f', glow: 'rgba(255,213,79,0.8)', emoji: '🌻' }, // Gold
+            { id: 3, color: '#b388ff', glow: 'rgba(179,136,255,0.8)', emoji: '💌' }  // Purple
+        ];
+        
+        const btnElements = [];
+        
+        buttonsData.forEach(data => {
+            const btn = document.createElement('div');
+            btn.style.backgroundColor = data.color;
+            btn.style.borderRadius = 'var(--radius-lg)';
+            btn.style.display = 'flex';
+            btn.style.alignItems = 'center';
+            btn.style.justifyContent = 'center';
+            btn.style.fontSize = '2.5rem';
+            btn.style.cursor = 'pointer';
+            btn.style.transition = 'all 0.1s';
+            btn.style.opacity = '0.6';
+            btn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
+            btn.innerHTML = data.emoji;
+            
+            btn.onclick = () => {
+                if (!isWaitingForPlayer) return;
+                
+                flashButton(data.id, 200);
+                playerSequence.push(data.id);
+                
+                // Check sequence
+                const currentIndex = playerSequence.length - 1;
+                if (playerSequence[currentIndex] !== sequence[currentIndex]) {
+                    // Wrong!
+                    isWaitingForPlayer = false;
+                    statusEl.textContent = '¡Ups! Secuencia incorrecta 💔';
+                    statusEl.style.color = '#ff4081';
+                    startBtn.style.display = 'inline-block';
+                    startBtn.textContent = 'Reintentar 🔄';
+                    return;
+                }
+                
+                if (playerSequence.length === sequence.length) {
+                    isWaitingForPlayer = false;
+                    
+                    if (sequence.length === WIN_TARGET) {
+                        setTimeout(() => {
+                            statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE! 🎉</span>';
+                            celebrate(wrapper, '¡TIENES UNA MEMORIA INCREÍBLE!');
+                            if (window.notifyCarlos) window.notifyCarlos('🧠 Melisa ganó el Simón Dice del Amor.');
+                            
+                            const winMsg = document.createElement('div');
+                            winMsg.style.background = 'rgba(255, 215, 0, 0.1)';
+                            winMsg.style.border = '1px solid var(--gold)';
+                            winMsg.style.padding = '15px';
+                            winMsg.style.borderRadius = '10px';
+                            winMsg.style.marginTop = '15px';
+                            winMsg.style.textAlign = 'center';
+                            winMsg.innerHTML = '<p>Conectados de mente y corazón.</p>';
+                            wrapper.appendChild(winMsg);
+                        }, 500);
+                    } else {
+                        statusEl.textContent = '¡Correcto! Siguiente nivel...';
+                        setTimeout(nextRound, 1000);
+                    }
+                }
+            };
+            
+            btnElements.push(btn);
+            grid.appendChild(btn);
+        });
+        
+        function flashButton(id, duration) {
+            const btn = btnElements[id];
+            const data = buttonsData[id];
+            btn.style.opacity = '1';
+            btn.style.transform = 'scale(0.95)';
+            btn.style.boxShadow = `0 0 20px ${data.glow}, inset 0 0 10px rgba(255,255,255,0.5)`;
+            
+            setTimeout(() => {
+                btn.style.opacity = '0.6';
+                btn.style.transform = 'scale(1)';
+                btn.style.boxShadow = '0 4px 10px rgba(0,0,0,0.3)';
+            }, duration);
+        }
+        
+        async function playSequence() {
+            isWaitingForPlayer = false;
+            statusEl.textContent = `Nivel ${sequence.length} / ${WIN_TARGET} - Observa... 👀`;
+            statusEl.style.color = 'var(--text-primary)';
+            
+            for (let i = 0; i < sequence.length; i++) {
+                await new Promise(r => setTimeout(r, 400));
+                flashButton(sequence[i], 400);
+                await new Promise(r => setTimeout(r, 500));
+            }
+            
+            statusEl.textContent = '¡Tu turno! 👆';
+            isWaitingForPlayer = true;
+        }
+        
+        function nextRound() {
+            playerSequence = [];
+            sequence.push(Math.floor(Math.random() * 4));
+            playSequence();
+        }
+        
+        wrapper.appendChild(grid);
+        
+        const startBtn = document.createElement('button');
+        startBtn.className = 'btn';
+        startBtn.textContent = '¡INICIAR!';
+        startBtn.style.marginTop = '10px';
+        
+        startBtn.onclick = () => {
+            startBtn.style.display = 'none';
+            // Clear any extra messages
+            if (wrapper.children.length > 3) {
+                wrapper.removeChild(wrapper.lastChild);
+            }
+            sequence = [];
+            nextRound();
+        };
+        
+        wrapper.appendChild(startBtn);
+        container.appendChild(wrapper);
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -1089,6 +1462,8 @@ const UniverseGames = (function() {
         startPuzzle,
         startRiddle,
         startHangman,
-        startRoulette
+        startRoulette,
+        startCatchHearts,
+        startSimonSays
     };
 })();
