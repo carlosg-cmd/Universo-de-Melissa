@@ -1693,11 +1693,11 @@ const UniverseGames = (function() {
         wrapper.style.margin = '0 auto';
         wrapper.style.padding = '10px';
 
-        // Automatic clean reset for v27 or ?reset=1
-        if (localStorage.getItem('melisa_v27_reset') !== 'true' || window.location.search.includes('reset=1')) {
+        // Automatic clean reset for v28 or ?reset=1
+        if (localStorage.getItem('melisa_v28_reset') !== 'true' || window.location.search.includes('reset=1')) {
             localStorage.removeItem('melisa_magicboxes_digits');
             localStorage.removeItem('melisa_magicboxes_total');
-            localStorage.setItem('melisa_v27_reset', 'true');
+            localStorage.setItem('melisa_v28_reset', 'true');
         }
 
         let totalExplored = parseInt(localStorage.getItem('melisa_magicboxes_total') || '0', 10);
@@ -1772,9 +1772,9 @@ const UniverseGames = (function() {
             const hour = now.getHours();
             const isTestWin = window.location.search.includes('win=1');
             
-            // First code strictly after 10 attempts, then every 2 hours: >=12, >=14, >=16, >=18
+            // First code strictly at 10:00 AM, then every 2 hours: >=12, >=14, >=16, >=18
             const conditions = [
-                totalExplored >= 10,
+                hour >= 10,
                 hour >= 12,
                 hour >= 14,
                 hour >= 16,
