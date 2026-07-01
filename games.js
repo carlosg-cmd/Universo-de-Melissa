@@ -1696,8 +1696,8 @@ const UniverseGames = (function() {
         let totalExplored = parseInt(localStorage.getItem('melisa_magicboxes_total') || '0', 10);
         let won = false;
         
-        // Secret 5-digit code revealed every 2 hours: 9 AM, 11 AM, 1 PM, 3 PM, 5 PM
-        const SECRET_CODE = ['7', '2', '4', '9', '5'];
+        // Secret 5-digit code: 26275
+        const SECRET_CODE = ['2', '6', '2', '7', '5'];
         let unlockedDigits = JSON.parse(localStorage.getItem('melisa_magicboxes_digits') || '[]');
 
         const instructions = document.createElement('p');
@@ -1705,7 +1705,7 @@ const UniverseGames = (function() {
         instructions.style.textAlign = 'center';
         instructions.style.fontSize = '0.95rem';
         instructions.style.margin = '0';
-        instructions.innerHTML = '✨ ¡Hola mi reina! Toca cualquier cajita para descubrir pensamientos mágicos. <br><strong>¡Atenta! Cada 2 horas aparecerá un dígito secreto. ¡Tómale pantallazo porque lo necesitarás para abrir el candado a las 7:00 PM!</strong> 📸🔐';
+        instructions.innerHTML = '✨ ¡Hola mi reina! Toca cualquier cajita para descubrir pensamientos mágicos. <br><strong>¡Atenta! Irán apareciendo pistas secretas. ¡Tómales pantallazo porque las necesitarás para abrir el candado final!</strong> 📸🔐';
         wrapper.appendChild(instructions);
 
         const counterEl = document.createElement('div');
@@ -1714,7 +1714,7 @@ const UniverseGames = (function() {
         counterEl.style.fontSize = '1rem';
         counterEl.style.color = 'var(--gold)';
         counterEl.style.textAlign = 'center';
-        counterEl.innerHTML = `🔐 Pistas del código hoy: ${unlockedDigits.length} / 5 <br><span style="font-size:0.8rem; color:var(--text-secondary);">Cajitas exploradas: ${totalExplored}</span>`;
+        counterEl.innerHTML = `🔐 Pistas descubiertas hoy: ${unlockedDigits.length} <br><span style="font-size:0.8rem; color:var(--text-secondary);">Cajitas exploradas: ${totalExplored}</span>`;
         wrapper.appendChild(counterEl);
 
         const grid = document.createElement('div');
@@ -1765,18 +1765,24 @@ const UniverseGames = (function() {
             const hour = now.getHours();
             const isTestWin = window.location.search.includes('win=1');
             
-            // Check windows: >=9 (digit 1), >=11 (digit 2), >=13 (digit 3), >=15 (digit 4), >=17 (digit 5)
-            const thresholds = [9, 11, 13, 15, 17];
-            for (let i = 0; i < thresholds.length; i++) {
-                if ((hour >= thresholds[i] || isTestWin) && unlockedDigits.length === i) {
-                    // Unlock digit i!
+            // First code after 10 clicks or 10:00 AM, then every 2 hours: >=12, >=14, >=16, >=18
+            const conditions = [
+                (totalExplored >= 10 || hour >= 10),
+                hour >= 12,
+                hour >= 14,
+                hour >= 16,
+                hour >= 18
+            ];
+
+            for (let i = 0; i < conditions.length; i++) {
+                if ((conditions[i] || isTestWin) && unlockedDigits.length === i) {
                     const digit = SECRET_CODE[i];
                     unlockedDigits.push(digit);
                     localStorage.setItem('melisa_magicboxes_digits', JSON.stringify(unlockedDigits));
                     return {
                         emoji: '📸',
-                        title: `¡PISTA #${i + 1} DEL CÓDIGO SECRETO!`,
-                        text: `¡Atención mi princesa! Ha aparecido el <strong>Dígito #${i + 1}</strong> para abrir el candado de las 7:00 PM:<br><br><span style="font-size:2.8rem; color:var(--gold); background:rgba(0,0,0,0.5); padding:5px 20px; border-radius:12px; border:2px dashed var(--gold); display:inline-block; margin:10px 0;">[ ${digit} ]</span><br><br>📸 <strong>¡TÓMALE PANTALLAZO AHORA MISMO!</strong> Guárdalo muy bien porque necesitarás los 5 dígitos para abrir la Llave Dorada.`,
+                        title: `¡PISTA #${unlockedDigits.length} DESCUBIERTA!`,
+                        text: `¡Atención mi princesa! Ha aparecido la <strong>Pista #${unlockedDigits.length}</strong> para el candado final:<br><br><span style="font-size:2.8rem; color:var(--gold); background:rgba(0,0,0,0.5); padding:5px 20px; border-radius:12px; border:2px dashed var(--gold); display:inline-block; margin:10px 0;">[ ${digit} ]</span><br><br>📸 <strong>¡TÓMALE PANTALLAZO AHORA MISMO!</strong> Guárdalo muy bien porque necesitarás todas las pistas que encuentres para abrir la Llave Dorada.`,
                         isDigit: true
                     };
                 }
@@ -1822,18 +1828,19 @@ const UniverseGames = (function() {
                     });
 
                     const now = new Date();
-                    const isAfter7PM = now.getHours() >= 19 || window.location.search.includes('win=1');
+                    // Lock appears after 7:59 PM (19:59) -> i.e. (hour == 19 && min >= 59) || hour >= 20
+                    const isAfter759PM = (now.getHours() === 19 && now.getMinutes() >= 59) || now.getHours() >= 20 || window.location.search.includes('win=1');
 
-                    if (isAfter7PM) {
+                    if (isAfter759PM) {
                         showPadlockModal();
                         return;
                     }
 
-                    // Check if she unlocked a new 2-hour digit!
+                    // Check if she unlocked a new clue!
                     const digitData = checkDigitUnlock();
                     const msgData = digitData || getRandomRomanticMessage();
 
-                    counterEl.innerHTML = `🔐 Pistas del código hoy: ${unlockedDigits.length} / 5 <br><span style="font-size:0.8rem; color:var(--text-secondary);">Cajitas exploradas: ${totalExplored}</span>`;
+                    counterEl.innerHTML = `🔐 Pistas descubiertas hoy: ${unlockedDigits.length} <br><span style="font-size:0.8rem; color:var(--text-secondary);">Cajitas exploradas: ${totalExplored}</span>`;
 
                     showBoxModal(msgData, false, () => {
                         // On modal close, shuffle and keep boxes closed!
