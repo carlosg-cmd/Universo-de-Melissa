@@ -1,4 +1,4 @@
-const CACHE_NAME = 'melisa-store-v22';
+const CACHE_NAME = 'melisa-store-v23';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
@@ -13,7 +13,8 @@ self.addEventListener('install', (e) => {
       './fotos/foto_139.jpeg',
       './fotos/foto_186.jpeg',
       './musica/cancion5.mp3',
-      './musica/cancion6.mp3'
+      './musica/cancion6.mp3',
+      './musica/cancion7.mp3'
     ]))
   );
 });

@@ -315,10 +315,21 @@ const DailyContent = (function() {
                 }
             ]
         },
-        // Days 7-29 are placeholders for Carlos to customize
-        ...Array.from({length: 23}, (_, i) => ({
-            day: i + 7,
-            title: `Día ${i + 7} - Sorpresa`,
+        {
+            day: 7,
+            title: "Día 7 - Las Cajitas Mágicas de Carlos 🎁",
+            emoji: "🗝️",
+            song: "musica/cancion7.mp3",
+            letter: "Mi hermosa princesa,\n\n¡Hemos llegado al Día 7 de nuestro Universo Melisa! 🎉 Siete días acompañándote en tu recuperación, viéndote ser cada día más fuerte y valiente.\n\nHoy te he preparado un minijuego nuevo y exclusivo: **Las Cajitas Mágicas de Carlos**. En cada cajita de regalo hay un mensaje escrito con todo mi amor.\n\nAbre cada una para descubrir lo mucho que te adoro, ¡y encuentra la **Llave Dorada del Amor** al final para desbloquear tu Premio Real del Día 7!\n\n¡Te amo infinito, mi reina hermosa! 💖",
+            funPhrase: "¡Una semana de recuperación superada como una verdadera campeona! 👑",
+            recoveryQuote: "Siete días menos de espera y siete días más de amor incondicional.",
+            gameType: 'magicboxes',
+            gameConfig: {}
+        },
+        // Days 8-29 are placeholders for Carlos to customize
+        ...Array.from({length: 22}, (_, i) => ({
+            day: i + 8,
+            title: `Día ${i + 8} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

@@ -1676,6 +1676,186 @@ const UniverseGames = (function() {
         container.appendChild(wrapper);
     }
 
+    // ==========================================
+    //  GAME 10: LAS CAJITAS MÁGICAS DE CARLOS
+    // ==========================================
+    function startMagicBoxes(container, config) {
+        container.innerHTML = '';
+        
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-magicboxes';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.gap = '15px';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '400px';
+        wrapper.style.margin = '0 auto';
+        wrapper.style.padding = '10px';
+
+        let openedCount = 0;
+        let won = false;
+        
+        const instructions = document.createElement('p');
+        instructions.style.color = 'var(--text-secondary)';
+        instructions.style.textAlign = 'center';
+        instructions.style.fontSize = '0.95rem';
+        instructions.style.margin = '0';
+        instructions.innerHTML = '✨ ¡Hola mi reina! Toca cada cajita de regalo para descubrir los mensajes mágicos que escribí para ti. <br><strong>¡Encuentra la Llave Dorada en la última caja para desbloquear tu Premio Real del Día 7!</strong> 🗝️🎁';
+        wrapper.appendChild(instructions);
+
+        const counterEl = document.createElement('div');
+        counterEl.style.fontFamily = 'Outfit, sans-serif';
+        counterEl.style.fontWeight = 'bold';
+        counterEl.style.fontSize = '1.1rem';
+        counterEl.style.color = 'var(--gold)';
+        counterEl.innerHTML = '🎁 Cajitas abiertas: 0 / 9';
+        wrapper.appendChild(counterEl);
+
+        // Progress bar
+        const progressWrap = document.createElement('div');
+        progressWrap.style.width = '100%';
+        progressWrap.style.height = '10px';
+        progressWrap.style.background = 'rgba(255,255,255,0.1)';
+        progressWrap.style.borderRadius = '5px';
+        progressWrap.style.overflow = 'hidden';
+        
+        const progressBar = document.createElement('div');
+        progressBar.style.width = '0%';
+        progressBar.style.height = '100%';
+        progressBar.style.background = 'linear-gradient(90deg, #ff4081, #ffd700)';
+        progressBar.style.transition = 'width 0.4s ease';
+        progressWrap.appendChild(progressBar);
+        wrapper.appendChild(progressWrap);
+
+        const grid = document.createElement('div');
+        grid.style.display = 'grid';
+        grid.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        grid.style.gap = '15px';
+        grid.style.width = '100%';
+        grid.style.marginTop = '10px';
+
+        const boxMessages = [
+            { emoji: '💌', title: 'Mensaje #1 de Carlos', text: 'Eres la casualidad más hermosa que llegó a mi vida. ¡Te amo infinito!' },
+            { emoji: '🌟', title: 'Mensaje #2 de Carlos', text: 'Adoro ver cómo luchas y te recuperas cada día. Eres mi campeona hermosa.' },
+            { emoji: '💖', title: 'Mensaje #3 de Carlos', text: 'Mi lugar favorito en todo el universo siempre será entre tus brazos.' },
+            { emoji: '✨', title: 'Mensaje #4 de Carlos', text: 'Tu sonrisa tiene el poder de iluminar hasta el día más gris.' },
+            { emoji: '🥰', title: 'Mensaje #5 de Carlos', text: 'Gracias por existir y por hacerme el hombre más feliz del mundo.' },
+            { emoji: '🌹', title: 'Mensaje #6 de Carlos', text: 'Cada segundo pensando en ti me recuerda lo mucho que te adoro.' },
+            { emoji: '🦋', title: 'Mensaje #7 de Carlos', text: 'Ya casi termina la espera para volver a salir, abrazarnos y consentirte.' },
+            { emoji: '💞', title: 'Mensaje #8 de Carlos', text: 'Eres mi consentida hermosa hoy, mañana y toda la eternidad.' },
+            { emoji: '🗝️', title: '¡LLAVE DORADA DEL AMOR!', text: '¡ENCONTRASTE EL TESORO SECRETO DEL DÍA 7! Has abierto todo mi corazón.', isKey: true }
+        ];
+
+        for (let i = 0; i < 9; i++) {
+            const boxBtn = document.createElement('div');
+            boxBtn.style.background = 'linear-gradient(135deg, rgba(255,64,129,0.25), rgba(0,229,255,0.15))';
+            boxBtn.style.border = '2px solid var(--accent-pink)';
+            boxBtn.style.borderRadius = '15px';
+            boxBtn.style.aspectRatio = '1';
+            boxBtn.style.display = 'flex';
+            boxBtn.style.flexDirection = 'column';
+            boxBtn.style.alignItems = 'center';
+            boxBtn.style.justifyContent = 'center';
+            boxBtn.style.cursor = 'pointer';
+            boxBtn.style.transition = 'all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+            boxBtn.style.boxShadow = '0 5px 15px rgba(255,64,129,0.2)';
+            boxBtn.style.userSelect = 'none';
+
+            boxBtn.innerHTML = '<span style="font-size:2.2rem; transition:transform 0.3s;">🎁</span><span style="font-size:0.75rem; color:var(--text-secondary); margin-top:4px;">Caja #' + (i + 1) + '</span>';
+
+            boxBtn.onmouseenter = () => { if (!boxBtn.opened) boxBtn.style.transform = 'scale(1.08) translateY(-3px)'; };
+            boxBtn.onmouseleave = () => { if (!boxBtn.opened) boxBtn.style.transform = 'scale(1)'; };
+
+            boxBtn.onclick = () => {
+                if (boxBtn.opened || won) return;
+                boxBtn.opened = true;
+                openedCount++;
+
+                const msgData = boxMessages[openedCount - 1];
+
+                boxBtn.style.background = 'rgba(255, 215, 0, 0.2)';
+                boxBtn.style.borderColor = 'var(--gold)';
+                boxBtn.style.transform = 'scale(0.95)';
+                boxBtn.style.boxShadow = '0 0 20px rgba(255,215,0,0.5)';
+                boxBtn.innerHTML = `<span style="font-size:2.2rem;">${msgData.emoji}</span><span style="font-size:0.7rem; color:var(--gold); font-weight:bold; margin-top:4px;">¡Abierta!</span>`;
+
+                counterEl.innerHTML = `🎁 Cajitas abiertas: ${openedCount} / 9`;
+                progressBar.style.width = ((openedCount / 9) * 100) + '%';
+
+                showBoxModal(msgData, openedCount === 9);
+
+                if (openedCount === 9) {
+                    won = true;
+                    setTimeout(() => {
+                        celebrate(wrapper, '¡TESORO ENCONTRADO!');
+                        if (window.notifyCarlos) window.notifyCarlos('🎁 Melisa abrió las 9 Cajitas Mágicas y desbloqueó el Día 7.');
+
+                        const winMsg = document.createElement('div');
+                        winMsg.style.background = 'rgba(255, 215, 0, 0.15)';
+                        winMsg.style.border = '2px solid var(--gold)';
+                        winMsg.style.padding = '18px';
+                        winMsg.style.borderRadius = '12px';
+                        winMsg.style.marginTop = '15px';
+                        winMsg.style.textAlign = 'center';
+                        winMsg.style.width = '100%';
+                        winMsg.style.animation = 'pulse 2s infinite';
+                        winMsg.innerHTML = '<h3 style="color:var(--gold); margin:0 0 8px 0; font-size:1.2rem;">🏆 ¡PREMIO REAL DÍA 7 DESBLOQUEADO! 🎉</h3><p style="color:var(--text-primary); font-size:0.9rem; margin-bottom:10px;">Encontraste la Llave Dorada del Amor dentro de las cajitas.</p><div style="background:rgba(0,0,0,0.4); padding:12px; border-radius:8px; border:1px dashed var(--gold);"><p style="color:var(--gold); font-weight:bold; font-size:0.95rem; margin:0;">📸 Tómale pantallazo y mándaselo a Carlos diciendo:<br><span style="color:#fff;"><em>"¡Encontré la Llave de Oro en las Cajitas del Día 7!"</em> 🗝️👑</span></p></div>';
+                        wrapper.appendChild(winMsg);
+                    }, 500);
+                }
+            };
+
+            grid.appendChild(boxBtn);
+        }
+
+        wrapper.appendChild(grid);
+
+        function showBoxModal(data, isFinal) {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.style.position = 'fixed';
+            modalOverlay.style.top = '0';
+            modalOverlay.style.left = '0';
+            modalOverlay.style.width = '100vw';
+            modalOverlay.style.height = '100vh';
+            modalOverlay.style.background = 'rgba(0,0,0,0.85)';
+            modalOverlay.style.display = 'flex';
+            modalOverlay.style.alignItems = 'center';
+            modalOverlay.style.justifyContent = 'center';
+            modalOverlay.style.zIndex = '99999';
+            modalOverlay.style.padding = '20px';
+
+            const card = document.createElement('div');
+            card.style.background = 'linear-gradient(135deg, #1a1a2e, #16213e)';
+            card.style.border = isFinal ? '2px solid var(--gold)' : '2px solid var(--accent-pink)';
+            card.style.borderRadius = '20px';
+            card.style.padding = '25px';
+            card.style.maxWidth = '340px';
+            card.style.width = '100%';
+            card.style.textAlign = 'center';
+            card.style.boxShadow = isFinal ? '0 0 40px rgba(255,215,0,0.6)' : '0 0 30px rgba(255,64,129,0.5)';
+
+            card.innerHTML = `
+                <div style="font-size:3.5rem; margin-bottom:10px;">${data.emoji}</div>
+                <h3 style="color:${isFinal ? 'var(--gold)' : 'var(--accent-pink)'}; font-family:'Outfit', sans-serif; margin-bottom:12px; font-size:1.3rem;">${data.title}</h3>
+                <p style="color:var(--text-primary); font-size:1.05rem; line-height:1.5; margin-bottom:20px;">"${data.text}"</p>
+                <button class="btn" style="background:${isFinal ? 'var(--gold)' : 'var(--accent-pink)'}; color:#000; font-weight:bold; padding:10px 25px; border-radius:30px; border:none; cursor:pointer;">
+                    ${isFinal ? '¡RECIBIR MI PREMIO! 🎉' : '¡Seguir abriendo cajitas! 💕'}
+                </button>
+            `;
+
+            const btn = card.querySelector('button');
+            btn.onclick = () => {
+                modalOverlay.remove();
+            };
+
+            modalOverlay.appendChild(card);
+            document.body.appendChild(modalOverlay);
+        }
+
+        container.appendChild(wrapper);
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -1685,6 +1865,7 @@ const UniverseGames = (function() {
         startHangman,
         startRoulette,
         startCatchHearts,
-        startSimonSays
+        startSimonSays,
+        startMagicBoxes
     };
 })();
