@@ -2088,24 +2088,54 @@ const UniverseGames = (function() {
 
         wrapper.appendChild(machineFrame);
 
-        // Romantic Phrases for Day 8
+        // Romantic Phrases for Day 8 (Massive personalized pool from Carlos & Melisa's universe)
         const jackpotPhrases = [
-            "👑 ¡ALINEASTE 3 CORONAS DE MI REINA! Mi vida hermosa, hoy cumples 8 días siendo una campeona en tu recuperación. No necesitas ningún premio terrenal porque tú eres el tesoro más incomparable del universo. ¡Estoy tan orgulloso de ti!",
+            "👑 ¡ALINEASTE 3 CORONAS DE MI REINA! Mi vida hermosa, hoy cumples 8 días siendo una campeona indiscutible en tu recuperación. No necesitas ningún premio terrenal porque tú eres el tesoro más invaluable de mi vida. ¡Estoy tan orgulloso de ti!",
             "💖 ¡TRIPLE CORAZÓN DE AMOR ETERNO! Mi princesa, cada uno de tus esfuerzos en esta recuperación me llena el alma de admiración. Te amo hoy, mañana y para siempre.",
-            "🌹 ¡ROSAS DE AMOR INFINITO! En este Día 8 quiero recordarte que pase lo que pase, siempre estaré aquí sosteniendo tu mano y cuidando tu corazón."
+            "🌹 ¡ROSAS DE AMOR INFINITO! En este Día 8 quiero recordarte que pase lo que pase, siempre estaré aquí sosteniendo tu mano y cuidando tu hermoso corazón.",
+            "✨ ¡JACKPOT DE ESTRELLAS! ¿Te acuerdas de cuando empezó esta semana de reposo? ¡Ya llevamos 8 días superados juntos! Eres la mujer más valiente y fuerte que conozco.",
+            "🦋 ¡ALINEACIÓN MARIPOSA! Al igual que una mariposa, estás sanando y preparándote para extender tus alas muy pronto. ¡Qué ganas tengo de nuestra próxima cita cuando estés al 100%!",
+            "💋 ¡BESOS POR MIL! Si este tragamonedas fuera en la vida real, este jackpot te daría un millón de besos y abrazos consentidores en el sofá. ¡Te adoro mi reina!",
+            "🎁 ¡EL REGALO ERES TÚ! No puse premios físicos hoy porque la verdadera celebración es ver cómo mejoras cada día. Eres el regalo más grande que me dio el universo.",
+            "👑 ¡REINA DE MI UNIVERSO! Creé esta aplicación y cada uno de estos minijuegos solo para ver sonreír a mi princesa preferida mientras descansa. ¡Eres mi todo!",
+            "💖 ¡AMOR INCONDICIONAL X3! Ni la distancia ni los días de reposo pueden apagar lo mucho que te amo. ¡Ya falta un día menos para abrazarnos súper fuerte!",
+            "🌹 ¡ROSAS DORADAS! Cada sonrisa tuya ilumina mi mundo entero. Gracias por ser tan dulce, tan paciente y tan hermosa. ¡Felicidades por tu octavo día de recuperación!",
+            "✨ ¡JACKPOT DE LUZ! Eres la persona favorita de mis días, mis tardes y mis noches. ¡Que nunca se te olvide lo increíblemente especial que eres para mí!",
+            "👑 ¡TRIPLE CORONA REAL! Si pudiera darte un trofeo por cada día que te has portado tan bien en tu recuperación, ya tendrías un palacio lleno de oro. ¡Te amo mi vida!",
+            "💖 ¡CORAZONES AL 100%! Mi amor por ti crece más rápido que los giros de esta máquina. ¡Eres y serás siempre mi consentida hermosa!",
+            "🦋 ¡VUELO DE AMOR! Imagínate cuando terminemos el mes y salgamos a celebrar tu salud al máximo. ¡Ese día será el verdadero jackpot para los dos!",
+            "🎁 ¡SORPRESA DEL ALMA! Mi mayor felicidad es saber que estás descansando, comiendo rico y dejándote consentir. ¡Te amo infinito!"
         ];
 
         const match2Phrases = [
             "💖 ¡Doble Corazón! Tu sonrisa ilumina mis días más que cualquier estrella en el firmamento. ¡Sigue adelante mi reina!",
             "👑 ¡Doble Corona! Eres la dueña indiscutible de mis pensamientos y de mi vida. ¡Te amo muchísimo!",
             "💋 ¡Besos Mágicos! Te mando un millón de abrazos y consentimientos para que tu cuerpo siga sanando de maravilla.",
-            "⭐ ¡Estrellas Alineadas! Nuestro amor estaba destinado desde antes de conocernos. ¡Eres mi bendición más grande!"
+            "⭐ ¡Estrellas Alineadas! Nuestro amor estaba destinado desde antes de conocernos. ¡Eres mi bendición más grande!",
+            "🌹 ¡Doble Rosa! Qué hermosa te ves hoy descansando. ¡Recuerda tomar tu agua y no hacer esfuerzos bruscos!",
+            "🦋 ¡Par de Mariposas! Cada día que pasa te siento más cerquita de mi corazón. ¡Eres una guerrera hermosa!",
+            "🎁 ¡Doble Sorpresa! ¿Sabías que cada vez que sonríes me alegras el día por completo? ¡Te adoro princesa!",
+            "💖 ¡Coincidencia Mágica! Así como coincidieron estos rodillos, coincidieron nuestras almas en este universo.",
+            "👑 ¡Reina y Corazón! Tú mandas en mi corazón hoy, mañana y siempre. ¡Disfruta tu Día 8 mi amor!",
+            "⭐ ¡Doble Brillo! Tu valentía durante estos días de reposo me inspira muchísimo. ¡Estoy muy orgulloso de ti!",
+            "💋 ¡Doble Besito! Un besito en tu frente y otro en tu mejilla para que tengas un día súper bendecido y tranquilo.",
+            "🌹 ¡Par de Rosas para la flor más hermosa! Nunca olvides cuánto te valoro y respeto mi vida.",
+            "🦋 ¡Alas de Amor! Ya falta menos para salir a pasear de la mano. ¡Por ahora a seguir descansando como reina!",
+            "💖 ¡Latidos Unidos! Mi corazón late al mismo ritmo que el tuyo. ¡Todo va a salir excelente mi amor!",
+            "🎁 ¡Regalo de Alegría! Espero que este minijuego te saque una hermosa sonrisa en esta linda mañana."
         ];
 
         const match0Phrases = [
             "💫 ¡Casi se alinean todos! Pero en mi corazón tú siempre te llevas el premio mayor todos los días. ¡Gira otra vez mi amor!",
             "🦋 ¡Sigue girando hermosa! Cada día que pasa estás más fuerte, más sana y hermosa. ¡Te adoro!",
-            "🎁 ¡El mejor regalo ya lo tengo yo al tenerte a ti en mi vida! Vuelve a girar para descubrir más piropos."
+            "🎁 ¡El mejor regalo ya lo tengo yo al tenerte a ti en mi vida! Vuelve a girar para descubrir más piropos.",
+            "💖 ¡No salieron iguales, pero mi amor por ti sí es igual de gigante todos los días! ¡Intenta otro giro princesa!",
+            "👑 ¡Una reina no se rinde! Dale otra vez al botón y veamos qué hermosa frase te sale en el siguiente intento.",
+            "⭐ ¡La suerte es mía por tener a una mujer tan maravillosa como tú! ¡Jala la palanca otra vez!",
+            "🌹 ¡Una rosa virtual mientras giran los rodillos! Recuerda que te amo con todo mi ser.",
+            "💋 ¡Un besito de la suerte de parte de tu rey Carlos para el próximo giro! ¡Tú puedes mi vida!",
+            "✨ ¡Gira sin parar mi reina! Hoy los giros son infinitos para que te diviertas todo el día.",
+            "💫 ¡Cada giro es un pretexto más para decirte lo mucho que me encantas! ¡Dale otra vez!"
         ];
 
         let isSpinning = false;
