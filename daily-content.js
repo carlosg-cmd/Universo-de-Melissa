@@ -326,10 +326,21 @@ const DailyContent = (function() {
             gameType: 'magicboxes',
             gameConfig: {}
         },
-        // Days 8-29 are placeholders for Carlos to customize
-        ...Array.from({length: 22}, (_, i) => ({
-            day: i + 8,
-            title: `Día ${i + 8} - Sorpresa`,
+        {
+            day: 8,
+            title: "Día 8 - El Tragamonedas del Amor 🎰",
+            emoji: "🎰",
+            song: "musica/cancion1.mp3",
+            letter: "¡Buenos días, mi reina hermosa!\n\n¡Bienvenida al Día 8! Hoy empezamos formalmente tu segunda semana de recuperación. Has demostrado ser una mujer extraordinaria, fuerte y perseverante.\n\nPara celebrar este día tan especial, te diseñé tu propio **Tragamonedas del Amor**. ¡Presiona el botón para girar los rodillos y descubrir todas las combinaciones románticas, piropos y hermosas dedicatorias que guardé para ti en cada giro!\n\n¡Hoy se juega por puro amor y celebración, porque tú ya te ganaste el premio mayor de mi corazón para toda la vida! 💖",
+            funPhrase: "¡En el casino de la vida, ganarte a ti fue mi mayor Jackpot! 🎰👑",
+            recoveryQuote: "Día 8: Segunda semana de amor, paciencia y consentimientos infinitos.",
+            gameType: 'slots',
+            gameConfig: {}
+        },
+        // Days 9-29 are placeholders for Carlos to customize
+        ...Array.from({length: 21}, (_, i) => ({
+            day: i + 9,
+            title: `Día ${i + 9} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

@@ -934,6 +934,9 @@
                 case 'magicboxes':
                     titleEl.textContent = '🎁 Cajitas Mágicas de Carlos';
                     return UniverseGames.startMagicBoxes(container, gConfig);
+                case 'slots':
+                    titleEl.textContent = '🎰 Tragamonedas del Amor';
+                    return UniverseGames.startSlots(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
@@ -1101,7 +1104,7 @@
     // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js?v=28').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=29').then(reg => {
             reg.update();
         }).catch(err => console.log('Service Worker failed', err));
     });

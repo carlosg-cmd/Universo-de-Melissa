@@ -1994,6 +1994,251 @@ const UniverseGames = (function() {
         container.appendChild(wrapper);
     }
 
+    // ==========================================
+    // 10. TRAGAMONEDAS DEL AMOR (SLOTS - DÍA 8 SIN PREMIO)
+    // ==========================================
+    function startSlots(container, config = {}) {
+        container.innerHTML = '';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-slots';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.gap = '20px';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '420px';
+        wrapper.style.margin = '0 auto';
+        wrapper.style.padding = '15px';
+
+        let totalSpins = parseInt(localStorage.getItem('melisa_slots_total') || '0', 10);
+
+        const instructions = document.createElement('p');
+        instructions.style.color = 'var(--text-secondary)';
+        instructions.style.textAlign = 'center';
+        instructions.style.fontSize = '0.95rem';
+        instructions.style.margin = '0';
+        instructions.innerHTML = '✨ ¡Hola mi hermosa princesa! Jala la palanca o presiona el botón para girar los rodillos. <br><strong>¡Descubre hermosas dedicatorias y celebra tus 8 días de valiente recuperación!</strong> 💖🎰';
+        wrapper.appendChild(instructions);
+
+        const counterEl = document.createElement('div');
+        counterEl.style.fontFamily = 'Outfit, sans-serif';
+        counterEl.style.fontWeight = 'bold';
+        counterEl.style.fontSize = '1.1rem';
+        counterEl.style.color = 'var(--gold)';
+        counterEl.style.textAlign = 'center';
+        counterEl.innerHTML = `💫 Giros de amor hoy: ${totalSpins}`;
+        wrapper.appendChild(counterEl);
+
+        // Slot Machine Frame
+        const machineFrame = document.createElement('div');
+        machineFrame.style.background = 'linear-gradient(145deg, #1f1f2e, #14141f)';
+        machineFrame.style.border = '3px solid var(--gold)';
+        machineFrame.style.borderRadius = '20px';
+        machineFrame.style.padding = '25px 20px';
+        machineFrame.style.boxShadow = '0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 15px rgba(255, 215, 0, 0.2)';
+        machineFrame.style.width = '100%';
+        machineFrame.style.display = 'flex';
+        machineFrame.style.flexDirection = 'column';
+        machineFrame.style.alignItems = 'center';
+        machineFrame.style.gap = '20px';
+
+        // Reels Container
+        const reelsBox = document.createElement('div');
+        reelsBox.style.display = 'grid';
+        reelsBox.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        reelsBox.style.gap = '15px';
+        reelsBox.style.width = '100%';
+
+        const symbols = ['👑', '💖', '🌹', '💋', '🦋', '⭐', '🎁'];
+        const reelEls = [];
+
+        for (let i = 0; i < 3; i++) {
+            const reel = document.createElement('div');
+            reel.style.background = '#0d0d14';
+            reel.style.border = '2px solid rgba(0, 229, 255, 0.4)';
+            reel.style.borderRadius = '15px';
+            reel.style.height = '100px';
+            reel.style.display = 'flex';
+            reel.style.alignItems = 'center';
+            reel.style.justifyContent = 'center';
+            reel.style.fontSize = '3.5rem';
+            reel.style.boxShadow = 'inset 0 0 15px rgba(0,0,0,0.8)';
+            reel.style.transition = 'transform 0.1s';
+            reel.textContent = symbols[i];
+            reelsBox.appendChild(reel);
+            reelEls.push(reel);
+        }
+        machineFrame.appendChild(reelsBox);
+
+        // Spin Button
+        const spinBtn = document.createElement('button');
+        spinBtn.style.background = 'linear-gradient(135deg, var(--gold), #ffa500)';
+        spinBtn.style.color = '#000';
+        spinBtn.style.border = 'none';
+        spinBtn.style.padding = '16px 30px';
+        spinBtn.style.borderRadius = '50px';
+        spinBtn.style.fontSize = '1.2rem';
+        spinBtn.style.fontWeight = 'bold';
+        spinBtn.style.cursor = 'pointer';
+        spinBtn.style.boxShadow = '0 6px 20px rgba(255, 215, 0, 0.4)';
+        spinBtn.style.transition = 'all 0.2s ease';
+        spinBtn.style.width = '90%';
+        spinBtn.innerHTML = '🎰 ¡GIRAR RODILLOS! ✨';
+        machineFrame.appendChild(spinBtn);
+
+        wrapper.appendChild(machineFrame);
+
+        // Romantic Phrases for Day 8
+        const jackpotPhrases = [
+            "👑 ¡ALINEASTE 3 CORONAS DE MI REINA! Mi vida hermosa, hoy cumples 8 días siendo una campeona en tu recuperación. No necesitas ningún premio terrenal porque tú eres el tesoro más incomparable del universo. ¡Estoy tan orgulloso de ti!",
+            "💖 ¡TRIPLE CORAZÓN DE AMOR ETERNO! Mi princesa, cada uno de tus esfuerzos en esta recuperación me llena el alma de admiración. Te amo hoy, mañana y para siempre.",
+            "🌹 ¡ROSAS DE AMOR INFINITO! En este Día 8 quiero recordarte que pase lo que pase, siempre estaré aquí sosteniendo tu mano y cuidando tu corazón."
+        ];
+
+        const match2Phrases = [
+            "💖 ¡Doble Corazón! Tu sonrisa ilumina mis días más que cualquier estrella en el firmamento. ¡Sigue adelante mi reina!",
+            "👑 ¡Doble Corona! Eres la dueña indiscutible de mis pensamientos y de mi vida. ¡Te amo muchísimo!",
+            "💋 ¡Besos Mágicos! Te mando un millón de abrazos y consentimientos para que tu cuerpo siga sanando de maravilla.",
+            "⭐ ¡Estrellas Alineadas! Nuestro amor estaba destinado desde antes de conocernos. ¡Eres mi bendición más grande!"
+        ];
+
+        const match0Phrases = [
+            "💫 ¡Casi se alinean todos! Pero en mi corazón tú siempre te llevas el premio mayor todos los días. ¡Gira otra vez mi amor!",
+            "🦋 ¡Sigue girando hermosa! Cada día que pasa estás más fuerte, más sana y hermosa. ¡Te adoro!",
+            "🎁 ¡El mejor regalo ya lo tengo yo al tenerte a ti en mi vida! Vuelve a girar para descubrir más piropos."
+        ];
+
+        let isSpinning = false;
+
+        spinBtn.onclick = () => {
+            if (isSpinning) return;
+            isSpinning = true;
+            spinBtn.style.opacity = '0.5';
+            spinBtn.style.cursor = 'not-allowed';
+            spinBtn.innerHTML = '💫 ¡Girando...!';
+
+            totalSpins++;
+            localStorage.setItem('melisa_slots_total', totalSpins.toString());
+            counterEl.innerHTML = `💫 Giros de amor hoy: ${totalSpins}`;
+
+            // Determine outcome
+            // Every 4th spin or 25% chance gives a JACKPOT (3 matching)
+            const isJackpot = (totalSpins % 4 === 0) || (Math.random() < 0.25);
+            // 50% chance of 2 matching if not jackpot
+            const isMatch2 = !isJackpot && (Math.random() < 0.6);
+
+            let finalSymbols = [];
+            if (isJackpot) {
+                const s = symbols[Math.floor(Math.random() * symbols.length)];
+                finalSymbols = [s, s, s];
+            } else if (isMatch2) {
+                const s = symbols[Math.floor(Math.random() * symbols.length)];
+                let s2 = symbols[Math.floor(Math.random() * symbols.length)];
+                while (s2 === s) s2 = symbols[Math.floor(Math.random() * symbols.length)];
+                finalSymbols = [s, s, s2];
+                // Shuffle the positions
+                finalSymbols.sort(() => Math.random() - 0.5);
+            } else {
+                // 3 distinct
+                const shuffled = [...symbols].sort(() => Math.random() - 0.5);
+                finalSymbols = [shuffled[0], shuffled[1], shuffled[2]];
+            }
+
+            // Spin animation loops
+            const intervals = [];
+            for (let i = 0; i < 3; i++) {
+                intervals[i] = setInterval(() => {
+                    reelEls[i].textContent = symbols[Math.floor(Math.random() * symbols.length)];
+                }, 80);
+            }
+
+            // Stop reels one by one
+            setTimeout(() => {
+                clearInterval(intervals[0]);
+                reelEls[0].textContent = finalSymbols[0];
+            }, 800);
+
+            setTimeout(() => {
+                clearInterval(intervals[1]);
+                reelEls[1].textContent = finalSymbols[1];
+            }, 1400);
+
+            setTimeout(() => {
+                clearInterval(intervals[2]);
+                reelEls[2].textContent = finalSymbols[2];
+                isSpinning = false;
+                spinBtn.style.opacity = '1';
+                spinBtn.style.cursor = 'pointer';
+                spinBtn.innerHTML = '🎰 ¡GIRAR RODILLOS! ✨';
+
+                // Show modal result
+                let title = '💫 ¡Giro Mágico!';
+                let text = '';
+                let emoji = '💕';
+
+                if (isJackpot) {
+                    emoji = '🎉👑';
+                    title = '✨ ¡SUPER JACKPOT DEL DÍA 8! ✨';
+                    text = jackpotPhrases[Math.floor(Math.random() * jackpotPhrases.length)];
+                } else if (isMatch2) {
+                    emoji = '💖✨';
+                    title = '🌸 ¡Hermosa Coincidencia!';
+                    text = match2Phrases[Math.floor(Math.random() * match2Phrases.length)];
+                } else {
+                    emoji = '🍀';
+                    title = '💫 ¡Pensamiento para ti!';
+                    text = match0Phrases[Math.floor(Math.random() * match0Phrases.length)];
+                }
+
+                showSlotsModal({ emoji, title, text });
+            }, 2000);
+        };
+
+        function showSlotsModal({ emoji, title, text }) {
+            const modalOverlay = document.createElement('div');
+            modalOverlay.style.position = 'fixed';
+            modalOverlay.style.top = '0';
+            modalOverlay.style.left = '0';
+            modalOverlay.style.width = '100vw';
+            modalOverlay.style.height = '100vh';
+            modalOverlay.style.background = 'rgba(0,0,0,0.85)';
+            modalOverlay.style.display = 'flex';
+            modalOverlay.style.alignItems = 'center';
+            modalOverlay.style.justifyContent = 'center';
+            modalOverlay.style.zIndex = '10000';
+            modalOverlay.style.padding = '20px';
+
+            const card = document.createElement('div');
+            card.style.background = 'linear-gradient(145deg, #1a1a2e, #16213e)';
+            card.style.border = '2px solid var(--gold)';
+            card.style.borderRadius = '20px';
+            card.style.padding = '25px';
+            card.style.maxWidth = '400px';
+            card.style.width = '100%';
+            card.style.textAlign = 'center';
+            card.style.boxShadow = '0 15px 35px rgba(0,0,0,0.8)';
+            card.style.animation = 'popIn 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+
+            card.innerHTML = `
+                <div style="font-size:3.5rem; margin-bottom:10px;">${emoji}</div>
+                <h3 style="color:var(--gold); margin:0 0 12px 0; font-family:'Outfit',sans-serif; font-size:1.4rem;">${title}</h3>
+                <p style="color:var(--text-primary); font-size:1rem; line-height:1.6; margin-bottom:20px;">${text}</p>
+                <button style="background:var(--cyan); color:#000; border:none; padding:12px 28px; border-radius:30px; font-weight:bold; font-size:1rem; cursor:pointer; box-shadow:0 4px 15px rgba(0,229,255,0.4);">
+                    💖 ¡Seguir girando y celebrando! 🎰
+                </button>
+            `;
+
+            card.querySelector('button').onclick = () => {
+                modalOverlay.remove();
+            };
+
+            modalOverlay.appendChild(card);
+            document.body.appendChild(modalOverlay);
+        }
+
+        container.appendChild(wrapper);
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -2004,6 +2249,7 @@ const UniverseGames = (function() {
         startRoulette,
         startCatchHearts,
         startSimonSays,
-        startMagicBoxes
+        startMagicBoxes,
+        startSlots
     };
 })();
