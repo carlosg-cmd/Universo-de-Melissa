@@ -2289,53 +2289,94 @@ const UniverseGames = (function() {
         header.style.marginBottom = '20px';
         header.innerHTML = `
             <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🏆 Tanda de Penales del Amor ⚽</h2>
-            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Métele un golazo romántico al portero! Juega todas las veces que quieras hoy.</p>
-            <div id="penalties-counter" style="background:rgba(0,229,255,0.15); border:1px solid var(--cyan); padding:8px 18px; border-radius:20px; color:var(--cyan); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem;">
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Métele un golazo al portero profesional! Juega rondas infinitas hoy.</p>
+            <div id="penalties-counter" style="background:rgba(0,229,255,0.15); border:1px solid var(--cyan); padding:8px 18px; border-radius:20px; color:var(--cyan); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(0,229,255,0.2);">
                 🏆 Goles de amor hoy: ${goals}
             </div>
         `;
         wrapper.appendChild(header);
 
-        // Stadium & Goal Frame
+        // Professional Stadium & Goal Frame
         const stadium = document.createElement('div');
         stadium.style.width = '100%';
-        stadium.style.height = '240px';
-        stadium.style.background = 'linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)';
+        stadium.style.height = '260px';
+        stadium.style.background = 'linear-gradient(180deg, #112233 0%, #1a4a24 45%, #226630 100%)';
         stadium.style.border = '3px solid var(--gold)';
-        stadium.style.borderRadius = '15px';
+        stadium.style.borderRadius = '18px';
         stadium.style.position = 'relative';
         stadium.style.overflow = 'hidden';
-        stadium.style.boxShadow = '0 10px 25px rgba(0,0,0,0.6)';
+        stadium.style.boxShadow = '0 12px 30px rgba(0,0,0,0.7), inset 0 0 40px rgba(0,0,0,0.4)';
 
-        // Goal Post
+        // Turf pattern
+        const turf = document.createElement('div');
+        turf.style.position = 'absolute';
+        turf.style.inset = '0';
+        turf.style.background = 'repeating-linear-gradient(0deg, transparent, transparent 20px, rgba(0,0,0,0.08) 20px, rgba(0,0,0,0.08) 40px)';
+        turf.style.pointerEvents = 'none';
+        stadium.appendChild(turf);
+
+        // Goal Post with Net Grid
         const goalPost = document.createElement('div');
         goalPost.style.position = 'absolute';
         goalPost.style.top = '30px';
-        goalPost.style.left = '15%';
-        goalPost.style.width = '70%';
-        goalPost.style.height = '140px';
-        goalPost.style.border = '6px solid #fff';
+        goalPost.style.left = '12%';
+        goalPost.style.width = '76%';
+        goalPost.style.height = '150px';
+        goalPost.style.border = '7px solid #fff';
         goalPost.style.borderBottom = 'none';
-        goalPost.style.boxSizing = 'border-box';
+        goalPost.style.borderRadius = '6px 6px 0 0';
+        goalPost.style.boxShadow = '0 0 20px rgba(255,255,255,0.3)';
+        goalPost.style.backgroundImage = 'radial-gradient(circle, rgba(255,255,255,0.35) 1.5px, transparent 1.5px)';
+        goalPost.style.backgroundSize = '14px 14px';
         stadium.appendChild(goalPost);
 
-        // Goalkeeper
+        // Professional Diving Goalkeeper Character
         const goalie = document.createElement('div');
         goalie.style.position = 'absolute';
-        goalie.style.top = '80px';
-        goalie.style.left = '45%';
-        goalie.style.fontSize = '3.2rem';
-        goalie.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
-        goalie.innerHTML = '🧤🧍‍♂️';
+        goalie.style.top = '85px';
+        goalie.style.left = '42%';
+        goalie.style.width = '68px';
+        goalie.style.height = '85px';
+        goalie.style.transition = 'all 0.55s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
+        goalie.style.display = 'flex';
+        goalie.style.flexDirection = 'column';
+        goalie.style.alignItems = 'center';
+        goalie.style.zIndex = '5';
+        goalie.innerHTML = `
+            <div style="font-size:1.8rem; line-height:1; filter:drop-shadow(0 3px 5px rgba(0,0,0,0.6));">👨‍🦱</div>
+            <div style="background:linear-gradient(135deg, #ff0055, #cc0044); width:52px; height:36px; border-radius:10px; border:2px solid #fff; display:flex; justify-content:space-between; align-items:center; padding:0 3px; box-shadow:0 4px 10px rgba(0,0,0,0.5); margin-top:-3px;">
+                <span style="font-size:1.4rem; transform:translateX(-14px);">🧤</span>
+                <span style="color:#fff; font-weight:900; font-size:0.8rem; font-family:sans-serif;">1</span>
+                <span style="font-size:1.4rem; transform:translateX(14px) scaleX(-1);">🧤</span>
+            </div>
+            <div style="display:flex; gap:8px; margin-top:2px;">
+                <div style="width:13px; height:24px; background:#1a1a1a; border-radius:4px; border:1px solid rgba(255,255,255,0.2);"></div>
+                <div style="width:13px; height:24px; background:#1a1a1a; border-radius:4px; border:1px solid rgba(255,255,255,0.2);"></div>
+            </div>
+        `;
         stadium.appendChild(goalie);
+
+        // Ball Shadow
+        const ballShadow = document.createElement('div');
+        ballShadow.style.position = 'absolute';
+        ballShadow.style.bottom = '12px';
+        ballShadow.style.left = '45%';
+        ballShadow.style.width = '35px';
+        ballShadow.style.height = '10px';
+        ballShadow.style.background = 'rgba(0,0,0,0.5)';
+        ballShadow.style.borderRadius = '50%';
+        ballShadow.style.transition = 'all 0.5s ease';
+        stadium.appendChild(ballShadow);
 
         // Ball
         const ball = document.createElement('div');
         ball.style.position = 'absolute';
         ball.style.bottom = '15px';
         ball.style.left = '45%';
-        ball.style.fontSize = '2.5rem';
-        ball.style.transition = 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+        ball.style.fontSize = '2.4rem';
+        ball.style.transition = 'all 0.58s cubic-bezier(0.25, 1, 0.5, 1)';
+        ball.style.zIndex = '10';
+        ball.style.filter = 'drop-shadow(0 6px 10px rgba(0,0,0,0.6))';
         ball.innerHTML = '⚽';
         stadium.appendChild(ball);
 
@@ -2344,16 +2385,17 @@ const UniverseGames = (function() {
         // Commentary Box
         const commentary = document.createElement('div');
         commentary.style.width = '100%';
-        commentary.style.background = 'rgba(255,255,255,0.05)';
-        commentary.style.border = '1px solid var(--text-secondary)';
-        commentary.style.borderRadius = '12px';
-        commentary.style.padding = '15px';
-        commentary.style.marginTop = '15px';
+        commentary.style.background = 'rgba(255,255,255,0.06)';
+        commentary.style.border = '1px solid rgba(255,255,255,0.15)';
+        commentary.style.borderRadius = '14px';
+        commentary.style.padding = '16px';
+        commentary.style.marginTop = '16px';
         commentary.style.textAlign = 'center';
         commentary.style.color = 'var(--text-primary)';
         commentary.style.fontStyle = 'italic';
-        commentary.style.minHeight = '60px';
-        commentary.innerHTML = '🎙️ <b>Comentarista:</b> "¡Atención! Melisa acomoda el balón en el punto penal. ¡Todo el estadio aguarda expectante!"';
+        commentary.style.minHeight = '65px';
+        commentary.style.lineHeight = '1.5';
+        commentary.innerHTML = '🎙️ <b>Comentarista:</b> "¡Atención! Melisa acomoda el balón frente a la portería. ¡El arquero flexiona las piernas listo para estirarse!"';
         wrapper.appendChild(commentary);
 
         // Controls
@@ -2364,16 +2406,16 @@ const UniverseGames = (function() {
         controlsDiv.style.width = '100%';
 
         const shootOptions = [
-            { label: '⬅️ Izquierda', dir: 'left', targetX: '20%', targetY: '60px' },
-            { label: '⏺️ Centro', dir: 'center', targetX: '45%', targetY: '50px' },
-            { label: '➡️ Derecha', dir: 'right', targetX: '70%', targetY: '60px' }
+            { label: '⬅️ Palo Izquierdo', dir: 'left', targetX: '18%', targetY: '170px' },
+            { label: '⏺️ Centro / Arriba', dir: 'center', targetX: '45%', targetY: '165px' },
+            { label: '➡️ Palo Derecho', dir: 'right', targetX: '70%', targetY: '170px' }
         ];
 
         const goalComments = [
-            '🎙️ <b>¡GOOOOOLAZO AL ÁNGULO!</b> "¡Qué clase, qué categoría! En el Mundial de mi vida, tú eres la estrella número 10 indiscutible, mi princesa hermosa. ¡Carlos celebra en la tribuna!"',
-            '🎙️ <b>¡GOOOOOL IMPARABLE!</b> "¡El portero ni la vio venir! Así como conquistaste este arco, conquistaste mi corazón para siempre. ¡Orgulloso de verte sanar cada día!"',
-            '🎙️ <b>¡GOL DE CAMPEONA MUNDIAL!</b> "¡Grita el estadio! Melisa demuestra que no hay reto ni día de reposo que la detenga. ¡Te ganaste la Copa del Amor!"',
-            '🎙️ <b>¡GOOOOOL MAGISTRAL!</b> "¡Qué remate tan dulce! Eres la dueña indiscutible del trofeo de mi corazón hoy, mañana y siempre. ¡Te amo mi reina!"'
+            '🎙️ <b>¡GOOOOOLAZO IMPRESIONANTE!</b> "¡La clavó en el ángulo donde duermen las arañas! En el Mundial de mi vida, tú eres la estrella número 10 indiscutible, mi princesa hermosa. ¡Carlos celebra aplaudiendo!"',
+            '🎙️ <b>¡GOOOOOL DE ORO!</b> "¡El portero voló espectacular hacia el lado contrario! Así como conquistaste este arco, conquistaste mi corazón para siempre. ¡Orgulloso de tu fuerza!"',
+            '🎙️ <b>¡GOLAZO DE CAMPEONA!</b> "¡Grita todo el estadio! Melisa demuestra que tiene una puntería y una garra de campeona mundial. ¡Te ganaste la Copa del Amor!"',
+            '🎙️ <b>¡GOOOOOL MAGISTRAL!</b> "¡Qué remate tan perfecto! Eres la dueña absoluta del trofeo de mi corazón hoy, mañana y toda la eternidad. ¡Te amo mi reina!"'
         ];
 
         let isShooting = false;
@@ -2382,51 +2424,73 @@ const UniverseGames = (function() {
             const btn = document.createElement('button');
             btn.className = 'btn';
             btn.style.flex = '1';
-            btn.style.padding = '12px 5px';
-            btn.style.fontSize = '0.95rem';
+            btn.style.padding = '14px 6px';
+            btn.style.fontSize = '0.92rem';
+            btn.style.fontWeight = 'bold';
             btn.innerHTML = opt.label;
             btn.onclick = () => {
                 if (isShooting) return;
                 isShooting = true;
 
-                // Goalie jumps
-                const goalieDirs = ['20%', '45%', '70%'];
-                const goalieTarget = goalieDirs[Math.floor(Math.random() * goalieDirs.length)];
-                goalie.style.left = goalieTarget;
+                // Professional Goalkeeper Diving Mechanics
+                const diveTypes = [
+                    { left: '16%', top: '105px', transform: 'rotate(-72deg) scale(1.1)' },
+                    { left: '42%', top: '40px', transform: 'scale(1.2)' },
+                    { left: '66%', top: '105px', transform: 'rotate(72deg) scale(1.1)' }
+                ];
+                const goalieDive = diveTypes[Math.floor(Math.random() * diveTypes.length)];
+                goalie.style.left = goalieDive.left;
+                goalie.style.top = goalieDive.top;
+                goalie.style.transform = goalieDive.transform;
 
-                // Ball moves
+                // Ball moves to target
                 ball.style.left = opt.targetX;
-                ball.style.bottom = '160px';
-                ball.style.transform = 'scale(0.6) rotate(360deg)';
+                ball.style.bottom = opt.targetY;
+                ball.style.transform = 'scale(0.55) rotate(540deg)';
+                ballShadow.style.left = opt.targetX;
+                ballShadow.style.bottom = '40px';
+                ballShadow.style.transform = 'scale(0.4)';
 
                 setTimeout(() => {
-                    // 85% chance of scoring so she feels like a superstar!
-                    const isGoal = Math.random() < 0.85;
+                    const isGoal = Math.random() < 0.88;
 
                     if (isGoal) {
                         goals++;
                         localStorage.setItem('melisa_penalties_goals', goals.toString());
                         document.getElementById('penalties-counter').innerHTML = `🏆 Goles de amor hoy: ${goals}`;
                         stadium.style.borderColor = '#00ff88';
+                        stadium.style.boxShadow = '0 0 35px rgba(0,255,136,0.6)';
                         commentary.innerHTML = goalComments[Math.floor(Math.random() * goalComments.length)];
                     } else {
-                        commentary.innerHTML = '🎙️ <b>¡Casi, casi!</b> "¡El portero la tocó con las uñas! Pero para tu rey Carlos tú siempre eres la campeona. ¡Patea otro penal!"';
+                        commentary.innerHTML = '🎙️ <b>¡Atajada de película!</b> "¡El arquero voló como un gato y la sacó con los guantes! Pero para tu rey Carlos tú siempre eres la campeona. ¡Patea otro penal!"';
                     }
 
                     setTimeout(() => {
-                        // Reset ball and goalie
                         ball.style.transition = 'none';
+                        goalie.style.transition = 'none';
+                        ballShadow.style.transition = 'none';
+
                         ball.style.bottom = '15px';
                         ball.style.left = '45%';
                         ball.style.transform = 'scale(1) rotate(0deg)';
+                        ballShadow.style.bottom = '12px';
+                        ballShadow.style.left = '45%';
+                        ballShadow.style.transform = 'scale(1)';
+
                         stadium.style.borderColor = 'var(--gold)';
-                        goalie.style.left = '45%';
+                        stadium.style.boxShadow = '0 12px 30px rgba(0,0,0,0.7), inset 0 0 40px rgba(0,0,0,0.4)';
+                        goalie.style.left = '42%';
+                        goalie.style.top = '85px';
+                        goalie.style.transform = 'rotate(0deg) scale(1)';
+
                         setTimeout(() => {
-                            ball.style.transition = 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                            ball.style.transition = 'all 0.58s cubic-bezier(0.25, 1, 0.5, 1)';
+                            goalie.style.transition = 'all 0.55s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
+                            ballShadow.style.transition = 'all 0.5s ease';
                             isShooting = false;
                         }, 50);
                     }, 2200);
-                }, 600);
+                }, 580);
             };
             controlsDiv.appendChild(btn);
         });
@@ -2455,8 +2519,8 @@ const UniverseGames = (function() {
         header.style.marginBottom = '20px';
         header.innerHTML = `
             <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">📖 Álbum Panini del Amor ⭐</h2>
-            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Abre sobres dorados infinitos para descubrir nuestras fotos mundialistas y dedicatorias!</p>
-            <div id="album-counter" style="background:rgba(255,215,0,0.15); border:1px solid var(--gold); padding:8px 18px; border-radius:20px; color:var(--gold); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem;">
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Abre sobres dorados infinitos para descubrir nuestras fotos mundialistas reales!</p>
+            <div id="album-counter" style="background:rgba(255,215,0,0.15); border:1px solid var(--gold); padding:8px 18px; border-radius:20px; color:var(--gold); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(255,215,0,0.2);">
                 ✨ Monitas pegadas en tu álbum: ${stickersCount}
             </div>
         `;
@@ -2467,31 +2531,31 @@ const UniverseGames = (function() {
         packDiv.style.width = '100%';
         packDiv.style.background = 'linear-gradient(135deg, #2b1055 0%, #7597de 100%)';
         packDiv.style.border = '2px dashed var(--gold)';
-        packDiv.style.borderRadius = '15px';
+        packDiv.style.borderRadius = '16px';
         packDiv.style.padding = '30px 20px';
         packDiv.style.textAlign = 'center';
-        packDiv.style.boxShadow = '0 8px 25px rgba(0,0,0,0.5)';
+        packDiv.style.boxShadow = '0 10px 28px rgba(0,0,0,0.6)';
         packDiv.style.marginBottom = '20px';
 
         packDiv.innerHTML = `
-            <div style="font-size:4rem; margin-bottom:10px;">🃏✨</div>
-            <h3 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif;">Sobre Dorado Panini Edición Especial</h3>
-            <p style="color:rgba(255,255,255,0.8); font-size:0.9rem; margin-bottom:20px;">Contiene 1 lámina brillante holográfica con foto real y mensaje romántico de Carlos.</p>
+            <div style="font-size:4.5rem; margin-bottom:10px; filter:drop-shadow(0 5px 15px rgba(255,215,0,0.5));">🃏✨</div>
+            <h3 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif; font-size:1.4rem;">Sobre Dorado Panini Edición Oro</h3>
+            <p style="color:rgba(255,255,255,0.85); font-size:0.92rem; margin-bottom:22px;">Contiene 1 lámina brillante holográfica con foto real de Carlos & Melisa.</p>
         `;
 
         const openBtn = document.createElement('button');
         openBtn.className = 'btn';
         openBtn.style.background = 'var(--gold)';
         openBtn.style.color = '#000';
-        openBtn.style.fontWeight = 'bold';
-        openBtn.style.padding = '14px 30px';
-        openBtn.style.fontSize = '1.1rem';
-        openBtn.style.boxShadow = '0 5px 20px rgba(255,215,0,0.4)';
+        openBtn.style.fontWeight = '900';
+        openBtn.style.padding = '15px 32px';
+        openBtn.style.fontSize = '1.12rem';
+        openBtn.style.boxShadow = '0 6px 22px rgba(255,215,0,0.5)';
+        openBtn.style.borderRadius = '50px';
         openBtn.innerHTML = '✨ ¡ABRIR SOBRE DORADO! 🎁';
         packDiv.appendChild(openBtn);
         wrapper.appendChild(packDiv);
 
-        // Card display container (hidden initially)
         const cardDisplay = document.createElement('div');
         cardDisplay.style.width = '100%';
         cardDisplay.style.display = 'none';
@@ -2520,24 +2584,24 @@ const UniverseGames = (function() {
             localStorage.setItem('melisa_album_total', stickersCount.toString());
             document.getElementById('album-counter').innerHTML = `✨ Monitas pegadas en tu álbum: ${stickersCount}`;
 
-            // Pick a random photo from 1 to 150
-            const photoNum = Math.floor(Math.random() * 150) + 1;
-            const photoUrl = `fotos/foto_${photoNum}.jpeg`;
+            // Exact file pattern matching foto (1).jpeg to foto (190).jpeg
+            const photoNum = Math.floor(Math.random() * 185) + 1;
+            const photoUrl = `fotos/foto (${photoNum}).jpeg`;
             const titleText = titles[Math.floor(Math.random() * titles.length)];
             const msgText = messages[Math.floor(Math.random() * messages.length)];
 
             cardDisplay.style.display = 'flex';
             cardDisplay.innerHTML = `
-                <div style="background:linear-gradient(145deg, #1f1c2c, #928dab); border:3px solid var(--gold); border-radius:18px; padding:18px; width:100%; max-width:340px; text-align:center; box-shadow:0 12px 30px rgba(0,0,0,0.7); animation:popIn 0.4s ease;">
-                    <div style="background:#000; border-radius:12px; overflow:hidden; height:260px; display:flex; align-items:center; justify-content:center; margin-bottom:12px; border:1px solid rgba(255,255,255,0.2);">
-                        <img src="${photoUrl}" alt="Recuerdo Mundialista" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='fotos/foto_1.jpeg';">
+                <div style="background:linear-gradient(145deg, #181824, #2a2a40); border:3px solid var(--gold); border-radius:20px; padding:20px; width:100%; max-width:350px; text-align:center; box-shadow:0 15px 35px rgba(0,0,0,0.8); animation:popIn 0.4s ease;">
+                    <div style="background:#000; border-radius:14px; overflow:hidden; height:280px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; border:2px solid rgba(255,215,0,0.4); box-shadow:0 6px 16px rgba(0,0,0,0.6);">
+                        <img src="${photoUrl}" alt="Recuerdo Melisa y Carlos" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='fotos/foto (1).jpeg';">
                     </div>
-                    <div style="background:var(--gold); color:#000; font-weight:bold; padding:5px 10px; border-radius:6px; font-size:0.85rem; margin-bottom:10px;">
-                        EDICIÒN ORO PANINI #0${photoNum}
+                    <div style="background:var(--gold); color:#000; font-weight:900; padding:6px 14px; border-radius:8px; font-size:0.85rem; letter-spacing:1px; margin-bottom:12px; display:inline-block;">
+                        EDICIÓN ORO PANINI #${photoNum}
                     </div>
-                    <h4 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif; font-size:1.1rem;">${titleText}</h4>
-                    <p style="color:rgba(255,255,255,0.9); font-size:0.92rem; line-height:1.5; font-style:italic; margin-bottom:15px;">"${msgText}"</p>
-                    <button id="next-pack-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:bold;">
+                    <h4 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif; font-size:1.18rem;">${titleText}</h4>
+                    <p style="color:rgba(255,255,255,0.9); font-size:0.95rem; line-height:1.5; font-style:italic; margin-bottom:18px;">"${msgText}"</p>
+                    <button id="next-pack-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:900; padding:13px; font-size:1rem;">
                         📥 ¡Pegar en el Álbum y Abrir Otro Sobre!
                     </button>
                 </div>
@@ -2554,7 +2618,7 @@ const UniverseGames = (function() {
     }
 
     // =============================================
-    //  DÍA 9: DOMINADAS MUNDIALISTAS (ARCADE) 🥇⚽
+    //  DÍA 9: DOMINADAS MUNDIALISTAS (PROFESIONAL) 🥇⚽
     // =============================================
     function startKeepyUppy(container, config) {
         container.innerHTML = '';
@@ -2573,8 +2637,8 @@ const UniverseGames = (function() {
         header.style.marginBottom = '15px';
         header.innerHTML = `
             <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🥇 Dominadas Mundialistas ⚽</h2>
-            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Toca los botones para mover el botín de oro y no dejas caer el balón!</p>
-            <div id="keepyuppy-counter" style="background:rgba(0,255,136,0.15); border:1px solid #00ff88; padding:8px 18px; border-radius:20px; color:#00ff88; font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem;">
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Presiona los botones para mover el Botín de Oro y dar toques al aire!</p>
+            <div id="keepyuppy-counter" style="background:rgba(0,255,136,0.15); border:1px solid #00ff88; padding:8px 18px; border-radius:20px; color:#00ff88; font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(0,255,136,0.2);">
                 ⚽ Rebotes y Dominadas: ${score}
             </div>
         `;
@@ -2582,96 +2646,154 @@ const UniverseGames = (function() {
 
         const field = document.createElement('div');
         field.style.width = '100%';
-        field.style.height = '280px';
-        field.style.background = 'radial-gradient(circle, #1e3c72 0%, #2a5298 100%)';
+        field.style.height = '290px';
+        field.style.background = 'radial-gradient(circle at 50% 20%, #1c3e7a 0%, #0f2347 100%)';
         field.style.border = '3px solid var(--gold)';
-        field.style.borderRadius = '15px';
+        field.style.borderRadius = '18px';
         field.style.position = 'relative';
         field.style.overflow = 'hidden';
-        field.style.boxShadow = '0 10px 25px rgba(0,0,0,0.6)';
+        field.style.boxShadow = '0 12px 30px rgba(0,0,0,0.7), inset 0 -40px 50px rgba(0,0,0,0.5)';
 
+        // Field turf lines
+        const fieldLines = document.createElement('div');
+        fieldLines.style.position = 'absolute';
+        fieldLines.style.bottom = '0';
+        fieldLines.style.left = '0';
+        fieldLines.style.right = '0';
+        fieldLines.style.height = '110px';
+        fieldLines.style.background = 'linear-gradient(180deg, rgba(30,130,50,0.4) 0%, rgba(20,90,35,0.8) 100%)';
+        fieldLines.style.borderTop = '2px solid rgba(255,255,255,0.3)';
+        field.appendChild(fieldLines);
+
+        // Professional Soccer Boot Element
         const boot = document.createElement('div');
         boot.style.position = 'absolute';
-        boot.style.bottom = '10px';
-        boot.style.left = '40%';
-        boot.style.fontSize = '3rem';
-        boot.style.transition = 'left 0.15s ease-out';
-        boot.innerHTML = '👟👑';
+        boot.style.bottom = '15px';
+        boot.style.left = '38%';
+        boot.style.width = '94px';
+        boot.style.height = '68px';
+        boot.style.transition = 'all 0.18s cubic-bezier(0.1, 0.9, 0.2, 1)';
+        boot.style.display = 'flex';
+        boot.style.flexDirection = 'column';
+        boot.style.alignItems = 'center';
+        boot.style.zIndex = '5';
+        boot.innerHTML = `
+            <div style="font-size:3.4rem; transform:scaleX(-1) rotate(-8deg); line-height:1; filter:drop-shadow(0 8px 12px rgba(0,0,0,0.7));">👟✨</div>
+            <div style="background:var(--gold); color:#000; font-size:0.65rem; font-weight:900; padding:2px 8px; border-radius:12px; margin-top:-6px; border:1px solid #fff; box-shadow:0 3px 8px rgba(0,0,0,0.5);">
+                BOTÍN DE ORO #10
+            </div>
+        `;
         field.appendChild(boot);
+
+        // Ball Shadow
+        const ballShadow = document.createElement('div');
+        ballShadow.style.position = 'absolute';
+        ballShadow.style.bottom = '18px';
+        ballShadow.style.left = '46%';
+        ballShadow.style.width = '40px';
+        ballShadow.style.height = '12px';
+        ballShadow.style.background = 'rgba(0,0,0,0.6)';
+        ballShadow.style.borderRadius = '50%';
+        ballShadow.style.transition = 'all 0.25s ease';
+        field.appendChild(ballShadow);
 
         const ball = document.createElement('div');
         ball.style.position = 'absolute';
-        ball.style.top = '10px';
+        ball.style.top = '25px';
         ball.style.left = '45%';
-        ball.style.fontSize = '2.2rem';
+        ball.style.fontSize = '2.5rem';
+        ball.style.transition = 'all 0.25s cubic-bezier(0.3, 1, 0.6, 1)';
+        ball.style.zIndex = '10';
+        ball.style.filter = 'drop-shadow(0 6px 10px rgba(0,0,0,0.6))';
         ball.innerHTML = '⚽';
         field.appendChild(ball);
 
         wrapper.appendChild(field);
 
-        // Commentary / Status
         const statusText = document.createElement('p');
         statusText.style.color = 'var(--text-primary)';
         statusText.style.fontStyle = 'italic';
         statusText.style.margin = '15px 0 10px 0';
         statusText.style.textAlign = 'center';
-        statusText.innerHTML = '🎙️ ¡Haz rebotar el balón en el aire sin parar campeona!';
+        statusText.style.lineHeight = '1.5';
+        statusText.innerHTML = '🎙️ ¡Presiona los botones para golpear el balón y mantenerlo en el aire!';
         wrapper.appendChild(statusText);
 
-        // Buttons to move boot left / center / right
         const btnDiv = document.createElement('div');
         btnDiv.style.display = 'flex';
         btnDiv.style.gap = '10px';
         btnDiv.style.width = '100%';
 
-        let bootPos = 40; // percent
+        let bootPos = 38; // percent
 
         const moveLeftBtn = document.createElement('button');
         moveLeftBtn.className = 'btn';
         moveLeftBtn.style.flex = '1';
-        moveLeftBtn.innerHTML = '⬅️ Izquierda';
+        moveLeftBtn.style.padding = '14px';
+        moveLeftBtn.style.fontWeight = 'bold';
+        moveLeftBtn.innerHTML = '⬅️ Mover Izquierda';
         moveLeftBtn.onclick = () => {
-            bootPos = Math.max(5, bootPos - 25);
+            bootPos = Math.max(6, bootPos - 25);
             boot.style.left = `${bootPos}%`;
-            bounceCheck();
+            kickAnimation();
+        };
+
+        const moveCenterBtn = document.createElement('button');
+        moveCenterBtn.className = 'btn';
+        moveCenterBtn.style.flex = '1';
+        moveCenterBtn.style.padding = '14px';
+        moveCenterBtn.style.fontWeight = 'bold';
+        moveCenterBtn.innerHTML = '⬆️ Cabecita / Centro';
+        moveCenterBtn.onclick = () => {
+            bootPos = 38;
+            boot.style.left = `${bootPos}%`;
+            kickAnimation();
         };
 
         const moveRightBtn = document.createElement('button');
         moveRightBtn.className = 'btn';
         moveRightBtn.style.flex = '1';
-        moveRightBtn.innerHTML = '➡️ Derecha';
+        moveRightBtn.style.padding = '14px';
+        moveRightBtn.style.fontWeight = 'bold';
+        moveRightBtn.innerHTML = '➡️ Mover Derecha';
         moveRightBtn.onclick = () => {
-            bootPos = Math.min(75, bootPos + 25);
+            bootPos = Math.min(70, bootPos + 25);
             boot.style.left = `${bootPos}%`;
-            bounceCheck();
+            kickAnimation();
         };
 
         btnDiv.appendChild(moveLeftBtn);
+        btnDiv.appendChild(moveCenterBtn);
         btnDiv.appendChild(moveRightBtn);
         wrapper.appendChild(btnDiv);
 
-        let ballY = 10;
-        let ballX = 45;
-        let ballSpeedY = 15;
+        function kickAnimation() {
+            // Ball drops towards boot
+            ball.style.top = '190px';
+            ball.style.left = `${bootPos + 6}%`;
+            ballShadow.style.left = `${bootPos + 6}%`;
+            ballShadow.style.width = '45px';
 
-        function bounceCheck() {
-            // When button clicked, animate ball drop and check if caught
-            ballY = 220;
-            ball.style.top = `${ballY}px`;
-            ball.style.left = `${bootPos + 5}%`;
+            // Boot kicks upward
+            boot.style.transform = 'translateY(-22px) rotate(-22deg) scale(1.15)';
 
             setTimeout(() => {
                 score++;
                 localStorage.setItem('melisa_keepyuppy_score', score.toString());
                 document.getElementById('keepyuppy-counter').innerHTML = `⚽ Rebotes y Dominadas: ${score}`;
-                statusText.innerHTML = `🎙️ <b>¡Excelente rebote!</b> Llevas ${score} dominadas de puro amor. ¡Eres increíble!`;
+                statusText.innerHTML = `🎙️ <b>¡Toque perfecto de botín!</b> Llevas ${score} dominadas consecutivas. ¡Eres una estrella!`;
 
-                // Bounce up
-                ballY = 20;
-                ball.style.top = `${ballY}px`;
-                ballX = Math.floor(Math.random() * 70) + 10;
-                ball.style.left = `${ballX}%`;
-            }, 250);
+                // Ball bounces high up
+                ball.style.top = '20px';
+                const newX = Math.floor(Math.random() * 65) + 12;
+                ball.style.left = `${newX}%`;
+                ball.style.transform = `rotate(${score * 180}deg)`;
+                ballShadow.style.left = `${newX}%`;
+                ballShadow.style.width = '25px';
+
+                // Boot resets
+                boot.style.transform = 'translateY(0px) rotate(0deg) scale(1)';
+            }, 180);
         }
 
         container.appendChild(wrapper);
