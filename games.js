@@ -2658,24 +2658,20 @@ const UniverseGames = (function() {
 
         openBtn.onclick = () => {
             galleryDisplay.style.display = 'none';
-            stickersCount++;
-            localStorage.setItem('melisa_album_total', stickersCount.toString());
-            document.getElementById('album-counter').innerHTML = `✨ Monitas pegadas en tu álbum: ${stickersCount}`;
+            packDiv.style.display = 'none';
 
             const photoNum = Math.floor(Math.random() * 185) + 1;
-            if (!collected.includes(photoNum)) {
-                collected.push(photoNum);
-                localStorage.setItem('melisa_album_collected', JSON.stringify(collected));
-                viewAlbumBtn.innerHTML = `📖 Ver Álbum Pegado (${collected.length})`;
-            }
-
+            const isRepeated = collected.includes(photoNum);
             const photoUrl = `fotos/foto (${photoNum}).jpeg`;
             const titleText = titles[Math.floor(Math.random() * titles.length)];
             const msgText = messages[Math.floor(Math.random() * messages.length)];
 
             cardDisplay.style.display = 'flex';
             cardDisplay.innerHTML = `
-                <div style="background:linear-gradient(145deg, #181824, #2a2a40); border:3px solid var(--gold); border-radius:20px; padding:20px; width:100%; max-width:350px; text-align:center; box-shadow:0 15px 35px rgba(0,0,0,0.8); animation:popIn 0.4s ease;">
+                <div style="background:linear-gradient(145deg, #181824, #2a2a40); border:3px solid var(--gold); border-radius:20px; padding:20px; width:100%; max-width:360px; text-align:center; box-shadow:0 15px 35px rgba(0,0,0,0.8); animation:popIn 0.4s ease;">
+                    <div style="background:${isRepeated ? '#ff4081' : '#00ff88'}; color:#000; font-weight:900; padding:6px 14px; border-radius:20px; font-size:0.85rem; letter-spacing:1px; margin-bottom:14px; display:inline-block; box-shadow:0 4px 10px rgba(0,0,0,0.3);">
+                        ${isRepeated ? '⚠️ FIGURITA REPETIDA' : '🌟 ¡NUEVA FIGURITA!'}
+                    </div>
                     <div style="background:#000; border-radius:14px; overflow:hidden; height:280px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; border:2px solid rgba(255,215,0,0.4); box-shadow:0 6px 16px rgba(0,0,0,0.6);">
                         <img src="${photoUrl}" alt="Recuerdo Melisa y Carlos" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='fotos/foto (1).jpeg';">
                     </div>
@@ -2684,14 +2680,37 @@ const UniverseGames = (function() {
                     </div>
                     <h4 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif; font-size:1.18rem;">${titleText}</h4>
                     <p style="color:rgba(255,255,255,0.9); font-size:0.95rem; line-height:1.5; font-style:italic; margin-bottom:18px;">"${msgText}"</p>
-                    <button id="next-pack-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:900; padding:13px; font-size:1rem;">
-                        📥 ¡Pegar en el Álbum y Abrir Otro Sobre!
-                    </button>
+                    
+                    <div style="display:flex; flex-direction:column; gap:10px;">
+                        <button id="paste-sticker-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:900; padding:14px; font-size:1.02rem; border-radius:30px; box-shadow:0 4px 15px rgba(0,229,255,0.4);">
+                            📗 PEGAR EN MI ÁLBUM
+                        </button>
+                        <button id="discard-sticker-btn" class="btn" style="background:rgba(255,64,129,0.2); border:2px solid #ff4081; color:#ff4081; width:100%; font-weight:900; padding:12px; font-size:0.95rem; border-radius:30px;">
+                            🗑️ DESCARTAR / GUARDAR REPETIDA
+                        </button>
+                    </div>
                 </div>
             `;
 
-            document.getElementById('next-pack-btn').onclick = () => {
-                openBtn.click();
+            document.getElementById('paste-sticker-btn').onclick = () => {
+                if (!collected.includes(photoNum)) {
+                    collected.push(photoNum);
+                    localStorage.setItem('melisa_album_collected', JSON.stringify(collected));
+                }
+                stickersCount++;
+                localStorage.setItem('melisa_album_total', stickersCount.toString());
+                document.getElementById('album-counter').innerHTML = `✨ Monitas pegadas en tu álbum: ${stickersCount}`;
+                viewAlbumBtn.innerHTML = `📖 Ver Álbum Pegado (${collected.length})`;
+
+                cardDisplay.style.display = 'none';
+                packDiv.style.display = 'block';
+                packDiv.scrollIntoView({ behavior: 'smooth' });
+            };
+
+            document.getElementById('discard-sticker-btn').onclick = () => {
+                cardDisplay.style.display = 'none';
+                packDiv.style.display = 'block';
+                packDiv.scrollIntoView({ behavior: 'smooth' });
             };
 
             cardDisplay.scrollIntoView({ behavior: 'smooth' });
@@ -2699,12 +2718,13 @@ const UniverseGames = (function() {
 
         viewAlbumBtn.onclick = () => {
             cardDisplay.style.display = 'none';
+            packDiv.style.display = 'block';
             galleryDisplay.style.display = 'flex';
 
             if (collected.length === 0) {
                 galleryDisplay.innerHTML = `
                     <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:15px; padding:25px; text-align:center; width:100%;">
-                        <p style="color:var(--text-secondary);">Aún no has abierto sobres hoy. ¡Presiona 'ABRIR SOBRE DORADO' para empezar a pegar tus láminas reales!</p>
+                        <p style="color:var(--text-secondary);">Aún no has pegado láminas hoy. ¡Presiona 'ABRIR SOBRE DORADO' y decide cuáles pegar en tu álbum!</p>
                     </div>
                 `;
             } else {
@@ -2804,6 +2824,9 @@ const UniverseGames = (function() {
             }
         }
 
+        if (Array.isArray(unshownIndices)) {
+            unshownIndices = unshownIndices.filter(i => typeof i === 'number' && i >= 0 && i < teamsData.length && teamsData[i]);
+        }
         if (!Array.isArray(unshownIndices) || unshownIndices.length === 0) {
             unshownIndices = Array.from({length: teamsData.length}, (_, i) => i);
             shuffleArray(unshownIndices);
@@ -2835,9 +2858,10 @@ const UniverseGames = (function() {
         wrapper.appendChild(card);
 
         function renderTeam() {
-            if (unshownIndices.length === 0) {
+            if (!Array.isArray(unshownIndices) || unshownIndices.length === 0 || unshownIndices[0] === undefined || !teamsData[unshownIndices[0]]) {
                 unshownIndices = Array.from({length: teamsData.length}, (_, i) => i);
                 shuffleArray(unshownIndices);
+                localStorage.setItem('melisa_wct_unshown_pool', JSON.stringify(unshownIndices));
             }
 
             const currentIdx = unshownIndices[0];
