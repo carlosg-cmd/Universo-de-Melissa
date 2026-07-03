@@ -2281,6 +2281,7 @@ const UniverseGames = (function() {
         wrapper.style.display = 'flex';
         wrapper.style.flexDirection = 'column';
         wrapper.style.alignItems = 'center';
+        wrapper.style.position = 'relative';
 
         let goals = parseInt(localStorage.getItem('melisa_penalties_goals') || '0', 10);
 
@@ -2380,6 +2381,27 @@ const UniverseGames = (function() {
         ball.innerHTML = '⚽';
         stadium.appendChild(ball);
 
+        // GOOL Popup Banner hidden
+        const golPopup = document.createElement('div');
+        golPopup.style.position = 'absolute';
+        golPopup.style.top = '45%';
+        golPopup.style.left = '50%';
+        golPopup.style.transform = 'translate(-50%, -50%) scale(0)';
+        golPopup.style.transition = 'transform 0.4s cubic-bezier(0.18, 0.89, 0.32, 1.28)';
+        golPopup.style.background = 'rgba(0,0,0,0.9)';
+        golPopup.style.border = '4px solid var(--gold)';
+        golPopup.style.borderRadius = '25px';
+        golPopup.style.padding = '15px 28px';
+        golPopup.style.color = '#fff';
+        golPopup.style.fontSize = '2.2rem';
+        golPopup.style.fontWeight = '900';
+        golPopup.style.zIndex = '50';
+        golPopup.style.boxShadow = '0 0 35px rgba(255,215,0,0.9)';
+        golPopup.style.textAlign = 'center';
+        golPopup.style.whiteSpace = 'nowrap';
+        golPopup.innerHTML = '🎉 ¡GOOOOOOL! ⚽👑';
+        stadium.appendChild(golPopup);
+
         wrapper.appendChild(stadium);
 
         // Commentary Box
@@ -2461,11 +2483,37 @@ const UniverseGames = (function() {
                         stadium.style.borderColor = '#00ff88';
                         stadium.style.boxShadow = '0 0 35px rgba(0,255,136,0.6)';
                         commentary.innerHTML = goalComments[Math.floor(Math.random() * goalComments.length)];
+
+                        // Show GOOOL text popup & Confetti
+                        golPopup.style.transform = 'translate(-50%, -50%) scale(1)';
+
+                        const confettiContainer = document.createElement('div');
+                        confettiContainer.className = 'game-confetti';
+                        confettiContainer.style.position = 'absolute';
+                        confettiContainer.style.inset = '0';
+                        confettiContainer.style.overflow = 'hidden';
+                        confettiContainer.style.pointerEvents = 'none';
+                        for(let i=0; i<45; i++) {
+                            const piece = document.createElement('div');
+                            piece.className = 'game-confetti-piece';
+                            piece.style.left = `${Math.random() * 100}%`;
+                            piece.style.backgroundColor = ['#00e5ff', '#ffd54f', '#ff4081', '#00ff88', '#fff'][Math.floor(Math.random() * 5)];
+                            piece.style.animationDelay = `${Math.random() * 1.5}s`;
+                            confettiContainer.appendChild(piece);
+                        }
+                        wrapper.appendChild(confettiContainer);
+
+                        setTimeout(() => {
+                            if (confettiContainer && confettiContainer.parentNode) {
+                                confettiContainer.remove();
+                            }
+                        }, 2500);
                     } else {
                         commentary.innerHTML = '🎙️ <b>¡Atajada de película!</b> "¡El arquero voló como un gato y la sacó con los guantes! Pero para tu rey Carlos tú siempre eres la campeona. ¡Patea otro penal!"';
                     }
 
                     setTimeout(() => {
+                        golPopup.style.transform = 'translate(-50%, -50%) scale(0)';
                         ball.style.transition = 'none';
                         goalie.style.transition = 'none';
                         ballShadow.style.transition = 'none';
@@ -2489,7 +2537,7 @@ const UniverseGames = (function() {
                             ballShadow.style.transition = 'all 0.5s ease';
                             isShooting = false;
                         }, 50);
-                    }, 2200);
+                    }, 2300);
                 }, 580);
             };
             controlsDiv.appendChild(btn);
@@ -2507,19 +2555,20 @@ const UniverseGames = (function() {
         const wrapper = document.createElement('div');
         wrapper.className = 'game-album';
         wrapper.style.width = '100%';
-        wrapper.style.maxWidth = '500px';
+        wrapper.style.maxWidth = '520px';
         wrapper.style.display = 'flex';
         wrapper.style.flexDirection = 'column';
         wrapper.style.alignItems = 'center';
 
-        let stickersCount = parseInt(localStorage.getItem('melisa_album_total') || '0', 10);
+        let collected = JSON.parse(localStorage.getItem('melisa_album_collected') || '[]');
+        let stickersCount = parseInt(localStorage.getItem('melisa_album_total') || collected.length.toString(), 10);
 
         const header = document.createElement('div');
         header.style.textAlign = 'center';
-        header.style.marginBottom = '20px';
+        header.style.marginBottom = '18px';
         header.innerHTML = `
             <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">📖 Álbum Panini del Amor ⭐</h2>
-            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Abre sobres dorados infinitos para descubrir nuestras fotos mundialistas reales!</p>
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Abre sobres dorados infinitos o visualiza tu colección de láminas reales!</p>
             <div id="album-counter" style="background:rgba(255,215,0,0.15); border:1px solid var(--gold); padding:8px 18px; border-radius:20px; color:var(--gold); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(255,215,0,0.2);">
                 ✨ Monitas pegadas en tu álbum: ${stickersCount}
             </div>
@@ -2532,28 +2581,48 @@ const UniverseGames = (function() {
         packDiv.style.background = 'linear-gradient(135deg, #2b1055 0%, #7597de 100%)';
         packDiv.style.border = '2px dashed var(--gold)';
         packDiv.style.borderRadius = '16px';
-        packDiv.style.padding = '30px 20px';
+        packDiv.style.padding = '25px 20px';
         packDiv.style.textAlign = 'center';
         packDiv.style.boxShadow = '0 10px 28px rgba(0,0,0,0.6)';
         packDiv.style.marginBottom = '20px';
 
         packDiv.innerHTML = `
-            <div style="font-size:4.5rem; margin-bottom:10px; filter:drop-shadow(0 5px 15px rgba(255,215,0,0.5));">🃏✨</div>
-            <h3 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif; font-size:1.4rem;">Sobre Dorado Panini Edición Oro</h3>
-            <p style="color:rgba(255,255,255,0.85); font-size:0.92rem; margin-bottom:22px;">Contiene 1 lámina brillante holográfica con foto real de Carlos & Melisa.</p>
+            <div style="font-size:4.2rem; margin-bottom:8px; filter:drop-shadow(0 5px 15px rgba(255,215,0,0.5));">🃏✨</div>
+            <h3 style="color:#fff; margin:0 0 8px 0; font-family:'Outfit',sans-serif; font-size:1.35rem;">Sobre Dorado Panini Edición Oro</h3>
+            <p style="color:rgba(255,255,255,0.85); font-size:0.9rem; margin-bottom:20px;">Contiene 1 lámina brillante holográfica con foto real de Carlos & Melisa.</p>
         `;
+
+        const btnsRow = document.createElement('div');
+        btnsRow.style.display = 'flex';
+        btnsRow.style.gap = '12px';
+        btnsRow.style.flexWrap = 'wrap';
+        btnsRow.style.justifyContent = 'center';
 
         const openBtn = document.createElement('button');
         openBtn.className = 'btn';
         openBtn.style.background = 'var(--gold)';
         openBtn.style.color = '#000';
         openBtn.style.fontWeight = '900';
-        openBtn.style.padding = '15px 32px';
-        openBtn.style.fontSize = '1.12rem';
-        openBtn.style.boxShadow = '0 6px 22px rgba(255,215,0,0.5)';
-        openBtn.style.borderRadius = '50px';
+        openBtn.style.padding = '14px 26px';
+        openBtn.style.fontSize = '1.05rem';
+        openBtn.style.boxShadow = '0 6px 20px rgba(255,215,0,0.5)';
+        openBtn.style.borderRadius = '30px';
         openBtn.innerHTML = '✨ ¡ABRIR SOBRE DORADO! 🎁';
-        packDiv.appendChild(openBtn);
+
+        const viewAlbumBtn = document.createElement('button');
+        viewAlbumBtn.className = 'btn';
+        viewAlbumBtn.style.background = 'var(--cyan)';
+        viewAlbumBtn.style.color = '#000';
+        viewAlbumBtn.style.fontWeight = '900';
+        viewAlbumBtn.style.padding = '14px 22px';
+        viewAlbumBtn.style.fontSize = '1.05rem';
+        viewAlbumBtn.style.boxShadow = '0 6px 20px rgba(0,229,255,0.4)';
+        viewAlbumBtn.style.borderRadius = '30px';
+        viewAlbumBtn.innerHTML = `📖 Ver Álbum Pegado (${collected.length})`;
+
+        btnsRow.appendChild(openBtn);
+        btnsRow.appendChild(viewAlbumBtn);
+        packDiv.appendChild(btnsRow);
         wrapper.appendChild(packDiv);
 
         const cardDisplay = document.createElement('div');
@@ -2562,6 +2631,14 @@ const UniverseGames = (function() {
         cardDisplay.style.flexDirection = 'column';
         cardDisplay.style.alignItems = 'center';
         wrapper.appendChild(cardDisplay);
+
+        // Gallery Display
+        const galleryDisplay = document.createElement('div');
+        galleryDisplay.style.width = '100%';
+        galleryDisplay.style.display = 'none';
+        galleryDisplay.style.flexDirection = 'column';
+        galleryDisplay.style.alignItems = 'center';
+        wrapper.appendChild(galleryDisplay);
 
         const titles = [
             '⭐ Selección Melisa & Carlos - Titulares Indiscutibles',
@@ -2580,12 +2657,18 @@ const UniverseGames = (function() {
         ];
 
         openBtn.onclick = () => {
+            galleryDisplay.style.display = 'none';
             stickersCount++;
             localStorage.setItem('melisa_album_total', stickersCount.toString());
             document.getElementById('album-counter').innerHTML = `✨ Monitas pegadas en tu álbum: ${stickersCount}`;
 
-            // Exact file pattern matching foto (1).jpeg to foto (190).jpeg
             const photoNum = Math.floor(Math.random() * 185) + 1;
+            if (!collected.includes(photoNum)) {
+                collected.push(photoNum);
+                localStorage.setItem('melisa_album_collected', JSON.stringify(collected));
+                viewAlbumBtn.innerHTML = `📖 Ver Álbum Pegado (${collected.length})`;
+            }
+
             const photoUrl = `fotos/foto (${photoNum}).jpeg`;
             const titleText = titles[Math.floor(Math.random() * titles.length)];
             const msgText = messages[Math.floor(Math.random() * messages.length)];
@@ -2614,188 +2697,164 @@ const UniverseGames = (function() {
             cardDisplay.scrollIntoView({ behavior: 'smooth' });
         };
 
+        viewAlbumBtn.onclick = () => {
+            cardDisplay.style.display = 'none';
+            galleryDisplay.style.display = 'flex';
+
+            if (collected.length === 0) {
+                galleryDisplay.innerHTML = `
+                    <div style="background:rgba(255,255,255,0.05); border:1px solid rgba(255,255,255,0.2); border-radius:15px; padding:25px; text-align:center; width:100%;">
+                        <p style="color:var(--text-secondary);">Aún no has abierto sobres hoy. ¡Presiona 'ABRIR SOBRE DORADO' para empezar a pegar tus láminas reales!</p>
+                    </div>
+                `;
+            } else {
+                let gridHtml = `
+                    <h3 style="color:var(--gold); font-family:'Outfit',sans-serif; margin:10px 0 15px 0;">¡Tus Láminas Panini Coleccionadas! ✨</h3>
+                    <div style="display:grid; grid-template-columns:repeat(auto-fill, minmax(130px, 1fr)); gap:12px; width:100%;">
+                `;
+                collected.forEach(num => {
+                    gridHtml += `
+                        <div style="background:#1a1a2e; border:2px solid var(--gold); border-radius:12px; overflow:hidden; padding:8px; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.5);">
+                            <div style="height:120px; border-radius:8px; overflow:hidden; margin-bottom:6px; background:#000;">
+                                <img src="fotos/foto (${num}).jpeg" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='fotos/foto (1).jpeg';">
+                            </div>
+                            <span style="color:var(--gold); font-size:0.75rem; font-weight:bold;">LÁMINA #${num}</span>
+                        </div>
+                    `;
+                });
+                gridHtml += `</div>`;
+                galleryDisplay.innerHTML = gridHtml;
+            }
+            galleryDisplay.scrollIntoView({ behavior: 'smooth' });
+        };
+
         container.appendChild(wrapper);
     }
 
     // =============================================
-    //  DÍA 9: DOMINADAS MUNDIALISTAS (PROFESIONAL) 🥇⚽
+    //  DÍA 9: SELECCIONES DEL MUNDIAL 2026 🌍🏆
     // =============================================
-    function startKeepyUppy(container, config) {
+    function startWorldCupTeams(container, config) {
         container.innerHTML = '';
         const wrapper = document.createElement('div');
-        wrapper.className = 'game-keepyuppy';
+        wrapper.className = 'game-worldcupteams';
         wrapper.style.width = '100%';
         wrapper.style.maxWidth = '500px';
         wrapper.style.display = 'flex';
         wrapper.style.flexDirection = 'column';
         wrapper.style.alignItems = 'center';
+        wrapper.style.position = 'relative';
 
-        let score = parseInt(localStorage.getItem('melisa_keepyuppy_score') || '0', 10);
+        const teamsData = [
+            { flag: '🇨🇴', name: 'COLOMBIA', clue: '¡Nuestra selección amada! El país del café, la cumbia, la pasión tricolor y nuestro amor incondicional.' },
+            { flag: '🇦🇷', name: 'ARGENTINA', clue: 'La actual campeona del mundo, liderada por Lionel Messi y ganadora en Qatar 2022.' },
+            { flag: '🇧🇷', name: 'BRASIL', clue: 'La pentacampeona del mundo, famosa por la samba, el jogo bonito y la camiseta verdeamarela.' },
+            { flag: '🇲🇽', name: 'MEXICO', clue: 'Una de las tres sedes anfitrionas del Mundial 2026, donde jugarán en el histórico Estadio Azteca.' },
+            { flag: '🇪🇸', name: 'ESPAÑA', clue: 'La Furia Roja, campeona de Europa y famosa por su estilo de juego de pases y tiki-taka.' },
+            { flag: '🇫🇷', name: 'FRANCIA', clue: 'La poderosa selección europea subcampeona del mundo y campeona en Rusia 2018.' },
+            { flag: '🇺🇸', name: 'ESTADOS UNIDOS', clue: 'El país anfitrión principal donde se disputará la gran final del Mundial en el 2026.' },
+            { flag: '🇺🇾', name: 'URUGUAY', clue: 'La Celeste, bicampeona mundial y primer país campeón en la historia de los mundiales (1930).' },
+            { flag: '🇩🇪', name: 'ALEMANIA', clue: 'Tetracampeona del mundo, una potencia histórica indiscutible del fútbol europeo.' },
+            { flag: '🇨🇦', name: 'CANADA', clue: 'El tercer país co-anfitrión de Norteamérica para 2026, representado por la hoja de arce.' }
+        ];
+
+        let currentIdx = 0;
+        let correctCount = 0;
 
         const header = document.createElement('div');
         header.style.textAlign = 'center';
-        header.style.marginBottom = '15px';
+        header.style.marginBottom = '20px';
         header.innerHTML = `
-            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🥇 Dominadas Mundialistas ⚽</h2>
-            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Presiona los botones para mover el Botín de Oro y dar toques al aire!</p>
-            <div id="keepyuppy-counter" style="background:rgba(0,255,136,0.15); border:1px solid #00ff88; padding:8px 18px; border-radius:20px; color:#00ff88; font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(0,255,136,0.2);">
-                ⚽ Rebotes y Dominadas: ${score}
+            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🌍 Adivina las Selecciones 2026 🏆</h2>
+            <p style="color:var(--text-secondary); font-size:0.95rem;">Lee la pista, mira la bandera y escribe o adivina el nombre del país clasificado.</p>
+            <div id="wct-counter" style="background:rgba(0,229,255,0.15); border:1px solid var(--cyan); padding:8px 18px; border-radius:20px; color:var(--cyan); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(0,229,255,0.2);">
+                🏆 Aciertos Mundialistas: ${correctCount}
             </div>
         `;
         wrapper.appendChild(header);
 
-        const field = document.createElement('div');
-        field.style.width = '100%';
-        field.style.height = '290px';
-        field.style.background = 'radial-gradient(circle at 50% 20%, #1c3e7a 0%, #0f2347 100%)';
-        field.style.border = '3px solid var(--gold)';
-        field.style.borderRadius = '18px';
-        field.style.position = 'relative';
-        field.style.overflow = 'hidden';
-        field.style.boxShadow = '0 12px 30px rgba(0,0,0,0.7), inset 0 -40px 50px rgba(0,0,0,0.5)';
+        const card = document.createElement('div');
+        card.style.width = '100%';
+        card.style.background = 'linear-gradient(145deg, #112233, #1e3a5f)';
+        card.style.border = '3px solid var(--gold)';
+        card.style.borderRadius = '18px';
+        card.style.padding = '24px';
+        card.style.textAlign = 'center';
+        card.style.boxShadow = '0 12px 30px rgba(0,0,0,0.7)';
+        wrapper.appendChild(card);
 
-        // Field turf lines
-        const fieldLines = document.createElement('div');
-        fieldLines.style.position = 'absolute';
-        fieldLines.style.bottom = '0';
-        fieldLines.style.left = '0';
-        fieldLines.style.right = '0';
-        fieldLines.style.height = '110px';
-        fieldLines.style.background = 'linear-gradient(180deg, rgba(30,130,50,0.4) 0%, rgba(20,90,35,0.8) 100%)';
-        fieldLines.style.borderTop = '2px solid rgba(255,255,255,0.3)';
-        field.appendChild(fieldLines);
+        function renderTeam() {
+            const current = teamsData[currentIdx];
+            card.innerHTML = `
+                <div style="font-size:5rem; margin-bottom:10px; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.6));">${current.flag}</div>
+                <div style="color:var(--gold); font-weight:bold; font-size:0.9rem; letter-spacing:1px; margin-bottom:10px;">
+                    SELECCIÓN #${currentIdx + 1} DE ${teamsData.length}
+                </div>
+                <p style="color:#fff; font-size:1.05rem; line-height:1.6; margin-bottom:22px; font-style:italic;">"${current.clue}"</p>
+                
+                <input type="text" id="team-input" placeholder="Escribe el nombre aquí..." autocomplete="off" style="width:100%; padding:14px; border-radius:12px; border:2px solid var(--cyan); background:rgba(0,0,0,0.5); color:#fff; font-size:1.15rem; text-align:center; font-weight:bold; margin-bottom:16px; outline:none;">
+                
+                <button id="check-btn" class="btn" style="background:var(--gold); color:#000; width:100%; font-weight:900; padding:15px; font-size:1.1rem; border-radius:50px;">
+                    ⚽ ¡VERIFICAR RESPUESTA!
+                </button>
+                <div id="feedback-area" style="margin-top:15px; min-height:40px;"></div>
+            `;
 
-        // Professional Soccer Boot Element
-        const boot = document.createElement('div');
-        boot.style.position = 'absolute';
-        boot.style.bottom = '15px';
-        boot.style.left = '38%';
-        boot.style.width = '94px';
-        boot.style.height = '68px';
-        boot.style.transition = 'all 0.18s cubic-bezier(0.1, 0.9, 0.2, 1)';
-        boot.style.display = 'flex';
-        boot.style.flexDirection = 'column';
-        boot.style.alignItems = 'center';
-        boot.style.zIndex = '5';
-        boot.innerHTML = `
-            <div style="font-size:3.4rem; transform:scaleX(-1) rotate(-8deg); line-height:1; filter:drop-shadow(0 8px 12px rgba(0,0,0,0.7));">👟✨</div>
-            <div style="background:var(--gold); color:#000; font-size:0.65rem; font-weight:900; padding:2px 8px; border-radius:12px; margin-top:-6px; border:1px solid #fff; box-shadow:0 3px 8px rgba(0,0,0,0.5);">
-                BOTÍN DE ORO #10
-            </div>
-        `;
-        field.appendChild(boot);
+            const inputEl = document.getElementById('team-input');
+            const checkBtn = document.getElementById('check-btn');
+            const feedback = document.getElementById('feedback-area');
 
-        // Ball Shadow
-        const ballShadow = document.createElement('div');
-        ballShadow.style.position = 'absolute';
-        ballShadow.style.bottom = '18px';
-        ballShadow.style.left = '46%';
-        ballShadow.style.width = '40px';
-        ballShadow.style.height = '12px';
-        ballShadow.style.background = 'rgba(0,0,0,0.6)';
-        ballShadow.style.borderRadius = '50%';
-        ballShadow.style.transition = 'all 0.25s ease';
-        field.appendChild(ballShadow);
+            function checkAnswer() {
+                const rawUser = inputEl.value.trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+                const target = current.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-        const ball = document.createElement('div');
-        ball.style.position = 'absolute';
-        ball.style.top = '25px';
-        ball.style.left = '45%';
-        ball.style.fontSize = '2.5rem';
-        ball.style.transition = 'all 0.25s cubic-bezier(0.3, 1, 0.6, 1)';
-        ball.style.zIndex = '10';
-        ball.style.filter = 'drop-shadow(0 6px 10px rgba(0,0,0,0.6))';
-        ball.innerHTML = '⚽';
-        field.appendChild(ball);
+                if (rawUser === target || (target === 'ESTADOS UNIDOS' && (rawUser === 'USA' || rawUser === 'EEUU'))) {
+                    correctCount++;
+                    document.getElementById('wct-counter').innerHTML = `🏆 Aciertos Mundialistas: ${correctCount}`;
+                    inputEl.style.borderColor = '#00ff88';
+                    inputEl.style.backgroundColor = 'rgba(0,255,136,0.15)';
+                    
+                    feedback.innerHTML = `
+                        <div style="color:#00ff88; font-weight:bold; font-size:1.2rem; margin-bottom:10px;">🎉 ¡GOLAZO ACERTADO! ⚽👑</div>
+                        <button id="next-team-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:bold;">
+                            ➡️ Siguiente Selección Mundialista
+                        </button>
+                    `;
 
-        wrapper.appendChild(field);
+                    // Confetti celebration
+                    const confettiContainer = document.createElement('div');
+                    confettiContainer.className = 'game-confetti';
+                    confettiContainer.style.position = 'absolute';
+                    confettiContainer.style.inset = '0';
+                    confettiContainer.style.overflow = 'hidden';
+                    confettiContainer.style.pointerEvents = 'none';
+                    for(let i=0; i<35; i++) {
+                        const piece = document.createElement('div');
+                        piece.className = 'game-confetti-piece';
+                        piece.style.left = `${Math.random() * 100}%`;
+                        piece.style.backgroundColor = ['#00e5ff', '#ffd54f', '#ff4081', '#00ff88'][Math.floor(Math.random() * 4)];
+                        piece.style.animationDelay = `${Math.random() * 1.5}s`;
+                        confettiContainer.appendChild(piece);
+                    }
+                    wrapper.appendChild(confettiContainer);
 
-        const statusText = document.createElement('p');
-        statusText.style.color = 'var(--text-primary)';
-        statusText.style.fontStyle = 'italic';
-        statusText.style.margin = '15px 0 10px 0';
-        statusText.style.textAlign = 'center';
-        statusText.style.lineHeight = '1.5';
-        statusText.innerHTML = '🎙️ ¡Presiona los botones para golpear el balón y mantenerlo en el aire!';
-        wrapper.appendChild(statusText);
+                    setTimeout(() => { if (confettiContainer.parentNode) confettiContainer.remove(); }, 2500);
 
-        const btnDiv = document.createElement('div');
-        btnDiv.style.display = 'flex';
-        btnDiv.style.gap = '10px';
-        btnDiv.style.width = '100%';
+                    document.getElementById('next-team-btn').onclick = () => {
+                        currentIdx = (currentIdx + 1) % teamsData.length;
+                        renderTeam();
+                    };
+                } else {
+                    inputEl.style.borderColor = '#ff4081';
+                    feedback.innerHTML = `<span style="color:#ff4081; font-weight:bold;">¡Casi! Inténtalo de nuevo mi campeona 💪</span>`;
+                }
+            }
 
-        let bootPos = 38; // percent
-
-        const moveLeftBtn = document.createElement('button');
-        moveLeftBtn.className = 'btn';
-        moveLeftBtn.style.flex = '1';
-        moveLeftBtn.style.padding = '14px';
-        moveLeftBtn.style.fontWeight = 'bold';
-        moveLeftBtn.innerHTML = '⬅️ Mover Izquierda';
-        moveLeftBtn.onclick = () => {
-            bootPos = Math.max(6, bootPos - 25);
-            boot.style.left = `${bootPos}%`;
-            kickAnimation();
-        };
-
-        const moveCenterBtn = document.createElement('button');
-        moveCenterBtn.className = 'btn';
-        moveCenterBtn.style.flex = '1';
-        moveCenterBtn.style.padding = '14px';
-        moveCenterBtn.style.fontWeight = 'bold';
-        moveCenterBtn.innerHTML = '⬆️ Cabecita / Centro';
-        moveCenterBtn.onclick = () => {
-            bootPos = 38;
-            boot.style.left = `${bootPos}%`;
-            kickAnimation();
-        };
-
-        const moveRightBtn = document.createElement('button');
-        moveRightBtn.className = 'btn';
-        moveRightBtn.style.flex = '1';
-        moveRightBtn.style.padding = '14px';
-        moveRightBtn.style.fontWeight = 'bold';
-        moveRightBtn.innerHTML = '➡️ Mover Derecha';
-        moveRightBtn.onclick = () => {
-            bootPos = Math.min(70, bootPos + 25);
-            boot.style.left = `${bootPos}%`;
-            kickAnimation();
-        };
-
-        btnDiv.appendChild(moveLeftBtn);
-        btnDiv.appendChild(moveCenterBtn);
-        btnDiv.appendChild(moveRightBtn);
-        wrapper.appendChild(btnDiv);
-
-        function kickAnimation() {
-            // Ball drops towards boot
-            ball.style.top = '190px';
-            ball.style.left = `${bootPos + 6}%`;
-            ballShadow.style.left = `${bootPos + 6}%`;
-            ballShadow.style.width = '45px';
-
-            // Boot kicks upward
-            boot.style.transform = 'translateY(-22px) rotate(-22deg) scale(1.15)';
-
-            setTimeout(() => {
-                score++;
-                localStorage.setItem('melisa_keepyuppy_score', score.toString());
-                document.getElementById('keepyuppy-counter').innerHTML = `⚽ Rebotes y Dominadas: ${score}`;
-                statusText.innerHTML = `🎙️ <b>¡Toque perfecto de botín!</b> Llevas ${score} dominadas consecutivas. ¡Eres una estrella!`;
-
-                // Ball bounces high up
-                ball.style.top = '20px';
-                const newX = Math.floor(Math.random() * 65) + 12;
-                ball.style.left = `${newX}%`;
-                ball.style.transform = `rotate(${score * 180}deg)`;
-                ballShadow.style.left = `${newX}%`;
-                ballShadow.style.width = '25px';
-
-                // Boot resets
-                boot.style.transform = 'translateY(0px) rotate(0deg) scale(1)';
-            }, 180);
+            checkBtn.onclick = checkAnswer;
+            inputEl.addEventListener('keyup', (e) => { if (e.key === 'Enter') checkAnswer(); });
         }
 
+        renderTeam();
         container.appendChild(wrapper);
     }
 
@@ -2813,6 +2872,7 @@ const UniverseGames = (function() {
         startSlots,
         startPenalties,
         startAlbum,
-        startKeepyUppy
+        startKeepyUppy: startWorldCupTeams,
+        startWorldCupTeams
     };
 })();
