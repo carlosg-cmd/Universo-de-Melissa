@@ -327,7 +327,8 @@
         // Use the current day or explicit song setting to select the song
         const currentDay = typeof DailyContent !== 'undefined' ? DailyContent.getCurrentDay() : 1;
         const todayData = typeof DailyContent !== 'undefined' ? DailyContent.getDay(currentDay) : null;
-        music.src = (todayData && todayData.song) ? todayData.song : `musica/cancion${currentDay}.mp3`;
+        const rawSongPath = (todayData && todayData.song) ? todayData.song : `musica/cancion${currentDay}.mp3`;
+        music.src = encodeURI(rawSongPath);
         music.loop = true;
         
         // Fallback: If the song for today isn't found, use cancion1.mp3 as default
@@ -1117,7 +1118,7 @@
     // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js?v=36').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=37').then(reg => {
             reg.update();
         }).catch(err => console.log('Service Worker failed', err));
     });
