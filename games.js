@@ -2739,34 +2739,34 @@ const UniverseGames = (function() {
         const wrapper = document.createElement('div');
         wrapper.className = 'game-worldcupteams';
         wrapper.style.width = '100%';
-        wrapper.style.maxWidth = '500px';
+        wrapper.style.maxWidth = '520px';
         wrapper.style.display = 'flex';
         wrapper.style.flexDirection = 'column';
         wrapper.style.alignItems = 'center';
         wrapper.style.position = 'relative';
 
         const teamsData = [
-            { flag: '🇨🇴', name: 'COLOMBIA', clue: '¡Nuestra selección amada! El país del café, la cumbia, la pasión tricolor y nuestro amor incondicional.' },
-            { flag: '🇦🇷', name: 'ARGENTINA', clue: 'La actual campeona del mundo, liderada por Lionel Messi y ganadora en Qatar 2022.' },
-            { flag: '🇧🇷', name: 'BRASIL', clue: 'La pentacampeona del mundo, famosa por la samba, el jogo bonito y la camiseta verdeamarela.' },
-            { flag: '🇲🇽', name: 'MEXICO', clue: 'Una de las tres sedes anfitrionas del Mundial 2026, donde jugarán en el histórico Estadio Azteca.' },
-            { flag: '🇪🇸', name: 'ESPAÑA', clue: 'La Furia Roja, campeona de Europa y famosa por su estilo de juego de pases y tiki-taka.' },
-            { flag: '🇫🇷', name: 'FRANCIA', clue: 'La poderosa selección europea subcampeona del mundo y campeona en Rusia 2018.' },
-            { flag: '🇺🇸', name: 'ESTADOS UNIDOS', clue: 'El país anfitrión principal donde se disputará la gran final del Mundial en el 2026.' },
-            { flag: '🇺🇾', name: 'URUGUAY', clue: 'La Celeste, bicampeona mundial y primer país campeón en la historia de los mundiales (1930).' },
-            { flag: '🇩🇪', name: 'ALEMANIA', clue: 'Tetracampeona del mundo, una potencia histórica indiscutible del fútbol europeo.' },
-            { flag: '🇨🇦', name: 'CANADA', clue: 'El tercer país co-anfitrión de Norteamérica para 2026, representado por la hoja de arce.' }
+            { flag: '🇨🇴', name: 'COLOMBIA', question: '¿Cuál es nuestra selección amada, el país del café, la cumbia y el orgullo tricolor por el que late nuestro corazón?', options: ['COLOMBIA', 'ECUADOR', 'VENEZUELA'] },
+            { flag: '🇦🇷', name: 'ARGENTINA', question: '¿Qué selección sudamericana es la actual campeona del mundo (Qatar 2022) liderada por Lionel Messi?', options: ['ARGENTINA', 'BRASIL', 'URUGUAY'] },
+            { flag: '🇧🇷', name: 'BRASIL', question: '¿Cuál es la selección pentacampeona del mundo famosa por el jogo bonito y la camiseta verdeamarela?', options: ['BRASIL', 'PORTUGAL', 'COLOMBIA'] },
+            { flag: '🇲🇽', name: 'MEXICO', question: '¿Qué país es una de las 3 sedes anfitrionas del 2026 donde se jugará en el histórico Estadio Azteca?', options: ['MEXICO', 'ESTADOS UNIDOS', 'CANADA'] },
+            { flag: '🇪🇸', name: 'ESPAÑA', question: '¿Qué selección europea es conocida como La Furia Roja, campeona de Europa y maestra del tiki-taka?', options: ['ESPAÑA', 'ITALIA', 'FRANCIA'] },
+            { flag: '🇫🇷', name: 'FRANCIA', question: '¿Qué poderosa selección europea fue campeona en 2018 y subcampeona del mundo liderada por Mbappé?', options: ['FRANCIA', 'ALEMANIA', 'INGLATERRA'] },
+            { flag: '🇺🇸', name: 'ESTADOS UNIDOS', question: '¿Cuál es el país anfitrión principal donde se disputará la gran final de la Copa del Mundo 2026?', options: ['ESTADOS UNIDOS', 'CANADA', 'MEXICO'] },
+            { flag: '🇺🇾', name: 'URUGUAY', question: '¿Qué selección sudamericana conocida como "La Celeste" fue el primer campeón en la historia de los mundiales (1930)?', options: ['URUGUAY', 'PARAGUAY', 'CHILE'] },
+            { flag: '🇩🇪', name: 'ALEMANIA', question: '¿Qué potencia del fútbol europeo ha ganado 4 Copas del Mundo y viste tradicionalmente de blanco?', options: ['ALEMANIA', 'HOLANDA', 'SUIZA'] },
+            { flag: '🇨🇦', name: 'CANADA', question: '¿Qué país norteamericano co-anfitrión del Mundial 2026 tiene una famosa hoja de arce en su banderaroja y blanca?', options: ['CANADA', 'ESTADOS UNIDOS', 'MEXICO'] }
         ];
 
         let currentIdx = 0;
-        let correctCount = 0;
+        let correctCount = parseInt(localStorage.getItem('melisa_wct_score') || '0', 10);
 
         const header = document.createElement('div');
         header.style.textAlign = 'center';
-        header.style.marginBottom = '20px';
+        header.style.marginBottom = '18px';
         header.innerHTML = `
-            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🌍 Adivina las Selecciones 2026 🏆</h2>
-            <p style="color:var(--text-secondary); font-size:0.95rem;">Lee la pista, mira la bandera y escribe o adivina el nombre del país clasificado.</p>
+            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🌍 Preguntas del Mundial 2026 🏆</h2>
+            <p style="color:var(--text-secondary); font-size:0.95rem;">Responde la pregunta escribiendo el nombre o seleccionando la opción correcta.</p>
             <div id="wct-counter" style="background:rgba(0,229,255,0.15); border:1px solid var(--cyan); padding:8px 18px; border-radius:20px; color:var(--cyan); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(0,229,255,0.2);">
                 🏆 Aciertos Mundialistas: ${correctCount}
             </div>
@@ -2777,80 +2777,119 @@ const UniverseGames = (function() {
         card.style.width = '100%';
         card.style.background = 'linear-gradient(145deg, #112233, #1e3a5f)';
         card.style.border = '3px solid var(--gold)';
-        card.style.borderRadius = '18px';
-        card.style.padding = '24px';
+        card.style.borderRadius = '20px';
+        card.style.padding = '24px 20px';
         card.style.textAlign = 'center';
         card.style.boxShadow = '0 12px 30px rgba(0,0,0,0.7)';
         wrapper.appendChild(card);
 
         function renderTeam() {
             const current = teamsData[currentIdx];
+            
+            // Shuffle options
+            const opts = [...current.options];
+            for (let i = opts.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [opts[i], opts[j]] = [opts[j], opts[i]];
+            }
+
             card.innerHTML = `
-                <div style="font-size:5rem; margin-bottom:10px; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.6));">${current.flag}</div>
-                <div style="color:var(--gold); font-weight:bold; font-size:0.9rem; letter-spacing:1px; margin-bottom:10px;">
-                    SELECCIÓN #${currentIdx + 1} DE ${teamsData.length}
+                <div style="background:linear-gradient(90deg, #00e5ff, #ffd54f); color:#000; font-weight:900; font-size:0.85rem; padding:5px 16px; border-radius:20px; display:inline-block; margin-bottom:12px; letter-spacing:1px; box-shadow:0 4px 10px rgba(0,229,255,0.3);">
+                    ⚽ PREGUNTA #${currentIdx + 1} DE ${teamsData.length}
                 </div>
-                <p style="color:#fff; font-size:1.05rem; line-height:1.6; margin-bottom:22px; font-style:italic;">"${current.clue}"</p>
+                <div style="font-size:4.8rem; margin:8px 0; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.6));">${current.flag}</div>
+                <h3 style="color:#fff; font-family:'Outfit',sans-serif; font-size:1.18rem; margin:10px 0 16px 0; line-height:1.4;">${current.question}</h3>
                 
-                <input type="text" id="team-input" placeholder="Escribe el nombre aquí..." autocomplete="off" style="width:100%; padding:14px; border-radius:12px; border:2px solid var(--cyan); background:rgba(0,0,0,0.5); color:#fff; font-size:1.15rem; text-align:center; font-weight:bold; margin-bottom:16px; outline:none;">
-                
-                <button id="check-btn" class="btn" style="background:var(--gold); color:#000; width:100%; font-weight:900; padding:15px; font-size:1.1rem; border-radius:50px;">
-                    ⚽ ¡VERIFICAR RESPUESTA!
-                </button>
-                <div id="feedback-area" style="margin-top:15px; min-height:40px;"></div>
+                <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:14px; margin-bottom:18px; border:1px solid rgba(255,255,255,0.15);">
+                    <label style="color:var(--gold); font-size:0.85rem; font-weight:bold; display:block; margin-bottom:8px;">✍️ ESCRIBE LA RESPUESTA AQUÍ:</label>
+                    <div style="display:flex; gap:8px;">
+                        <input type="text" id="team-input" placeholder="Ej: COLOMBIA..." autocomplete="off" style="flex:1; padding:12px; border-radius:10px; border:2px solid var(--cyan); background:rgba(0,0,0,0.6); color:#fff; font-size:1.1rem; text-align:center; font-weight:bold; outline:none;">
+                        <button id="check-btn" class="btn" style="background:var(--gold); color:#000; font-weight:900; padding:12px 18px; border-radius:10px;">
+                            ¡Verificar!
+                        </button>
+                    </div>
+                </div>
+
+                <p style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:12px; font-weight:bold;">👉 O SELECCIONA UNA OPCIÓN RÁPIDA:</p>
+                <div id="options-row" style="display:flex; gap:10px; flex-direction:column; width:100%;"></div>
+
+                <div id="feedback-area" style="margin-top:16px; min-height:40px;"></div>
             `;
 
             const inputEl = document.getElementById('team-input');
             const checkBtn = document.getElementById('check-btn');
             const feedback = document.getElementById('feedback-area');
+            const optionsRow = document.getElementById('options-row');
 
-            function checkAnswer() {
-                const rawUser = inputEl.value.trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
+            function triggerSuccess() {
+                correctCount++;
+                localStorage.setItem('melisa_wct_score', correctCount.toString());
+                document.getElementById('wct-counter').innerHTML = `🏆 Aciertos Mundialistas: ${correctCount}`;
+                
+                feedback.innerHTML = `
+                    <div style="color:#00ff88; font-weight:900; font-size:1.3rem; margin-bottom:12px; animation:popIn 0.4s ease;">🎉 ¡CORRECTO! ¡GOLAZO ACERTADO! ⚽👑</div>
+                    <button id="next-team-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:900; padding:14px; font-size:1.05rem; border-radius:30px; box-shadow:0 6px 18px rgba(0,229,255,0.4);">
+                        ➡️ Siguiente Pregunta Mundialista
+                    </button>
+                `;
+
+                // Confetti celebration
+                const confettiContainer = document.createElement('div');
+                confettiContainer.className = 'game-confetti';
+                confettiContainer.style.position = 'absolute';
+                confettiContainer.style.inset = '0';
+                confettiContainer.style.overflow = 'hidden';
+                confettiContainer.style.pointerEvents = 'none';
+                for(let i=0; i<40; i++) {
+                    const piece = document.createElement('div');
+                    piece.className = 'game-confetti-piece';
+                    piece.style.left = `${Math.random() * 100}%`;
+                    piece.style.backgroundColor = ['#00e5ff', '#ffd54f', '#ff4081', '#00ff88'][Math.floor(Math.random() * 4)];
+                    piece.style.animationDelay = `${Math.random() * 1.5}s`;
+                    confettiContainer.appendChild(piece);
+                }
+                wrapper.appendChild(confettiContainer);
+
+                setTimeout(() => { if (confettiContainer.parentNode) confettiContainer.remove(); }, 2500);
+
+                document.getElementById('next-team-btn').onclick = () => {
+                    currentIdx = (currentIdx + 1) % teamsData.length;
+                    renderTeam();
+                };
+            }
+
+            function checkAnswer(userStr) {
+                const rawUser = (userStr || inputEl.value).trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
                 const target = current.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
                 if (rawUser === target || (target === 'ESTADOS UNIDOS' && (rawUser === 'USA' || rawUser === 'EEUU'))) {
-                    correctCount++;
-                    document.getElementById('wct-counter').innerHTML = `🏆 Aciertos Mundialistas: ${correctCount}`;
+                    inputEl.value = current.name;
                     inputEl.style.borderColor = '#00ff88';
                     inputEl.style.backgroundColor = 'rgba(0,255,136,0.15)';
-                    
-                    feedback.innerHTML = `
-                        <div style="color:#00ff88; font-weight:bold; font-size:1.2rem; margin-bottom:10px;">🎉 ¡GOLAZO ACERTADO! ⚽👑</div>
-                        <button id="next-team-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:bold;">
-                            ➡️ Siguiente Selección Mundialista
-                        </button>
-                    `;
-
-                    // Confetti celebration
-                    const confettiContainer = document.createElement('div');
-                    confettiContainer.className = 'game-confetti';
-                    confettiContainer.style.position = 'absolute';
-                    confettiContainer.style.inset = '0';
-                    confettiContainer.style.overflow = 'hidden';
-                    confettiContainer.style.pointerEvents = 'none';
-                    for(let i=0; i<35; i++) {
-                        const piece = document.createElement('div');
-                        piece.className = 'game-confetti-piece';
-                        piece.style.left = `${Math.random() * 100}%`;
-                        piece.style.backgroundColor = ['#00e5ff', '#ffd54f', '#ff4081', '#00ff88'][Math.floor(Math.random() * 4)];
-                        piece.style.animationDelay = `${Math.random() * 1.5}s`;
-                        confettiContainer.appendChild(piece);
-                    }
-                    wrapper.appendChild(confettiContainer);
-
-                    setTimeout(() => { if (confettiContainer.parentNode) confettiContainer.remove(); }, 2500);
-
-                    document.getElementById('next-team-btn').onclick = () => {
-                        currentIdx = (currentIdx + 1) % teamsData.length;
-                        renderTeam();
-                    };
+                    triggerSuccess();
                 } else {
                     inputEl.style.borderColor = '#ff4081';
-                    feedback.innerHTML = `<span style="color:#ff4081; font-weight:bold;">¡Casi! Inténtalo de nuevo mi campeona 💪</span>`;
+                    feedback.innerHTML = `<span style="color:#ff4081; font-weight:bold;">¡Respuesta incorrecta! Inténtalo de nuevo mi campeona 💪</span>`;
                 }
             }
 
-            checkBtn.onclick = checkAnswer;
+            opts.forEach(optText => {
+                const optBtn = document.createElement('button');
+                optBtn.className = 'btn';
+                optBtn.style.background = 'rgba(255,255,255,0.08)';
+                optBtn.style.border = '2px solid rgba(255,255,255,0.25)';
+                optBtn.style.color = '#fff';
+                optBtn.style.fontWeight = 'bold';
+                optBtn.style.padding = '12px';
+                optBtn.style.fontSize = '1.02rem';
+                optBtn.style.borderRadius = '12px';
+                optBtn.style.transition = 'all 0.2s ease';
+                optBtn.innerHTML = optText;
+                optBtn.onclick = () => checkAnswer(optText);
+                optionsRow.appendChild(optBtn);
+            });
+
+            checkBtn.onclick = () => checkAnswer();
             inputEl.addEventListener('keyup', (e) => { if (e.key === 'Enter') checkAnswer(); });
         }
 
