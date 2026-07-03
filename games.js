@@ -2732,7 +2732,7 @@ const UniverseGames = (function() {
     }
 
     // =============================================
-    //  DÍA 9: SELECCIONES DEL MUNDIAL 2026 🌍🏆
+    //  DÍA 9: SELECCIONES DEL MUNDIAL 2026 🌍🏆 (INFINITO)
     // =============================================
     function startWorldCupTeams(container, config) {
         container.innerHTML = '';
@@ -2755,10 +2755,61 @@ const UniverseGames = (function() {
             { flag: '🇺🇸', name: 'ESTADOS UNIDOS', question: '¿Cuál es el país anfitrión principal donde se disputará la gran final de la Copa del Mundo 2026?', options: ['ESTADOS UNIDOS', 'CANADA', 'MEXICO'] },
             { flag: '🇺🇾', name: 'URUGUAY', question: '¿Qué selección sudamericana conocida como "La Celeste" fue el primer campeón en la historia de los mundiales (1930)?', options: ['URUGUAY', 'PARAGUAY', 'CHILE'] },
             { flag: '🇩🇪', name: 'ALEMANIA', question: '¿Qué potencia del fútbol europeo ha ganado 4 Copas del Mundo y viste tradicionalmente de blanco?', options: ['ALEMANIA', 'HOLANDA', 'SUIZA'] },
-            { flag: '🇨🇦', name: 'CANADA', question: '¿Qué país norteamericano co-anfitrión del Mundial 2026 tiene una famosa hoja de arce en su banderaroja y blanca?', options: ['CANADA', 'ESTADOS UNIDOS', 'MEXICO'] }
+            { flag: '🇨🇦', name: 'CANADA', question: '¿Qué país norteamericano co-anfitrión del Mundial 2026 tiene una famosa hoja de arce en su bandera?', options: ['CANADA', 'ESTADOS UNIDOS', 'MEXICO'] },
+            { flag: '🏴󠁧󠁢󠁥󠁮󠁧󠁿', name: 'INGLATERRA', question: '¿Qué selección europea es conocida como "Los Tres Leones" y ganó el Mundial en 1966?', options: ['INGLATERRA', 'ESCOCIA', 'GALES'] },
+            { flag: '🇮🇹', name: 'ITALIA', question: '¿Qué histórica selección europea tetracampeona es conocida como la "Azzurra"?', options: ['ITALIA', 'GRECIA', 'ESPAÑA'] },
+            { flag: '🇵🇹', name: 'PORTUGAL', question: '¿Qué selección europea viste de rojo y verde y ha sido capitaneada por Cristiano Ronaldo?', options: ['PORTUGAL', 'ESPAÑA', 'BELGICA'] },
+            { flag: '🇳🇱', name: 'PAISES BAJOS', question: '¿Qué famosa selección europea que viste de naranja es conocida históricamente como la "Naranja Mecánica"?', options: ['PAISES BAJOS', 'ALEMANIA', 'DINAMARCA'] },
+            { flag: '🇭🇷', name: 'CROACIA', question: '¿Qué selección con camiseta a cuadros rojos y blancos llegó a la final en el Mundial 2018 y fue tercera en 2022?', options: ['CROACIA', 'POLONIA', 'SUIZA'] },
+            { flag: '🇧🇪', name: 'BELGICA', question: '¿Qué selección europea es apodada "Los Diablos Rojos" y tiene estrellas como De Bruyne y Lukaku?', options: ['BELGICA', 'SUIZA', 'AUSTRIA'] },
+            { flag: '🇯🇵', name: 'JAPON', question: '¿Qué selección asiática conocida como los "Samuráis Azules" destaca por su disciplina y velocidad?', options: ['JAPON', 'COREA DEL SUR', 'CHINA'] },
+            { flag: '🇰🇷', name: 'COREA DEL SUR', question: '¿Qué selección asiática apodada los "Guerreros Taeguk" llegó a semifinales en 2002 y viste de rojo?', options: ['COREA DEL SUR', 'JAPON', 'AUSTRALIA'] },
+            { flag: '🇲🇦', name: 'MARRUECOS', question: '¿Qué selección africana apodada los "Leones del Atlas" hizo historia al llegar a semifinales en Qatar 2022?', options: ['MARRUECOS', 'EGIPTO', 'SENEGAL'] },
+            { flag: '🇸🇳', name: 'SENEGAL', question: '¿Qué selección africana conocida como los "Leones de la Teranga" viste de verde, amarillo y rojo?', options: ['SENEGAL', 'CAMERUN', 'NIGERIA'] },
+            { flag: '🇪🇨', name: 'ECUADOR', question: '¿Qué selección sudamericana apodada "La Tri" disputa sus partidos de local en las alturas de Quito?', options: ['ECUADOR', 'PERU', 'BOLIVIA'] },
+            { flag: '🇵🇪', name: 'PERU', question: '¿Qué selección sudamericana lleva una icónica franja diagonal roja en el pecho de su camiseta blanca?', options: ['PERU', 'PARAGUAY', 'CHILE'] },
+            { flag: '🇨🇱', name: 'CHILE', question: '¿Qué selección sudamericana es conocida como "La Roja" y fue bicampeona de América en 2015 y 2016?', options: ['CHILE', 'PERU', 'URUGUAY'] },
+            { flag: '🇵🇾', name: 'PARAGUAY', question: '¿Qué selección sudamericana apodada "La Albirroja" es famosa por su aguerrida garra guaraní?', options: ['PARAGUAY', 'PERU', 'VENEZUELA'] },
+            { flag: '🇻🇪', name: 'VENEZUELA', question: '¿Qué selección sudamericana es conocida con cariño y orgullo como la "Vinotinto"?', options: ['VENEZUELA', 'COLOMBIA', 'ECUADOR'] },
+            { flag: '🇨🇷', name: 'COSTA RICA', question: '¿Qué selección centroamericana conocida como los "Ticos" maravilló al mundo llegando a cuartos en Brasil 2014?', options: ['COSTA RICA', 'PANAMA', 'HONDURAS'] },
+            { flag: '🇨🇭', name: 'SUIZA', question: '¿Qué selección europea tiene una cruz blanca en su bandera roja y es famosa por su solidez defensiva?', options: ['SUIZA', 'AUSTRIA', 'DINAMARCA'] },
+            { flag: '🇩🇰', name: 'DINAMARCA', question: '¿Qué selección nórdica conocida como la "Dinamita Roja" fue campeona de Europa en 1992?', options: ['DINAMARCA', 'SUECIA', 'NORUEGA'] },
+            { flag: '🇵🇱', name: 'POLONIA', question: '¿Qué selección europea viste de blanco y rojo y ha tenido como gran goleador a Robert Lewandowski?', options: ['POLONIA', 'UCRANIA', 'REP. CHECA'] },
+            { flag: '🇦🇺', name: 'AUSTRALIA', question: '¿Qué selección de Oceanía que compite en Asia es apodada los "Socceroos" y viste de amarillo y verde?', options: ['AUSTRALIA', 'NUEVA ZELANDA', 'JAPON'] },
+            { flag: '🇳🇬', name: 'NIGERIA', question: '¿Qué histórica selección africana viste de verde y es famosa en el mundo entero como las "Súper Águilas"?', options: ['NIGERIA', 'CAMERUN', 'GHANA'] },
+            { flag: '🇪🇬', name: 'EGIPTO', question: '¿Qué selección africana apodada los "Faraones" es el equipo con más títulos en la Copa Africana de Naciones?', options: ['EGIPTO', 'MARRUECOS', 'ARGELIA'] },
+            { flag: '🇬🇭', name: 'GHANA', question: '¿Qué selección africana apodada las "Estrellas Negras" estuvo a un paso de semifinales en Sudáfrica 2010?', options: ['GHANA', 'NIGERIA', 'COSTA DE MARFIL'] },
+            { flag: '🇨🇲', name: 'CAMERUN', question: '¿Qué selección africana es legendariamente conocida como los "Leones Indomables"?', options: ['CAMERUN', 'SENEGAL', 'NIGERIA'] },
+            { flag: '🇸🇪', name: 'SUECIA', question: '¿Qué selección escandinava que viste de amarillo y azul fue subcampeona del mundo en 1958?', options: ['SUECIA', 'NORUEGA', 'FINLANDIA'] },
+            { flag: '🇬🇷', name: 'GRECIA', question: '¿Qué selección europea dio una de las mayores sorpresas de la historia ganando la Eurocopa en 2004?', options: ['GRECIA', 'TURQUIA', 'ITALIA'] },
+            { flag: '🇵🇦', name: 'PANAMA', question: '¿Qué selección centroamericana apodada los "Canaleros" jugó su primer e histórico Mundial en Rusia 2018?', options: ['PANAMA', 'COSTA RICA', 'GUATEMALA'] },
+            { flag: '💖', name: 'MELISA', question: '¿Cuál es la selección, reina y jugadora número 1 en el corazón y en el universo entero de Carlos?', options: ['MELISA', 'LA REINA', 'MI AMOR'] },
+            { flag: '👑', name: 'CARLOS', question: '¿Quién es el capitán del amor que dará todo en la cancha de la vida para ver siempre feliz a Melisa?', options: ['CARLOS', 'EL REY', 'MI NOVIO'] },
+            { flag: '🏆', name: 'NUESTRO AMOR', question: '¿Cuál es el trofeo más grande, invencible y eterno que ganaremos todos los días por el resto de nuestras vidas?', options: ['NUESTRO AMOR', 'LA COPA DEL MUNDO', 'EL CHAMPIONSHIP'] }
         ];
 
-        let currentIdx = 0;
+        // Load or initialize non-repeating infinite unshown index pool
+        let unshownIndices = [];
+        try {
+            const savedPool = localStorage.getItem('melisa_wct_unshown_pool');
+            if (savedPool) {
+                unshownIndices = JSON.parse(savedPool);
+            }
+        } catch(e) {}
+
+        function shuffleArray(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+
+        if (!Array.isArray(unshownIndices) || unshownIndices.length === 0) {
+            unshownIndices = Array.from({length: teamsData.length}, (_, i) => i);
+            shuffleArray(unshownIndices);
+            localStorage.setItem('melisa_wct_unshown_pool', JSON.stringify(unshownIndices));
+        }
+
         let correctCount = parseInt(localStorage.getItem('melisa_wct_score') || '0', 10);
 
         const header = document.createElement('div');
@@ -2766,7 +2817,7 @@ const UniverseGames = (function() {
         header.style.marginBottom = '18px';
         header.innerHTML = `
             <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🌍 Preguntas del Mundial 2026 🏆</h2>
-            <p style="color:var(--text-secondary); font-size:0.95rem;">Responde la pregunta escribiendo el nombre o seleccionando la opción correcta.</p>
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Juego infinito! Responde adivinando o seleccionando la opción correcta.</p>
             <div id="wct-counter" style="background:rgba(0,229,255,0.15); border:1px solid var(--cyan); padding:8px 18px; border-radius:20px; color:var(--cyan); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem; box-shadow:0 4px 12px rgba(0,229,255,0.2);">
                 🏆 Aciertos Mundialistas: ${correctCount}
             </div>
@@ -2784,18 +2835,21 @@ const UniverseGames = (function() {
         wrapper.appendChild(card);
 
         function renderTeam() {
+            if (unshownIndices.length === 0) {
+                unshownIndices = Array.from({length: teamsData.length}, (_, i) => i);
+                shuffleArray(unshownIndices);
+            }
+
+            const currentIdx = unshownIndices[0];
             const current = teamsData[currentIdx];
             
             // Shuffle options
             const opts = [...current.options];
-            for (let i = opts.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [opts[i], opts[j]] = [opts[j], opts[i]];
-            }
+            shuffleArray(opts);
 
             card.innerHTML = `
                 <div style="background:linear-gradient(90deg, #00e5ff, #ffd54f); color:#000; font-weight:900; font-size:0.85rem; padding:5px 16px; border-radius:20px; display:inline-block; margin-bottom:12px; letter-spacing:1px; box-shadow:0 4px 10px rgba(0,229,255,0.3);">
-                    ⚽ PREGUNTA #${currentIdx + 1} DE ${teamsData.length}
+                    ⚽ RETO FUTBOLERO DEL AMOR
                 </div>
                 <div style="font-size:4.8rem; margin:8px 0; filter:drop-shadow(0 5px 12px rgba(0,0,0,0.6));">${current.flag}</div>
                 <h3 style="color:#fff; font-family:'Outfit',sans-serif; font-size:1.18rem; margin:10px 0 16px 0; line-height:1.4;">${current.question}</h3>
@@ -2803,7 +2857,7 @@ const UniverseGames = (function() {
                 <div style="background:rgba(0,0,0,0.3); padding:15px; border-radius:14px; margin-bottom:18px; border:1px solid rgba(255,255,255,0.15);">
                     <label style="color:var(--gold); font-size:0.85rem; font-weight:bold; display:block; margin-bottom:8px;">✍️ ESCRIBE LA RESPUESTA AQUÍ:</label>
                     <div style="display:flex; gap:8px;">
-                        <input type="text" id="team-input" placeholder="Ej: COLOMBIA..." autocomplete="off" style="flex:1; padding:12px; border-radius:10px; border:2px solid var(--cyan); background:rgba(0,0,0,0.6); color:#fff; font-size:1.1rem; text-align:center; font-weight:bold; outline:none;">
+                        <input type="text" id="team-input" placeholder="Escribe tu respuesta..." autocomplete="off" style="flex:1; padding:12px; border-radius:10px; border:2px solid var(--cyan); background:rgba(0,0,0,0.6); color:#fff; font-size:1.1rem; text-align:center; font-weight:bold; outline:none;">
                         <button id="check-btn" class="btn" style="background:var(--gold); color:#000; font-weight:900; padding:12px 18px; border-radius:10px;">
                             ¡Verificar!
                         </button>
@@ -2826,10 +2880,18 @@ const UniverseGames = (function() {
                 localStorage.setItem('melisa_wct_score', correctCount.toString());
                 document.getElementById('wct-counter').innerHTML = `🏆 Aciertos Mundialistas: ${correctCount}`;
                 
+                // Remove solved question from unshown pool
+                unshownIndices.shift();
+                if (unshownIndices.length === 0) {
+                    unshownIndices = Array.from({length: teamsData.length}, (_, i) => i);
+                    shuffleArray(unshownIndices);
+                }
+                localStorage.setItem('melisa_wct_unshown_pool', JSON.stringify(unshownIndices));
+                
                 feedback.innerHTML = `
                     <div style="color:#00ff88; font-weight:900; font-size:1.3rem; margin-bottom:12px; animation:popIn 0.4s ease;">🎉 ¡CORRECTO! ¡GOLAZO ACERTADO! ⚽👑</div>
                     <button id="next-team-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:900; padding:14px; font-size:1.05rem; border-radius:30px; box-shadow:0 6px 18px rgba(0,229,255,0.4);">
-                        ➡️ Siguiente Pregunta Mundialista
+                        ➡️ Siguiente Pregunta
                     </button>
                 `;
 
@@ -2853,7 +2915,6 @@ const UniverseGames = (function() {
                 setTimeout(() => { if (confettiContainer.parentNode) confettiContainer.remove(); }, 2500);
 
                 document.getElementById('next-team-btn').onclick = () => {
-                    currentIdx = (currentIdx + 1) % teamsData.length;
                     renderTeam();
                 };
             }
@@ -2862,7 +2923,7 @@ const UniverseGames = (function() {
                 const rawUser = (userStr || inputEl.value).trim().toUpperCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
                 const target = current.name.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
 
-                if (rawUser === target || (target === 'ESTADOS UNIDOS' && (rawUser === 'USA' || rawUser === 'EEUU'))) {
+                if (rawUser === target || (target === 'ESTADOS UNIDOS' && (rawUser === 'USA' || rawUser === 'EEUU')) || (target === 'PAISES BAJOS' && rawUser === 'HOLANDA')) {
                     inputEl.value = current.name;
                     inputEl.style.borderColor = '#00ff88';
                     inputEl.style.backgroundColor = 'rgba(0,255,136,0.15)';
