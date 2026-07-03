@@ -877,10 +877,13 @@
         if (today && today.letter) {
             if (window.notifyCarlos) window.notifyCarlos(`Melisa abrió la Carta del Día ${dayNumber}.`);
             titleEl.textContent = today.title || `Carta del Día ${dayNumber}`;
-            textEl.textContent = today.letter;
+            const formattedLetter = today.letter
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--gold); font-weight:600;">$1</strong>')
+                .replace(/\n/g, '<br>');
+            textEl.innerHTML = formattedLetter;
         } else {
             titleEl.textContent = 'Carta de Hoy';
-            textEl.textContent = 'Mi amor, hoy quiero que sepas lo mucho que te amo y lo orgulloso que estoy de ti. Eres la persona más fuerte que conozco. Pronto vamos a estar juntos de nuevo. Te amo infinitamente. 💕';
+            textEl.innerHTML = 'Mi amor, hoy quiero que sepas lo mucho que te amo y lo orgulloso que estoy de ti. Eres la persona más fuerte que conozco. Pronto vamos a estar juntos de nuevo. Te amo infinitamente. 💕';
         }
 
         openModal('letter-modal');
@@ -1113,7 +1116,7 @@
     // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js?v=31').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=32').then(reg => {
             reg.update();
         }).catch(err => console.log('Service Worker failed', err));
     });
