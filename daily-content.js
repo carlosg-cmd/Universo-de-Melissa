@@ -337,10 +337,39 @@ const DailyContent = (function() {
             gameType: 'slots',
             gameConfig: {}
         },
-        // Days 9-29 are placeholders for Carlos to customize
-        ...Array.from({length: 21}, (_, i) => ({
-            day: i + 9,
-            title: `Día ${i + 9} - Sorpresa`,
+        {
+            day: 9,
+            title: "Día 9 - ¡Festival Mundialista del Amor! 🏆⚽",
+            emoji: "🏆",
+            song: "musica/cancion2.mp3",
+            letter: "¡Hola, campeona indiscutible de mi vida!\n\n¡Bienvenida al Día 9! Hoy tu recuperación se viste de gala y entra al **Mundial de Fútbol del Amor**. Has jugado cada día con una garra y una dulzura impresionantes.\n\nPara hoy te preparé no uno, sino **TRES MINIJUEGOS MUNDIALISTAS INFINITOS**:\n1️⃣ **Tanda de Penales del Amor:** ¡Métele golazos románticos al portero!\n2️⃣ **Álbum Panini de Carlos y Melisa:** ¡Abre sobres dorados infinitos con nuestras fotos reales y mensajes secretos!\n3️⃣ **Dominadas Mundialistas:** ¡Haz cabecitas con los balones y trofeos!\n\n¡Juega todo lo que quieras hoy, mi estrella número 10! Te amo con toda mi alma 💖🇨🇴",
+            funPhrase: "⚽ ¡En la selección de mi corazón, tú llevas la 10 y eres la capitana eterna! 🏆👑",
+            recoveryQuote: "Día 9: Goleando a la recuperación como toda una campeona mundial.",
+            games: [
+                {
+                    name: 'Tanda de Penales del Amor ⚽',
+                    emoji: '⚽',
+                    type: 'penalties',
+                    config: {}
+                },
+                {
+                    name: 'Álbum Panini de Carlos y Melisa 📖',
+                    emoji: '📖',
+                    type: 'album',
+                    config: {}
+                },
+                {
+                    name: 'Dominadas Mundialistas 🥇',
+                    emoji: '🥇',
+                    type: 'keepyuppy',
+                    config: {}
+                }
+            ]
+        },
+        // Days 10-29 are placeholders for Carlos to customize
+        ...Array.from({length: 20}, (_, i) => ({
+            day: i + 10,
+            title: `Día ${i + 10} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

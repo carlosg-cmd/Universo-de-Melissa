@@ -2269,6 +2269,414 @@ const UniverseGames = (function() {
         container.appendChild(wrapper);
     }
 
+    // =============================================
+    //  DÍA 9: TANDA DE PENALES DEL AMOR ⚽🏆
+    // =============================================
+    function startPenalties(container, config) {
+        container.innerHTML = '';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-penalties';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '500px';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+
+        let goals = parseInt(localStorage.getItem('melisa_penalties_goals') || '0', 10);
+
+        const header = document.createElement('div');
+        header.style.textAlign = 'center';
+        header.style.marginBottom = '20px';
+        header.innerHTML = `
+            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🏆 Tanda de Penales del Amor ⚽</h2>
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Métele un golazo romántico al portero! Juega todas las veces que quieras hoy.</p>
+            <div id="penalties-counter" style="background:rgba(0,229,255,0.15); border:1px solid var(--cyan); padding:8px 18px; border-radius:20px; color:var(--cyan); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem;">
+                🏆 Goles de amor hoy: ${goals}
+            </div>
+        `;
+        wrapper.appendChild(header);
+
+        // Stadium & Goal Frame
+        const stadium = document.createElement('div');
+        stadium.style.width = '100%';
+        stadium.style.height = '240px';
+        stadium.style.background = 'linear-gradient(180deg, #0f2027 0%, #203a43 50%, #2c5364 100%)';
+        stadium.style.border = '3px solid var(--gold)';
+        stadium.style.borderRadius = '15px';
+        stadium.style.position = 'relative';
+        stadium.style.overflow = 'hidden';
+        stadium.style.boxShadow = '0 10px 25px rgba(0,0,0,0.6)';
+
+        // Goal Post
+        const goalPost = document.createElement('div');
+        goalPost.style.position = 'absolute';
+        goalPost.style.top = '30px';
+        goalPost.style.left = '15%';
+        goalPost.style.width = '70%';
+        goalPost.style.height = '140px';
+        goalPost.style.border = '6px solid #fff';
+        goalPost.style.borderBottom = 'none';
+        goalPost.style.boxSizing = 'border-box';
+        stadium.appendChild(goalPost);
+
+        // Goalkeeper
+        const goalie = document.createElement('div');
+        goalie.style.position = 'absolute';
+        goalie.style.top = '80px';
+        goalie.style.left = '45%';
+        goalie.style.fontSize = '3.2rem';
+        goalie.style.transition = 'all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275)';
+        goalie.innerHTML = '🧤🧍‍♂️';
+        stadium.appendChild(goalie);
+
+        // Ball
+        const ball = document.createElement('div');
+        ball.style.position = 'absolute';
+        ball.style.bottom = '15px';
+        ball.style.left = '45%';
+        ball.style.fontSize = '2.5rem';
+        ball.style.transition = 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+        ball.innerHTML = '⚽';
+        stadium.appendChild(ball);
+
+        wrapper.appendChild(stadium);
+
+        // Commentary Box
+        const commentary = document.createElement('div');
+        commentary.style.width = '100%';
+        commentary.style.background = 'rgba(255,255,255,0.05)';
+        commentary.style.border = '1px solid var(--text-secondary)';
+        commentary.style.borderRadius = '12px';
+        commentary.style.padding = '15px';
+        commentary.style.marginTop = '15px';
+        commentary.style.textAlign = 'center';
+        commentary.style.color = 'var(--text-primary)';
+        commentary.style.fontStyle = 'italic';
+        commentary.style.minHeight = '60px';
+        commentary.innerHTML = '🎙️ <b>Comentarista:</b> "¡Atención! Melisa acomoda el balón en el punto penal. ¡Todo el estadio aguarda expectante!"';
+        wrapper.appendChild(commentary);
+
+        // Controls
+        const controlsDiv = document.createElement('div');
+        controlsDiv.style.display = 'flex';
+        controlsDiv.style.gap = '10px';
+        controlsDiv.style.marginTop = '15px';
+        controlsDiv.style.width = '100%';
+
+        const shootOptions = [
+            { label: '⬅️ Izquierda', dir: 'left', targetX: '20%', targetY: '60px' },
+            { label: '⏺️ Centro', dir: 'center', targetX: '45%', targetY: '50px' },
+            { label: '➡️ Derecha', dir: 'right', targetX: '70%', targetY: '60px' }
+        ];
+
+        const goalComments = [
+            '🎙️ <b>¡GOOOOOLAZO AL ÁNGULO!</b> "¡Qué clase, qué categoría! En el Mundial de mi vida, tú eres la estrella número 10 indiscutible, mi princesa hermosa. ¡Carlos celebra en la tribuna!"',
+            '🎙️ <b>¡GOOOOOL IMPARABLE!</b> "¡El portero ni la vio venir! Así como conquistaste este arco, conquistaste mi corazón para siempre. ¡Orgulloso de verte sanar cada día!"',
+            '🎙️ <b>¡GOL DE CAMPEONA MUNDIAL!</b> "¡Grita el estadio! Melisa demuestra que no hay reto ni día de reposo que la detenga. ¡Te ganaste la Copa del Amor!"',
+            '🎙️ <b>¡GOOOOOL MAGISTRAL!</b> "¡Qué remate tan dulce! Eres la dueña indiscutible del trofeo de mi corazón hoy, mañana y siempre. ¡Te amo mi reina!"'
+        ];
+
+        let isShooting = false;
+
+        shootOptions.forEach(opt => {
+            const btn = document.createElement('button');
+            btn.className = 'btn';
+            btn.style.flex = '1';
+            btn.style.padding = '12px 5px';
+            btn.style.fontSize = '0.95rem';
+            btn.innerHTML = opt.label;
+            btn.onclick = () => {
+                if (isShooting) return;
+                isShooting = true;
+
+                // Goalie jumps
+                const goalieDirs = ['20%', '45%', '70%'];
+                const goalieTarget = goalieDirs[Math.floor(Math.random() * goalieDirs.length)];
+                goalie.style.left = goalieTarget;
+
+                // Ball moves
+                ball.style.left = opt.targetX;
+                ball.style.bottom = '160px';
+                ball.style.transform = 'scale(0.6) rotate(360deg)';
+
+                setTimeout(() => {
+                    // 85% chance of scoring so she feels like a superstar!
+                    const isGoal = Math.random() < 0.85;
+
+                    if (isGoal) {
+                        goals++;
+                        localStorage.setItem('melisa_penalties_goals', goals.toString());
+                        document.getElementById('penalties-counter').innerHTML = `🏆 Goles de amor hoy: ${goals}`;
+                        stadium.style.borderColor = '#00ff88';
+                        commentary.innerHTML = goalComments[Math.floor(Math.random() * goalComments.length)];
+                    } else {
+                        commentary.innerHTML = '🎙️ <b>¡Casi, casi!</b> "¡El portero la tocó con las uñas! Pero para tu rey Carlos tú siempre eres la campeona. ¡Patea otro penal!"';
+                    }
+
+                    setTimeout(() => {
+                        // Reset ball and goalie
+                        ball.style.transition = 'none';
+                        ball.style.bottom = '15px';
+                        ball.style.left = '45%';
+                        ball.style.transform = 'scale(1) rotate(0deg)';
+                        stadium.style.borderColor = 'var(--gold)';
+                        goalie.style.left = '45%';
+                        setTimeout(() => {
+                            ball.style.transition = 'all 0.6s cubic-bezier(0.25, 1, 0.5, 1)';
+                            isShooting = false;
+                        }, 50);
+                    }, 2200);
+                }, 600);
+            };
+            controlsDiv.appendChild(btn);
+        });
+
+        wrapper.appendChild(controlsDiv);
+        container.appendChild(wrapper);
+    }
+
+    // =============================================
+    //  DÍA 9: ÁLBUM PANINI DE CARLOS & MELISA 📖🃏
+    // =============================================
+    function startAlbum(container, config) {
+        container.innerHTML = '';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-album';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '500px';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+
+        let stickersCount = parseInt(localStorage.getItem('melisa_album_total') || '0', 10);
+
+        const header = document.createElement('div');
+        header.style.textAlign = 'center';
+        header.style.marginBottom = '20px';
+        header.innerHTML = `
+            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">📖 Álbum Panini del Amor ⭐</h2>
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Abre sobres dorados infinitos para descubrir nuestras fotos mundialistas y dedicatorias!</p>
+            <div id="album-counter" style="background:rgba(255,215,0,0.15); border:1px solid var(--gold); padding:8px 18px; border-radius:20px; color:var(--gold); font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem;">
+                ✨ Monitas pegadas en tu álbum: ${stickersCount}
+            </div>
+        `;
+        wrapper.appendChild(header);
+
+        // Pack Area
+        const packDiv = document.createElement('div');
+        packDiv.style.width = '100%';
+        packDiv.style.background = 'linear-gradient(135deg, #2b1055 0%, #7597de 100%)';
+        packDiv.style.border = '2px dashed var(--gold)';
+        packDiv.style.borderRadius = '15px';
+        packDiv.style.padding = '30px 20px';
+        packDiv.style.textAlign = 'center';
+        packDiv.style.boxShadow = '0 8px 25px rgba(0,0,0,0.5)';
+        packDiv.style.marginBottom = '20px';
+
+        packDiv.innerHTML = `
+            <div style="font-size:4rem; margin-bottom:10px;">🃏✨</div>
+            <h3 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif;">Sobre Dorado Panini Edición Especial</h3>
+            <p style="color:rgba(255,255,255,0.8); font-size:0.9rem; margin-bottom:20px;">Contiene 1 lámina brillante holográfica con foto real y mensaje romántico de Carlos.</p>
+        `;
+
+        const openBtn = document.createElement('button');
+        openBtn.className = 'btn';
+        openBtn.style.background = 'var(--gold)';
+        openBtn.style.color = '#000';
+        openBtn.style.fontWeight = 'bold';
+        openBtn.style.padding = '14px 30px';
+        openBtn.style.fontSize = '1.1rem';
+        openBtn.style.boxShadow = '0 5px 20px rgba(255,215,0,0.4)';
+        openBtn.innerHTML = '✨ ¡ABRIR SOBRE DORADO! 🎁';
+        packDiv.appendChild(openBtn);
+        wrapper.appendChild(packDiv);
+
+        // Card display container (hidden initially)
+        const cardDisplay = document.createElement('div');
+        cardDisplay.style.width = '100%';
+        cardDisplay.style.display = 'none';
+        cardDisplay.style.flexDirection = 'column';
+        cardDisplay.style.alignItems = 'center';
+        wrapper.appendChild(cardDisplay);
+
+        const titles = [
+            '⭐ Selección Melisa & Carlos - Titulares Indiscutibles',
+            '👑 Melisa - Capitana Eterna de mi Corazón',
+            '🏆 Balón de Oro del Amor Incondicional',
+            '🇨🇴 Hinchada Oficial de tu Recuperación',
+            '✨ Estrellas Brillantes de Nuestro Universo'
+        ];
+
+        const messages = [
+            'Cada foto nuestra me recuerda el motivo por el cual sonrío todos los días. ¡Eres mi jugadora favorita para toda la vida!',
+            'En este Mundial del Amor, verte mejorar día a día es la mayor victoria que puedo pedir. ¡Te amo infinitamente mi princesa!',
+            'No hay estadio en el mundo que pueda contener todo el amor y la admiración que siento por ti. ¡Felicidades en tu Día 9!',
+            'Guardé cada uno de estos recuerdos porque a tu lado cada instante se convierte en una obra de arte. ¡Te adoro mi reina!',
+            '¡Qué guapos nos vemos juntos! Muy pronto estaremos sumando miles de fotos más en nuestras próximas aventuras.'
+        ];
+
+        openBtn.onclick = () => {
+            stickersCount++;
+            localStorage.setItem('melisa_album_total', stickersCount.toString());
+            document.getElementById('album-counter').innerHTML = `✨ Monitas pegadas en tu álbum: ${stickersCount}`;
+
+            // Pick a random photo from 1 to 150
+            const photoNum = Math.floor(Math.random() * 150) + 1;
+            const photoUrl = `fotos/foto_${photoNum}.jpeg`;
+            const titleText = titles[Math.floor(Math.random() * titles.length)];
+            const msgText = messages[Math.floor(Math.random() * messages.length)];
+
+            cardDisplay.style.display = 'flex';
+            cardDisplay.innerHTML = `
+                <div style="background:linear-gradient(145deg, #1f1c2c, #928dab); border:3px solid var(--gold); border-radius:18px; padding:18px; width:100%; max-width:340px; text-align:center; box-shadow:0 12px 30px rgba(0,0,0,0.7); animation:popIn 0.4s ease;">
+                    <div style="background:#000; border-radius:12px; overflow:hidden; height:260px; display:flex; align-items:center; justify-content:center; margin-bottom:12px; border:1px solid rgba(255,255,255,0.2);">
+                        <img src="${photoUrl}" alt="Recuerdo Mundialista" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='fotos/foto_1.jpeg';">
+                    </div>
+                    <div style="background:var(--gold); color:#000; font-weight:bold; padding:5px 10px; border-radius:6px; font-size:0.85rem; margin-bottom:10px;">
+                        EDICIÒN ORO PANINI #0${photoNum}
+                    </div>
+                    <h4 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif; font-size:1.1rem;">${titleText}</h4>
+                    <p style="color:rgba(255,255,255,0.9); font-size:0.92rem; line-height:1.5; font-style:italic; margin-bottom:15px;">"${msgText}"</p>
+                    <button id="next-pack-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:bold;">
+                        📥 ¡Pegar en el Álbum y Abrir Otro Sobre!
+                    </button>
+                </div>
+            `;
+
+            document.getElementById('next-pack-btn').onclick = () => {
+                openBtn.click();
+            };
+
+            cardDisplay.scrollIntoView({ behavior: 'smooth' });
+        };
+
+        container.appendChild(wrapper);
+    }
+
+    // =============================================
+    //  DÍA 9: DOMINADAS MUNDIALISTAS (ARCADE) 🥇⚽
+    // =============================================
+    function startKeepyUppy(container, config) {
+        container.innerHTML = '';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-keepyuppy';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '500px';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+
+        let score = parseInt(localStorage.getItem('melisa_keepyuppy_score') || '0', 10);
+
+        const header = document.createElement('div');
+        header.style.textAlign = 'center';
+        header.style.marginBottom = '15px';
+        header.innerHTML = `
+            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:5px;">🥇 Dominadas Mundialistas ⚽</h2>
+            <p style="color:var(--text-secondary); font-size:0.95rem;">¡Toca los botones para mover el botín de oro y no dejas caer el balón!</p>
+            <div id="keepyuppy-counter" style="background:rgba(0,255,136,0.15); border:1px solid #00ff88; padding:8px 18px; border-radius:20px; color:#00ff88; font-weight:bold; display:inline-block; margin-top:10px; font-size:1.1rem;">
+                ⚽ Rebotes y Dominadas: ${score}
+            </div>
+        `;
+        wrapper.appendChild(header);
+
+        const field = document.createElement('div');
+        field.style.width = '100%';
+        field.style.height = '280px';
+        field.style.background = 'radial-gradient(circle, #1e3c72 0%, #2a5298 100%)';
+        field.style.border = '3px solid var(--gold)';
+        field.style.borderRadius = '15px';
+        field.style.position = 'relative';
+        field.style.overflow = 'hidden';
+        field.style.boxShadow = '0 10px 25px rgba(0,0,0,0.6)';
+
+        const boot = document.createElement('div');
+        boot.style.position = 'absolute';
+        boot.style.bottom = '10px';
+        boot.style.left = '40%';
+        boot.style.fontSize = '3rem';
+        boot.style.transition = 'left 0.15s ease-out';
+        boot.innerHTML = '👟👑';
+        field.appendChild(boot);
+
+        const ball = document.createElement('div');
+        ball.style.position = 'absolute';
+        ball.style.top = '10px';
+        ball.style.left = '45%';
+        ball.style.fontSize = '2.2rem';
+        ball.innerHTML = '⚽';
+        field.appendChild(ball);
+
+        wrapper.appendChild(field);
+
+        // Commentary / Status
+        const statusText = document.createElement('p');
+        statusText.style.color = 'var(--text-primary)';
+        statusText.style.fontStyle = 'italic';
+        statusText.style.margin = '15px 0 10px 0';
+        statusText.style.textAlign = 'center';
+        statusText.innerHTML = '🎙️ ¡Haz rebotar el balón en el aire sin parar campeona!';
+        wrapper.appendChild(statusText);
+
+        // Buttons to move boot left / center / right
+        const btnDiv = document.createElement('div');
+        btnDiv.style.display = 'flex';
+        btnDiv.style.gap = '10px';
+        btnDiv.style.width = '100%';
+
+        let bootPos = 40; // percent
+
+        const moveLeftBtn = document.createElement('button');
+        moveLeftBtn.className = 'btn';
+        moveLeftBtn.style.flex = '1';
+        moveLeftBtn.innerHTML = '⬅️ Izquierda';
+        moveLeftBtn.onclick = () => {
+            bootPos = Math.max(5, bootPos - 25);
+            boot.style.left = `${bootPos}%`;
+            bounceCheck();
+        };
+
+        const moveRightBtn = document.createElement('button');
+        moveRightBtn.className = 'btn';
+        moveRightBtn.style.flex = '1';
+        moveRightBtn.innerHTML = '➡️ Derecha';
+        moveRightBtn.onclick = () => {
+            bootPos = Math.min(75, bootPos + 25);
+            boot.style.left = `${bootPos}%`;
+            bounceCheck();
+        };
+
+        btnDiv.appendChild(moveLeftBtn);
+        btnDiv.appendChild(moveRightBtn);
+        wrapper.appendChild(btnDiv);
+
+        let ballY = 10;
+        let ballX = 45;
+        let ballSpeedY = 15;
+
+        function bounceCheck() {
+            // When button clicked, animate ball drop and check if caught
+            ballY = 220;
+            ball.style.top = `${ballY}px`;
+            ball.style.left = `${bootPos + 5}%`;
+
+            setTimeout(() => {
+                score++;
+                localStorage.setItem('melisa_keepyuppy_score', score.toString());
+                document.getElementById('keepyuppy-counter').innerHTML = `⚽ Rebotes y Dominadas: ${score}`;
+                statusText.innerHTML = `🎙️ <b>¡Excelente rebote!</b> Llevas ${score} dominadas de puro amor. ¡Eres increíble!`;
+
+                // Bounce up
+                ballY = 20;
+                ball.style.top = `${ballY}px`;
+                ballX = Math.floor(Math.random() * 70) + 10;
+                ball.style.left = `${ballX}%`;
+            }, 250);
+        }
+
+        container.appendChild(wrapper);
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -2280,6 +2688,9 @@ const UniverseGames = (function() {
         startCatchHearts,
         startSimonSays,
         startMagicBoxes,
-        startSlots
+        startSlots,
+        startPenalties,
+        startAlbum,
+        startKeepyUppy
     };
 })();

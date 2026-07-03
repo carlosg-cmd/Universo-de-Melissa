@@ -937,6 +937,15 @@
                 case 'slots':
                     titleEl.textContent = '🎰 Tragamonedas del Amor';
                     return UniverseGames.startSlots(container, gConfig);
+                case 'penalties':
+                    titleEl.textContent = '⚽ Tanda de Penales del Amor';
+                    return UniverseGames.startPenalties(container, gConfig);
+                case 'album':
+                    titleEl.textContent = '📖 Álbum Panini del Amor';
+                    return UniverseGames.startAlbum(container, gConfig);
+                case 'keepyuppy':
+                    titleEl.textContent = '🥇 Dominadas Mundialistas';
+                    return UniverseGames.startKeepyUppy(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
@@ -946,7 +955,7 @@
 
         if (today && typeof UniverseGames !== 'undefined') {
             if (today.games && Array.isArray(today.games)) {
-                titleEl.textContent = '🎡 Festival de Juegos';
+                titleEl.textContent = today.day === 9 ? '🏆 Festival Mundialista del Amor' : '🎡 Festival de Juegos';
                 if (window.notifyCarlos) window.notifyCarlos(`Melisa abrió el Festival de Juegos del Día ${dayNumber}.`);
                 
                 const menuDiv = document.createElement('div');
@@ -961,8 +970,8 @@
                 today.games.forEach((game, index) => {
                     const btn = document.createElement('button');
                     btn.className = 'btn';
-                    const emoji = emojis[index % emojis.length];
-                    btn.textContent = `${emoji} Juego ${index + 1}: ${game.name || 'Sorpresa'}`;
+                    const emoji = game.emoji || emojis[index % emojis.length];
+                    btn.textContent = `${emoji} ${game.name || 'Sorpresa'}`;
                     btn.onclick = () => {
                         gameArea.innerHTML = '';
                         
@@ -1104,7 +1113,7 @@
     // PWA Service Worker Registration
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
-        navigator.serviceWorker.register('sw.js?v=30').then(reg => {
+        navigator.serviceWorker.register('sw.js?v=31').then(reg => {
             reg.update();
         }).catch(err => console.log('Service Worker failed', err));
     });
