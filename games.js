@@ -2692,26 +2692,33 @@ const UniverseGames = (function() {
                 </div>
             `;
 
-            document.getElementById('paste-sticker-btn').onclick = () => {
-                if (!collected.includes(photoNum)) {
-                    collected.push(photoNum);
-                    localStorage.setItem('melisa_album_collected', JSON.stringify(collected));
-                }
-                stickersCount++;
-                localStorage.setItem('melisa_album_total', stickersCount.toString());
-                document.getElementById('album-counter').innerHTML = `✨ Monitas pegadas en tu álbum: ${stickersCount}`;
-                viewAlbumBtn.innerHTML = `📖 Ver Álbum Pegado (${collected.length})`;
+            const pasteBtn = cardDisplay.querySelector('#paste-sticker-btn');
+            if (pasteBtn) {
+                pasteBtn.onclick = () => {
+                    if (!collected.includes(photoNum)) {
+                        collected.push(photoNum);
+                        localStorage.setItem('melisa_album_collected', JSON.stringify(collected));
+                    }
+                    stickersCount++;
+                    localStorage.setItem('melisa_album_total', stickersCount.toString());
+                    const albCounter = wrapper.querySelector('#album-counter');
+                    if (albCounter) albCounter.innerHTML = `✨ Monitas pegadas en tu álbum: ${stickersCount}`;
+                    viewAlbumBtn.innerHTML = `📖 Ver Álbum Pegado (${collected.length})`;
 
-                cardDisplay.style.display = 'none';
-                packDiv.style.display = 'block';
-                packDiv.scrollIntoView({ behavior: 'smooth' });
-            };
+                    cardDisplay.style.display = 'none';
+                    packDiv.style.display = 'block';
+                    packDiv.scrollIntoView({ behavior: 'smooth' });
+                };
+            }
 
-            document.getElementById('discard-sticker-btn').onclick = () => {
-                cardDisplay.style.display = 'none';
-                packDiv.style.display = 'block';
-                packDiv.scrollIntoView({ behavior: 'smooth' });
-            };
+            const discardBtn = cardDisplay.querySelector('#discard-sticker-btn');
+            if (discardBtn) {
+                discardBtn.onclick = () => {
+                    cardDisplay.style.display = 'none';
+                    packDiv.style.display = 'block';
+                    packDiv.scrollIntoView({ behavior: 'smooth' });
+                };
+            }
 
             cardDisplay.scrollIntoView({ behavior: 'smooth' });
         };
@@ -2894,15 +2901,16 @@ const UniverseGames = (function() {
                 <div id="feedback-area" style="margin-top:16px; min-height:40px;"></div>
             `;
 
-            const inputEl = document.getElementById('team-input');
-            const checkBtn = document.getElementById('check-btn');
-            const feedback = document.getElementById('feedback-area');
-            const optionsRow = document.getElementById('options-row');
+            const inputEl = card.querySelector('#team-input');
+            const checkBtn = card.querySelector('#check-btn');
+            const feedback = card.querySelector('#feedback-area');
+            const optionsRow = card.querySelector('#options-row');
 
             function triggerSuccess() {
                 correctCount++;
                 localStorage.setItem('melisa_wct_score', correctCount.toString());
-                document.getElementById('wct-counter').innerHTML = `🏆 Aciertos Mundialistas: ${correctCount}`;
+                const wctCounter = wrapper.querySelector('#wct-counter');
+                if (wctCounter) wctCounter.innerHTML = `🏆 Aciertos Mundialistas: ${correctCount}`;
                 
                 // Remove solved question from unshown pool
                 unshownIndices.shift();
@@ -2938,9 +2946,12 @@ const UniverseGames = (function() {
 
                 setTimeout(() => { if (confettiContainer.parentNode) confettiContainer.remove(); }, 2500);
 
-                document.getElementById('next-team-btn').onclick = () => {
-                    renderTeam();
-                };
+                const nextBtn = feedback.querySelector('#next-team-btn');
+                if (nextBtn) {
+                    nextBtn.onclick = () => {
+                        renderTeam();
+                    };
+                }
             }
 
             function checkAnswer(userStr) {
@@ -2958,28 +2969,30 @@ const UniverseGames = (function() {
                 }
             }
 
-            opts.forEach(optText => {
-                const optBtn = document.createElement('button');
-                optBtn.className = 'btn';
-                optBtn.style.background = 'rgba(255,255,255,0.08)';
-                optBtn.style.border = '2px solid rgba(255,255,255,0.25)';
-                optBtn.style.color = '#fff';
-                optBtn.style.fontWeight = 'bold';
-                optBtn.style.padding = '12px';
-                optBtn.style.fontSize = '1.02rem';
-                optBtn.style.borderRadius = '12px';
-                optBtn.style.transition = 'all 0.2s ease';
-                optBtn.innerHTML = optText;
-                optBtn.onclick = () => checkAnswer(optText);
-                optionsRow.appendChild(optBtn);
-            });
+            if (optionsRow) {
+                opts.forEach(optText => {
+                    const optBtn = document.createElement('button');
+                    optBtn.className = 'btn';
+                    optBtn.style.background = 'rgba(255,255,255,0.08)';
+                    optBtn.style.border = '2px solid rgba(255,255,255,0.25)';
+                    optBtn.style.color = '#fff';
+                    optBtn.style.fontWeight = 'bold';
+                    optBtn.style.padding = '12px';
+                    optBtn.style.fontSize = '1.02rem';
+                    optBtn.style.borderRadius = '12px';
+                    optBtn.style.transition = 'all 0.2s ease';
+                    optBtn.innerHTML = optText;
+                    optBtn.onclick = () => checkAnswer(optText);
+                    optionsRow.appendChild(optBtn);
+                });
+            }
 
-            checkBtn.onclick = () => checkAnswer();
-            inputEl.addEventListener('keyup', (e) => { if (e.key === 'Enter') checkAnswer(); });
+            if (checkBtn) checkBtn.onclick = () => checkAnswer();
+            if (inputEl) inputEl.addEventListener('keyup', (e) => { if (e.key === 'Enter') checkAnswer(); });
         }
 
-        renderTeam();
         container.appendChild(wrapper);
+        renderTeam();
     }
 
     return {
