@@ -3944,98 +3944,138 @@ const UniverseGames = (function() {
         // --- TAB 2: TETRIS DEL AMOR ---
         let tetrisPiecesCount = 0;
         const tetrisShapes = [
-            { name: 'Doble Corazón', emoji: '💖💖', color: '#ff007f' },
-            { name: 'Corona Real', emoji: '👑👑', color: '#ffd54f' },
-            { name: 'Abrazo Eterno', emoji: '🫂❤️', color: '#00e5ff' },
-            { name: 'Beso Apasionado', emoji: '💋💋', color: '#00ff88' },
-            { name: 'Estrella de Paz', emoji: '⭐⭐', color: '#7c4dff' }
+            { name: 'Doble Corazón', emoji: '💖', color: '#ff007f' },
+            { name: 'Corona Real', emoji: '👑', color: '#ffd54f' },
+            { name: 'Abrazo Eterno', emoji: '🫂', color: '#00e5ff' },
+            { name: 'Beso Apasionado', emoji: '💋', color: '#00ff88' },
+            { name: 'Estrella de Paz', emoji: '⭐', color: '#7c4dff' }
         ];
         let currentShape = tetrisShapes[0];
+        let tetrisBoard = [[], [], []]; // 3 columns, max 5 rows
 
         function renderTetrisLove() {
             if (pacInterval) clearInterval(pacInterval);
-            currentShape = tetrisShapes[Math.floor(Math.random() * tetrisShapes.length)];
+            if (!currentShape) currentShape = tetrisShapes[Math.floor(Math.random() * tetrisShapes.length)];
 
             contentArea.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
                     <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🧱 ENCAJA NUESTRO AMOR</span>
                     <span style="color:var(--gold); font-weight:900; font-size:0.9rem;">💖 Piezas: ${tetrisPiecesCount}</span>
                 </div>
-                <p style="color:#fff; font-size:0.85rem; text-align:center; margin-bottom:16px;">
-                    ✨ En este Tetris romántico no hay piezas equivocadas: ¡tú y yo encajamos a la perfección siempre!
+                <p style="color:#fff; font-size:0.85rem; text-align:center; margin-bottom:14px;">
+                    ✨ Elige en cuál columna (1, 2 o 3) dejar caer la pieza. ¡Cuando completes una línea horizontal de 3 piezas ganarás el súper bono de amor!
                 </p>
 
-                <div style="background:#0a0818; border:2px dashed #ff007f; border-radius:18px; padding:20px; text-align:center; margin-bottom:20px; min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
-                    <div style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:10px;">PRÓXIMA PIEZA EN CAER:</div>
-                    <div id="tetris-piece-display" style="font-size:2.8rem; margin-bottom:12px; filter:drop-shadow(0 0 10px ${currentShape.color}); animation:bounce 1.5s infinite;">
+                <div style="background:#0a0818; border:2px dashed #ff007f; border-radius:16px; padding:12px; text-align:center; margin-bottom:16px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <div style="color:var(--text-secondary); font-size:0.8rem; margin-bottom:4px;">PRÓXIMA PIEZA EN CAER:</div>
+                    <div id="tetris-piece-display" style="font-size:2.2rem; margin-bottom:4px; filter:drop-shadow(0 0 10px ${currentShape.color}); animation:bounce 1.5s infinite;">
                         ${currentShape.emoji}
                     </div>
-                    <div style="color:#fff; font-weight:bold; font-size:1.05rem;">«${currentShape.name}»</div>
+                    <div style="color:#fff; font-weight:bold; font-size:0.95rem;">«${currentShape.name}»</div>
                 </div>
 
-                <div id="tetris-msg-box" style="background:rgba(0,229,255,0.1); border:1px solid var(--cyan); border-radius:14px; padding:12px; text-align:center; color:#fff; font-size:0.95rem; margin-bottom:18px; min-height:50px; display:flex; align-items:center; justify-content:center;">
-                    Presiona el botón para encajar la pieza en nuestro tablero de amor... 💞
+                <div id="tetris-board" style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; max-width:280px; margin:0 auto 16px auto; background:#080612; padding:12px; border-radius:16px; border:2px solid rgba(255,255,255,0.15); min-height:200px;"></div>
+
+                <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap:8px; max-width:280px; margin:0 auto 16px auto;">
+                    <button id="tetris-col-0" class="btn" style="background:var(--cyan); color:#000; font-weight:900; padding:10px 4px; border-radius:12px; font-size:0.85rem;">⬇️ Col 1</button>
+                    <button id="tetris-col-1" class="btn" style="background:#ff007f; color:#fff; font-weight:900; padding:10px 4px; border-radius:12px; font-size:0.85rem;">⬇️ Col 2</button>
+                    <button id="tetris-col-2" class="btn" style="background:var(--gold); color:#000; font-weight:900; padding:10px 4px; border-radius:12px; font-size:0.85rem;">⬇️ Col 3</button>
                 </div>
 
-                <div style="text-align:center;">
-                    <button id="tetris-drop-btn" class="btn" style="background:linear-gradient(90deg, #ff007f, #00e5ff); color:#fff; font-weight:900; padding:14px 28px; border-radius:30px; box-shadow:0 6px 20px rgba(255,0,127,0.4); font-size:1.08rem; width:100%;">
-                        ⬇️ ¡ENCAJAR PIEZA CON AMOR! (+30 TICKETS) 💖
-                    </button>
+                <div id="tetris-msg-box" style="background:rgba(0,229,255,0.1); border:1px solid var(--cyan); border-radius:14px; padding:10px; text-align:center; color:#fff; font-size:0.88rem; min-height:44px; display:flex; align-items:center; justify-content:center;">
+                    Selecciona una columna para dejar caer la pieza... 💞
                 </div>
             `;
 
-            const dropBtn = contentArea.querySelector('#tetris-drop-btn');
-            const msgBox = contentArea.querySelector('#tetris-msg-box');
+            function renderBoard() {
+                const boardEl = contentArea.querySelector('#tetris-board');
+                if (!boardEl) return;
+                boardEl.innerHTML = '';
+                // Render from top row (row 4) down to bottom row (row 0)
+                for (let r = 4; r >= 0; r--) {
+                    for (let c = 0; c < 3; c++) {
+                        const cell = document.createElement('div');
+                        cell.style.width = '100%';
+                        cell.style.aspectRatio = '1';
+                        cell.style.borderRadius = '8px';
+                        cell.style.display = 'flex';
+                        cell.style.alignItems = 'center';
+                        cell.style.justifyContent = 'center';
+                        cell.style.fontSize = '1.5rem';
 
-            if (dropBtn) {
-                dropBtn.onclick = () => {
-                    tetrisPiecesCount++;
-                    tickets += 30;
-                    localStorage.setItem('melisa_arcade_tickets', tickets.toString());
-                    updateTicketDisplay();
-
-                    playArcadeTone(523.25, 'sine', 0.15);
-                    setTimeout(() => playArcadeTone(659.25, 'sine', 0.25), 120);
-
-                    const loveQuotes = [
-                        "💖 ¡ENCAJE PERFECTO! Así de natural y hermoso encajan nuestras almas y corazones.",
-                        "👑 ¡LÍNEA COMPLETADA! Eres la pieza que le faltaba al rompecabezas de mi vida para ser feliz.",
-                        "🔥 ¡COMBO DE DULZURA! Contigo a mi lado todo tiene sentido, orden y armonía infinita.",
-                        "🌟 ¡SUPER JACKPOT ROMÁNTICO! No hay espacio vacío en mi pecho, tú lo llenaste todo de luz.",
-                        "💋 ¡BLOQUE DE BESOS! Cada segundo que pasamos juntos construimos un castillo indestructible."
-                    ];
-                    const randomQ = loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
-
-                    if (msgBox) {
-                        msgBox.style.animation = 'none';
-                        void msgBox.offsetWidth;
-                        msgBox.style.animation = 'popIn 0.3s ease';
-                        msgBox.innerHTML = `<span style="color:#00ff88; font-weight:bold;">${randomQ}</span>`;
+                        const piece = tetrisBoard[c][r];
+                        if (piece) {
+                            cell.style.background = 'rgba(255,255,255,0.1)';
+                            cell.style.border = `2px solid ${piece.color}`;
+                            cell.style.boxShadow = `0 0 8px ${piece.color}`;
+                            cell.innerHTML = piece.emoji;
+                        } else {
+                            cell.style.background = 'rgba(255,255,255,0.02)';
+                            cell.style.border = '1px dashed rgba(255,255,255,0.08)';
+                        }
+                        boardEl.appendChild(cell);
                     }
-
-                    // Next piece
-                    currentShape = tetrisShapes[Math.floor(Math.random() * tetrisShapes.length)];
-                    const pDisp = contentArea.querySelector('#tetris-piece-display');
-                    if (pDisp) {
-                        pDisp.innerHTML = currentShape.emoji;
-                        pDisp.style.filter = `drop-shadow(0 0 10px ${currentShape.color})`;
-                    }
-
-                    // Confetti
-                    const cDiv = document.createElement('div');
-                    cDiv.className = 'game-confetti';
-                    cDiv.style.position = 'absolute'; cDiv.style.inset = '0'; cDiv.style.pointerEvents = 'none';
-                    for(let i=0; i<20; i++) {
-                        const p = document.createElement('div');
-                        p.className = 'game-confetti-piece';
-                        p.style.left = `${Math.random()*100}%`;
-                        p.style.backgroundColor = ['#ff007f','#00e5ff','#ffd54f'][Math.floor(Math.random()*3)];
-                        cDiv.appendChild(p);
-                    }
-                    wrapper.appendChild(cDiv);
-                    setTimeout(() => { if (cDiv.parentNode) cDiv.remove(); }, 1800);
-                };
+                }
             }
+
+            function dropPiece(colIdx) {
+                if (tetrisBoard[colIdx].length >= 5) {
+                    // Auto-clear top if full so she never loses
+                    tetrisBoard[colIdx].shift();
+                }
+                tetrisBoard[colIdx].push(currentShape);
+                tetrisPiecesCount++;
+                tickets += 30;
+                playArcadeTone(523.25, 'triangle', 0.15);
+
+                // Check if bottom row (row 0) is full across all 3 columns
+                let lineCleared = false;
+                if (tetrisBoard[0].length > 0 && tetrisBoard[1].length > 0 && tetrisBoard[2].length > 0) {
+                    // Clear bottom row from all columns!
+                    tetrisBoard[0].shift();
+                    tetrisBoard[1].shift();
+                    tetrisBoard[2].shift();
+                    tickets += 100;
+                    lineCleared = true;
+                    playArcadeTone(587.33, 'sine', 0.2);
+                    setTimeout(() => playArcadeTone(880, 'sine', 0.35), 150);
+                }
+
+                localStorage.setItem('melisa_arcade_tickets', tickets.toString());
+                updateTicketDisplay();
+                renderBoard();
+
+                const msgBox = contentArea.querySelector('#tetris-msg-box');
+                if (msgBox) {
+                    msgBox.style.animation = 'none';
+                    void msgBox.offsetWidth;
+                    msgBox.style.animation = 'popIn 0.3s ease';
+                    if (lineCleared) {
+                        msgBox.innerHTML = '<strong style="color:#00ff88;">💥 ¡LÍNEA COMPLETADA! +130 TICKETS EN TOTAL 🎟️<br>¡Así de perfecto encajan nuestras almas! 💖</strong>';
+                    } else {
+                        msgBox.innerHTML = `<span style="color:#00e5ff;">+30 Tickets ganados 🎟️ ¡Sigue encajando piezas para armar la línea!</span>`;
+                    }
+                }
+
+                // Next piece
+                currentShape = tetrisShapes[Math.floor(Math.random() * tetrisShapes.length)];
+                const pDisp = contentArea.querySelector('#tetris-piece-display');
+                if (pDisp) {
+                    pDisp.innerHTML = currentShape.emoji;
+                    pDisp.style.filter = `drop-shadow(0 0 10px ${currentShape.color})`;
+                    pDisp.nextElementSibling.textContent = `«${currentShape.name}»`;
+                }
+            }
+
+            renderBoard();
+
+            const b0 = contentArea.querySelector('#tetris-col-0');
+            const b1 = contentArea.querySelector('#tetris-col-1');
+            const b2 = contentArea.querySelector('#tetris-col-2');
+
+            if (b0) b0.onclick = () => dropPiece(0);
+            if (b1) b1.onclick = () => dropPiece(1);
+            if (b2) b2.onclick = () => dropPiece(2);
         }
 
         // --- TAB 3: CANJEAR PREMIOS VIP ---
@@ -4043,7 +4083,7 @@ const UniverseGames = (function() {
             { id: 'p_burger', title: '🍔 Hamburguesa Gourmet & Papitas', desc: 'Una salida o pedido a domicilio de tu hamburguesa favorita en cuanto te recuperes.', cost: 5000 },
             { id: 'p_icecream', title: '🍦 Helado Doble Consentido', desc: 'Una tarde deliciosa comiendo tu helado preferido tomados de la mano.', cost: 2500 },
             { id: 'p_movie', title: '🎬 Tarde de Cine & Crispetas VIP', desc: 'Película a tu elección, sofá, cobija, crispetas gigantes y abrazos ilimitados.', cost: 300 },
-            { id: 'p_massage', title: '💆‍♀️ Masaje Real de tu Rey (20 min)', desc: 'Sesión especial de masaje relajante en pies y espalda dado exclusivamente por Carlos.', cost: 8000 },
+            { id: 'p_massage', title: '💆‍♀️ Masaje Real de tu Rey (20 min)', desc: 'Sesión especial de masaje relajante en pies y espalda dado exclusivamente por Carlos.', cost: 8000000 },
             { id: 'p_trip', title: '✈️ Paseo Especial de Celebración', desc: 'Una escapada o paseo romántico para festejar tu alta médica por todo lo alto.', cost: 1000000 },
             { id: 'p_wish', title: '👑 El Gran Deseo de la Reina', desc: '¡Tú pides el capricho o deseo que quieras y tu rey Carlos te lo cumple sin dudarlo!', cost: 5000000 }
         ];
