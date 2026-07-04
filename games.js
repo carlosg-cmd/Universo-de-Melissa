@@ -3664,6 +3664,7 @@ const UniverseGames = (function() {
         wrapper.style.boxShadow = '0 0 30px rgba(0, 229, 255, 0.4), inset 0 0 20px rgba(255, 0, 127, 0.2)';
         wrapper.style.position = 'relative';
         wrapper.style.overflow = 'hidden';
+        container.appendChild(wrapper);
 
         let tickets = parseInt(localStorage.getItem('melisa_arcade_tickets') || '50', 10);
         let redeemedPrizes = JSON.parse(localStorage.getItem('melisa_arcade_redeemed') || '[]');
@@ -4193,6 +4194,11 @@ const UniverseGames = (function() {
         if (btnA) btnA.onclick = () => { activeTab = 'arcadeprizes'; updateTabUI(); };
 
         updateTabUI();
+        return {
+            destroy: () => {
+                if (pacInterval) clearInterval(pacInterval);
+            }
+        };
     }
 
     return {
