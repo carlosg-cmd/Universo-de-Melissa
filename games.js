@@ -3339,26 +3339,26 @@ const UniverseGames = (function() {
         //  TAB 2: PIANO MÁGICO DE CARLOS (WEB AUDIO API)
         // ==========================================
         const pianoQuotes = [
-            "🎹 ¡Nota Do de Dulzura! Eres la melodía que alegra cada mañana de Carlos.",
-            "🎹 ¡Nota Re de Reina! Melisa, no hay mujer más hermosa ni valiente en todo el universo.",
-            "🎹 ¡Nota Mi de Mi Amor! Cada latido del corazón de Carlos suena con tu nombre.",
-            "🎹 ¡Nota Fa de Fascinante! Tu sonrisa tiene el poder de iluminar el día más oscuro.",
-            "🎹 ¡Nota Sol de Sol mío! Eres el sol que abrigará todas nuestras mañanas cuando sanes.",
-            "🎹 ¡Nota La de Lealtad! Carlos estará a tu lado hoy, mañana y en cada segundo de tu vida.",
-            "🎹 ¡Nota Si de Siempre Juntos! Nada ni nadie podrá apagar la música de nuestro amor.",
-            "🎼 ¡Acorde Mágico! La distancia es solo un silencio temporal antes de nuestro gran concierto de abrazos.",
-            "🎼 ¡Sinfonía del Corazón! Carlos te envía 10,000 besos musicales para que te cures más rápido.",
-            "🎼 ¡Armonía Perfecta! Contigo la vida no es un ensayo, ¡es la obra maestra más hermosa!",
-            "🎹 ¡Ritmo Imparable! Tu valentía en esta recuperación merece una ovación de pie en todo el universo.",
+            "🎹 ¡Nota Do de Dulzura! Eres la melodía que alegra mi mañana.",
+            "🎹 ¡Nota Re de Reina! Mi Melisa, para mí no hay mujer más hermosa ni valiente en todo el universo.",
+            "🎹 ¡Nota Mi de Mi Amor! Cada latido de mi corazón suena con tu dulce nombre.",
+            "🎹 ¡Nota Fa de Fascinante! Tu sonrisa tiene el poder de iluminar mi día más oscuro.",
+            "🎹 ¡Nota Sol de Sol mío! Eres el sol que ilumina mi vida; muy pronto amaneceremos celebrando tu salud.",
+            "🎹 ¡Nota La de Lealtad! Yo estaré a tu lado hoy, mañana y en cada segundo de tu hermosa vida.",
+            "🎹 ¡Nota Si de Siempre Juntos! Nada ni nadie podrá apagar la música y la magia de nuestro amor.",
+            "🎼 ¡Acorde Mágico! Esta distancia es solo un silencio temporal antes de que te llene de abrazos y besos.",
+            "🎼 ¡Sinfonía del Corazón! Te envío 10,000 besos musicales desde lo más profundo de mi alma para que te cures más rápido.",
+            "🎼 ¡Armonía Perfecta! Contigo mi vida no es un ensayo, ¡tú eres mi obra maestra más hermosa!",
+            "🎹 ¡Ritmo Imparable! Admiro tanto tu valentía; te mereces una ovación de pie en todo mi mundo.",
             "🎹 ¡Melodía Celestial! Si mi amor por ti fuera una canción, sonaría por toda la eternidad sin detenerse.",
-            "🎼 ¡Dúo Perfecto! Tú y yo hacemos el mejor equipo de todo el cosmos. ¡Te amo infinito Melisa!",
-            "🎹 ¡Nota de Esperanza! Muy pronto estaremos bailando, riendo y celebrando tu salud completa.",
-            "🎼 ¡Serenata de Amor! Cierra los ojos y siente cómo mi abrazo te envuelve en este instante.",
-            "🎹 ¡Composición Real! Eres el verso más bonito que Dios escribió en el destino de Carlos.",
+            "🎼 ¡Dúo Perfecto! Tú y yo hacemos el mejor equipo de todo el cosmos. ¡Te amo infinito, mi princesa Melisa!",
+            "🎹 ¡Nota de Esperanza! Ya cuento los días para que estemos bailando, riendo y celebrando tu salud completa.",
+            "🎼 ¡Serenata de Amor! Cierra los ojos y siente cómo mi abrazo te envuelve en este instante, mi amor.",
+            "🎹 ¡Composición Real! Eres el verso más bonito y bendecido que Dios escribió en mi destino.",
             "🎼 ¡Concierto de Besos! Cada día que pasa es una nota más cerca de volver a tenerte entre mis brazos.",
-            "🎹 ¡Sonido de Paz! Descansa, recupérate tranquila, que aquí está tu rey velando siempre por ti.",
-            "🎼 ¡Inspiración Eterna! Eres la musa que inspira toda la alegría y el amor en el Universo de Melisa.",
-            "🎹 ¡Aplauso Infinito! ¡Eres la campeona indiscutible de mi corazón y de mi vida entera!"
+            "🎹 ¡Sonido de Paz! Descansa y recupérate tranquila, que aquí estoy yo, tu rey, velando siempre por ti.",
+            "🎼 ¡Inspiración Eterna! Eres la musa que inspira toda la alegría y el amor que siento en mi corazón.",
+            "🎹 ¡Aplauso Infinito! ¡Eres la reina indiscutible de mi corazón y de mi vida entera!"
         ];
 
         let pianoPool = [];
@@ -3418,11 +3418,11 @@ const UniverseGames = (function() {
 
             contentArea.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
-                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🎹 PIANO DE CARLOS</span>
+                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🎹 MI PIANO ROMÁNTICO PARA MELISA</span>
                     <span id="piano-counter-txt" style="color:var(--gold); font-weight:900; font-size:0.9rem;">🎵 Notas Tocadas: ${pianoNotesPlayed}</span>
                 </div>
                 <p style="color:#fff; font-size:0.88rem; text-align:center; margin-bottom:16px;">
-                    ✨ Toca las teclas para escuchar sonido real y liberar dedicatorias mágicas del corazón de Carlos.
+                    ✨ Toca las teclas para escuchar sonido real y liberar dedicatorias mágicas que escribí desde el fondo de mi corazón para ti.
                 </p>
 
                 <div id="piano-keyboard" style="display:flex; justify-content:center; gap:6px; margin-bottom:20px; padding:10px; background:#0a0e17; border-radius:18px; border:2px solid rgba(255,255,255,0.1); overflow-x:auto;"></div>
@@ -3541,18 +3541,18 @@ const UniverseGames = (function() {
         //  TAB 3: LA ROCKOLA ROMÁNTICA (ESTACIONES FM)
         // ==========================================
         const rockolaStations = [
-            { station: "📻 99.9 FM - Radio Besos", title: "¡Hit de Abrazos Apretaditos!", desc: "Sintonizando en directo desde el corazón de Carlos: 'Melisa, te mando mil besos al aire para que te llenen de calor y dulzura hoy'." },
-            { station: "📻 100.5 FM - Estación Pasión", title: "Boletín Informativo del Amor", desc: "Se reporta un enamoramiento extremo, incurable y eterno del rey Carlos hacia la mujer más espectacular del planeta: ¡Melisa!" },
-            { station: "📻 102.3 FM - Frecuencia Destino", title: "La Casualidad más Hermosa", desc: "En esta estación recordamos que coincidir contigo en esta vida ha sido el regalo más grande y maravilloso que Dios le dio a Carlos." },
+            { station: "📻 99.9 FM - Radio Besos", title: "¡Hit de Abrazos Apretaditos!", desc: "Sintonizando en directo desde mi corazón para ti: 'Mi Melisa, te mando mil besos al aire para que te llenen de calor y dulzura hoy'." },
+            { station: "📻 100.5 FM - Estación Pasión", title: "Boletín Informativo del Amor", desc: "Se reporta un enamoramiento extremo, incurable y eterno de tu rey hacia la mujer más espectacular del planeta: ¡tú, mi Melisa!" },
+            { station: "📻 102.3 FM - Frecuencia Destino", title: "La Casualidad más Hermosa", desc: "En esta estación recordamos que coincidir contigo en esta vida ha sido el regalo más grande y maravilloso que Dios me dio." },
             { station: "📻 104.8 FM - Radio Recuperación", title: "¡Fuerza, Salud y Alegría!", desc: "Transmitiendo energía curativa 24/7: Cada día que pasa eres más fuerte, tu cuerpo sana maravillosamente y muy pronto estaremos festejando en la calle." },
-            { station: "📻 107.5 FM - Romántica Universal", title: "Dedicatoria VIP del Oyente Carlos", desc: "'Eres el motivo de mi sonrisa, la inspiración de mis días y la reina indiscutible de todo mi universo. ¡Te amo con el alma!'" },
+            { station: "📻 107.5 FM - Romántica Universal", title: "Dedicatoria VIP de tu Enamorado #1", desc: "'Eres el motivo de mi sonrisa, la inspiración de mis días y la reina indiscutible de todo mi universo. ¡Te amo con el alma!'" },
             { station: "📻 108.0 FM - Estación Futuro", title: "Pronóstico del Tiempo Juntos", desc: "Pronóstico del clima para cuando te recuperes: ¡100% de probabilidad de salidas a cenar, paseos tomados de la mano, risas y felicidad total!" },
-            { station: "📻 95.5 FM - Radio Sonrisas", title: "El Sonido de tu Risa", desc: "No hay sinfonía en el mundo que se compare con el sonido de tu risa. Carlos está contando los segundos para volver a ver tus ojitos brillar de felicidad." },
-            { station: "📻 101.1 FM - Frecuencia Ternura", title: "La Guerrera más Hermosa", desc: "Hoy celebramos tu valentía. Has demostrado una fuerza increíble en estos 10 días. ¡Eres el orgullo más grande de tu novio!" },
-            { station: "📻 103.7 FM - Estación Promesas", title: "Un Juramento de Amor", desc: "Pase lo que pase, en los días buenos y en los difíciles, siempre tendrás la mano de Carlos sosteniendo la tuya con lealtad absoluta." },
-            { station: "📻 106.2 FM - Radio Universo", title: "El Centro del Sistema Solar", desc: "Todos los planetas, las estrellas y los latidos del corazón de Carlos giran alrededor de una sola reina: ¡Tú, mi hermosa Melisa!" },
+            { station: "📻 95.5 FM - Radio Sonrisas", title: "El Sonido de tu Risa", desc: "No hay sinfonía en el mundo que se compare con el sonido de tu risa. Yo estoy contando los segundos para volver a ver tus ojitos brillar de felicidad." },
+            { station: "📻 101.1 FM - Frecuencia Ternura", title: "La Guerrera más Hermosa", desc: "Hoy celebramos tu valentía. Has demostrado una fuerza increíble en estos 10 días. ¡Eres el orgullo más grande de mi vida y de mi corazón!" },
+            { station: "📻 103.7 FM - Estación Promesas", title: "Un Juramento de Amor", desc: "Pase lo que pase, en los días buenos y en los difíciles, siempre tendrás mi mano sosteniendo la tuya con lealtad absoluta." },
+            { station: "📻 106.2 FM - Radio Universo", title: "El Centro del Sistema Solar", desc: "Todos los planetas, las estrellas y los latidos de mi corazón giran alrededor de una sola reina: ¡Tú, mi hermosa Melisa!" },
             { station: "📻 98.4 FM - Frecuencia Poesía", title: "Un Verso para Mi Amada", desc: "'Si el universo entero fuera música, tú serías la melodía perfecta que da sentido a toda mi existencia'." },
-            { station: "📻 105.9 FM - Estación Celebración", title: "¡Llegamos al Día 10!", desc: "¡Diez días de recuperación superados con éxito! Preparen el confeti y la música porque esta reina va directo a la victoria total." }
+            { station: "📻 105.9 FM - Estación Celebración", title: "¡Llegamos al Día 10!", desc: "¡Diez días de recuperación superados con éxito! Preparen el confeti y la música porque mi reina va directo a la victoria total." }
         ];
 
         let rockolaPool = [];
