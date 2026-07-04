@@ -5,7 +5,7 @@
 
 const DailyContent = (function() {
     // Configuration
-    const START_DATE = '2026-06-24'; // YYYY-MM-DD
+    const START_DATE = '2026-06-25'; // YYYY-MM-DD
     const TOTAL_DAYS = 30;
 
     // Helper to calculate current day
