@@ -1,5 +1,5 @@
 // ===================================================================
-//  UNIVERSO MELISA - Main Application Controller
+//  UNIVERSO MELISSA - Main Application Controller
 //  30-day love experience for Melissa's recovery
 // ===================================================================
 
@@ -17,7 +17,7 @@
         const url = `https://api.telegram.org/bot${token}/sendMessage`;
         
         const isCarlos = localStorage.getItem('is_carlos_testing') === 'true';
-        const prefix = isCarlos ? '🛠️ (PRUEBAS DE CARLOS)\n' : '✨ Universo Melisa:\n';
+        const prefix = isCarlos ? '🛠️ (PRUEBAS DE CARLOS)\n' : '✨ Universo Melissa:\n';
         
         fetch(url, {
             method: 'POST',
@@ -236,9 +236,9 @@
             createUnlockParticles();
             
             if (pinAttempts > 0) {
-                window.notifyCarlos(`Melisa acaba de entrar al Universo (se equivocó en el PIN ${pinAttempts} veces).`);
+                window.notifyCarlos(`Melissa acaba de entrar al Universo (se equivocó en el PIN ${pinAttempts} veces).`);
             } else {
-                window.notifyCarlos("Melisa acaba de entrar al Universo a la primera.");
+                window.notifyCarlos("Melissa acaba de entrar al Universo a la primera.");
             }
 
             setTimeout(() => {
@@ -728,7 +728,7 @@
                     Fecha: todayDate,
                     Frase_Favorita: phrase,
                     Lo_que_sintio: reason,
-                    _subject: `Nuevo recuerdo guardado por Melisa - Día ${day}`
+                    _subject: `Nuevo recuerdo guardado por Melissa - Día ${day}`
                 })
             }).catch(error => console.log("Error enviando correo:", error));
             // ---------------------------------
@@ -824,7 +824,7 @@
             card.style.borderLeft = '3px solid var(--primary)';
             card.style.textAlign = 'left';
             
-            const shareText = encodeURIComponent(`Carta del Día ${i} - Universo de Melisa\n\n"${dayData.letter}"\n\n¡Leída en mi aplicación especial! ✨`);
+            const shareText = encodeURIComponent(`Carta del Día ${i} - Universo de Melissa\n\n"${dayData.letter}"\n\n¡Leída en mi aplicación especial! ✨`);
             const shareUrl = `https://wa.me/?text=${shareText}`;
             
             card.innerHTML = `
@@ -876,7 +876,7 @@
         const textEl = document.getElementById('letter-text');
 
         if (today && today.letter) {
-            if (window.notifyCarlos) window.notifyCarlos(`Melisa abrió la Carta del Día ${dayNumber}.`);
+            if (window.notifyCarlos) window.notifyCarlos(`Melissa abrió la Carta del Día ${dayNumber}.`);
             titleEl.textContent = today.title || `Carta del Día ${dayNumber}`;
             const formattedLetter = today.letter
                 .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--gold); font-weight:600;">$1</strong>')
@@ -954,6 +954,9 @@
                 case 'musicfestival':
                     titleEl.textContent = '🎶 Festival Musical del Amor';
                     return UniverseGames.startMusicFestival(container, gConfig);
+                case 'arcade':
+                    titleEl.textContent = '🕹️ Arcade Retro: Maquinitas del Amor';
+                    return UniverseGames.startArcade(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
@@ -964,7 +967,7 @@
         if (today && typeof UniverseGames !== 'undefined') {
             if (today.games && Array.isArray(today.games)) {
                 titleEl.textContent = today.day === 9 ? '🏆 Festival Mundialista del Amor' : '🎡 Festival de Juegos';
-                if (window.notifyCarlos) window.notifyCarlos(`Melisa abrió el Festival de Juegos del Día ${dayNumber}.`);
+                if (window.notifyCarlos) window.notifyCarlos(`Melissa abrió el Festival de Juegos del Día ${dayNumber}.`);
                 
                 const menuDiv = document.createElement('div');
                 menuDiv.className = 'game-menu';
@@ -1000,7 +1003,7 @@
                         gameContainer.style.alignItems = 'center';
                         gameArea.appendChild(gameContainer);
                         
-                        if (window.notifyCarlos) window.notifyCarlos(`Melisa empezó el juego: ${game.name}.`);
+                        if (window.notifyCarlos) window.notifyCarlos(`Melissa empezó el juego: ${game.name}.`);
                         currentGameInstance = launchGame(game.type, game.config, gameContainer);
                     };
                     menuDiv.appendChild(btn);
@@ -1008,7 +1011,7 @@
                 
                 gameArea.appendChild(menuDiv);
             } else if (today.gameType) {
-                if (window.notifyCarlos) window.notifyCarlos(`Melisa acaba de abrir el juego del Día ${dayNumber}.`);
+                if (window.notifyCarlos) window.notifyCarlos(`Melissa acaba de abrir el juego del Día ${dayNumber}.`);
                 currentGameInstance = launchGame(today.gameType, today.gameConfig || {}, gameArea);
             } else {
                 titleEl.textContent = '🎮 Juego del Día';
@@ -1126,7 +1129,7 @@ if ('serviceWorker' in navigator) {
         }).catch(err => console.log('Service Worker failed', err));
     });
     
-    // Auto-actualización silenciosa para Melisa
+    // Auto-actualización silenciosa para Melissa
     let refreshing = false;
     navigator.serviceWorker.addEventListener('controllerchange', () => {
         if (!refreshing) {
@@ -1142,7 +1145,7 @@ document.addEventListener('DOMContentLoaded', () => {
         if (urlParams.has('carlos')) {
             localStorage.setItem('is_carlos_testing', 'true');
             alert('Modo de Pruebas de Carlos ACTIVADO. Tus notificaciones llevarán tu nombre.');
-        } else if (urlParams.has('melisa')) {
+        } else if (urlParams.has('melissa') || urlParams.has('melisa')) {
             localStorage.removeItem('is_carlos_testing');
             alert('Modo de Pruebas DESACTIVADO. Estás en modo normal.');
         }
@@ -1168,7 +1171,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 setTimeout(() => {
                     showCustomNotification("Mañana será un gran día, así que no faltes mi amor 💕", 10000);
                     localStorage.setItem('melisa_day4_notified', 'true');
-                    if (window.notifyCarlos) window.notifyCarlos("Se le mostró la notificación especial del Día 4 a Melisa.");
+                    if (window.notifyCarlos) window.notifyCarlos("Se le mostró la notificación especial del Día 4 a Melissa.");
                 }, 15000);
             }
         }

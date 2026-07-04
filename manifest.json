@@ -1,11 +1,11 @@
 {
-  "name": "Universo de Melisa",
+  "name": "Universo de Melissa",
   "short_name": "Mi Universo",
   "start_url": "./",
   "display": "standalone",
   "background_color": "#050B14",
   "theme_color": "#00e5ff",
-  "description": "Un regalo interactivo para Melisa",
+  "description": "Un regalo interactivo para Melissa",
   "icons": [
     {
       "src": "fotos/foto_146.jpeg",

@@ -1,5 +1,5 @@
 // ===================================================================
-//  UNIVERSO MELISA - Games Module
+//  UNIVERSO MELISSA - Games Module
 //  Memory, Word Search, Trivia, Puzzle, Riddle
 // ===================================================================
 
@@ -132,7 +132,7 @@ const UniverseGames = (function() {
                 matches++;
                 resetBoard();
                 if (matches === pairsCount) {
-                    if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de ganar el Juego de Memoria.");
+                    if (window.notifyCarlos) window.notifyCarlos("🎮 Melissa acaba de ganar el Juego de Memoria.");
                     setTimeout(() => celebrate(container, `¡Lo lograste en ${moves} movimientos!`), 500);
                 }
             } else {
@@ -307,7 +307,7 @@ const UniverseGames = (function() {
                                 listEl.querySelector(`[data-word="${wordFound}"]`).classList.add('found');
                                 
                                 if(foundWords.size === words.length) {
-                                    if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de encontrar todas las palabras en la Sopa de Letras.");
+                                    if (window.notifyCarlos) window.notifyCarlos("🎮 Melissa acaba de encontrar todas las palabras en la Sopa de Letras.");
                                     setTimeout(() => celebrate(wsContainer, '¡Encontraste todas nuestras palabras!'), 500);
                                 }
                             }
@@ -405,7 +405,7 @@ const UniverseGames = (function() {
 
         function showScore() {
             progressDiv.firstChild.style.width = '100%';
-            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melisa terminó la Trivia con un puntaje de ${score}/${questions.length}.`);
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa terminó la Trivia con un puntaje de ${score}/${questions.length}.`);
             qContainer.innerHTML = `
                 <div class="game-trivia-score">
                     <div class="game-trivia-score-number">${score} / ${questions.length}</div>
@@ -531,7 +531,7 @@ const UniverseGames = (function() {
             });
             
             if (checkWin(tiles)) {
-                if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de armar el Rompecabezas deslizante.");
+                if (window.notifyCarlos) window.notifyCarlos("🎮 Melissa acaba de armar el Rompecabezas deslizante.");
                 setTimeout(() => {
                     board.innerHTML = '';
                     board.style.display = 'block';
@@ -753,7 +753,7 @@ const UniverseGames = (function() {
                 }
             }
             if (won) {
-                if (window.notifyCarlos) window.notifyCarlos("🎮 Melisa acaba de descubrir la frase secreta del girasol.");
+                if (window.notifyCarlos) window.notifyCarlos("🎮 Melissa acaba de descubrir la frase secreta del girasol.");
                 keyboardDiv.style.display = 'none';
                 setTimeout(() => {
                     celebrate(wrapper, '¡Descubriste la frase secreta!');
@@ -997,7 +997,7 @@ const UniverseGames = (function() {
             localStorage.setItem('melisa_roulette_spins', spins);
             
             if (window.notifyCarlos) {
-                window.notifyCarlos(`🎰 Melisa giró la ruleta (Intento ${spins}/${WIN_TARGET})`);
+                window.notifyCarlos(`🎰 Melissa giró la ruleta (Intento ${spins}/${WIN_TARGET})`);
             }
             
             let targetIndex;
@@ -1030,7 +1030,7 @@ const UniverseGames = (function() {
                 
                 if (landedSlice.isWin) {
                     celebrate(wrapper, '¡GANASTE EL PREMIO SORPRESA! 🎉');
-                    if (window.notifyCarlos) window.notifyCarlos(`🏆 ¡MELISA GANÓ EL PREMIO EN LA RULETA (Intento ${spins})!`);
+                    if (window.notifyCarlos) window.notifyCarlos(`🏆 ¡MELISSA GANÓ EL PREMIO EN LA RULETA (Intento ${spins})!`);
                     spinBtn.style.display = 'none';
                     
                     const winMsg = document.createElement('div');
@@ -1333,7 +1333,7 @@ const UniverseGames = (function() {
             
             if (win || score >= 1000) {
                 celebrate(wrapper, '¡OBJETIVO CUMPLIDO! 🎉');
-                if (window.notifyCarlos) window.notifyCarlos(`💖 Melisa desbloqueó el premio real de Atrapa mi Corazón (${score} pts, ${totalAttempts} partidas).`);
+                if (window.notifyCarlos) window.notifyCarlos(`💖 Melissa desbloqueó el premio real de Atrapa mi Corazón (${score} pts, ${totalAttempts} partidas).`);
                 overlay.innerHTML = `
                     <h2 style="color:var(--gold); margin-bottom:10px; text-shadow: 0 0 10px rgba(255,215,0,0.5); font-size:1.35rem;">¡PREMIO REAL #1 DESBLOQUEADO! 🎉</h2>
                     <p style="margin-bottom:8px; font-size:0.9rem;">Reto: Atrapa mi Corazón (Puntos: ${score}/1000 | Partidas: ${totalAttempts}/15).</p>
@@ -1582,7 +1582,7 @@ const UniverseGames = (function() {
                         setTimeout(() => {
                             statusEl.innerHTML = '<span style="color:var(--gold)">¡GANASTE TU PREMIO REAL #2! 🎉</span>';
                             celebrate(wrapper, '¡INCREÍBLE!');
-                            if (window.notifyCarlos) window.notifyCarlos(`🧠 Melisa ganó Simón Dice del Amor (${score} pts, ${attempts} partidas).`);
+                            if (window.notifyCarlos) window.notifyCarlos(`🧠 Melissa ganó Simón Dice del Amor (${score} pts, ${attempts} partidas).`);
                             
                             const winMsg = document.createElement('div');
                             winMsg.style.background = 'rgba(255, 215, 0, 0.15)';
@@ -1735,7 +1735,7 @@ const UniverseGames = (function() {
         const openers = [
             "Mi princesa hermosa,", "Mi consentida preciosa,", "Reina de mi corazón,", "Mi guerrera valiente,", 
             "Amor de mi vida,", "Mi tesoro más preciado,", "Mi muñeca hermosa,", "Vida mía,", "Mi campeona inolvidable,", 
-            "Mi dulce Melisa,", "Mi consentida adorada,", "Dueña de mi universo,", "Mi inspiración diaria,", "Mi razón de ser,"
+            "Mi dulce Melissa,", "Mi consentida adorada,", "Dueña de mi universo,", "Mi inspiración diaria,", "Mi razón de ser,"
         ];
         const cores = [
             "cada segundo que pasa admiro más tu fortaleza y cómo superas cada día de recuperación.",
@@ -1746,7 +1746,7 @@ const UniverseGames = (function() {
             "no hay cirugía ni obstáculo en este mundo que pueda detener a una mujer tan extraordinaria como tú.",
             "cuento los minutos para que termines tu reposo y podamos salir a celebrar nuestro gran amor.",
             "tu ternura, tu valentía y tu dulzura me enamoran mil veces más cada mañana.",
-            "este Universo Melisa fue creado exclusivamente para recordarte lo infinitamente especial que eres.",
+            "este Universo Melissa fue creado exclusivamente para recordarte lo infinitamente especial que eres.",
             "adoro cuando me miras, cuando sonríes y cuando me dejas consentirte como mereces.",
             "eres mi compañera inseparable, mi cómplice perfecta y el gran amor de mi existencia.",
             "que nunca se te olvide que tienes a un hombre que te adora y que da todo por verte feliz.",
@@ -1914,7 +1914,7 @@ const UniverseGames = (function() {
                     modalOverlay.remove();
                     won = true;
                     celebrate(wrapper, '¡CANDADO ABIERTO!');
-                    if (window.notifyCarlos) window.notifyCarlos('🏆 Melisa ingresó el código 72495 y desbloqueó la Llave Dorada.');
+                    if (window.notifyCarlos) window.notifyCarlos('🏆 Melissa ingresó el código 72495 y desbloqueó la Llave Dorada.');
 
                     const winMsg = document.createElement('div');
                     winMsg.style.background = 'rgba(255, 215, 0, 0.18)';
@@ -2088,7 +2088,7 @@ const UniverseGames = (function() {
 
         wrapper.appendChild(machineFrame);
 
-        // Romantic Phrases for Day 8 (Massive personalized pool from Carlos & Melisa's universe)
+        // Romantic Phrases for Day 8 (Massive personalized pool from Carlos & Melissa's universe)
         const jackpotPhrases = [
             "👑 ¡ALINEASTE 3 CORONAS DE MI REINA! Mi vida hermosa, hoy cumples 8 días siendo una campeona indiscutible en tu recuperación. No necesitas ningún premio terrenal porque tú eres el tesoro más invaluable de mi vida. ¡Estoy tan orgulloso de ti!",
             "💖 ¡TRIPLE CORAZÓN DE AMOR ETERNO! Mi princesa, cada uno de tus esfuerzos en esta recuperación me llena el alma de admiración. Te amo hoy, mañana y para siempre.",
@@ -2417,7 +2417,7 @@ const UniverseGames = (function() {
         commentary.style.fontStyle = 'italic';
         commentary.style.minHeight = '65px';
         commentary.style.lineHeight = '1.5';
-        commentary.innerHTML = '🎙️ <b>Comentarista:</b> "¡Atención! Melisa acomoda el balón frente a la portería. ¡El arquero flexiona las piernas listo para estirarse!"';
+        commentary.innerHTML = '🎙️ <b>Comentarista:</b> "¡Atención! Melissa acomoda el balón frente a la portería. ¡El arquero flexiona las piernas listo para estirarse!"';
         wrapper.appendChild(commentary);
 
         // Controls
@@ -2436,7 +2436,7 @@ const UniverseGames = (function() {
         const goalComments = [
             '🎙️ <b>¡GOOOOOLAZO IMPRESIONANTE!</b> "¡La clavó en el ángulo donde duermen las arañas! En el Mundial de mi vida, tú eres la estrella número 10 indiscutible, mi princesa hermosa. ¡Carlos celebra aplaudiendo!"',
             '🎙️ <b>¡GOOOOOL DE ORO!</b> "¡El portero voló espectacular hacia el lado contrario! Así como conquistaste este arco, conquistaste mi corazón para siempre. ¡Orgulloso de tu fuerza!"',
-            '🎙️ <b>¡GOLAZO DE CAMPEONA!</b> "¡Grita todo el estadio! Melisa demuestra que tiene una puntería y una garra de campeona mundial. ¡Te ganaste la Copa del Amor!"',
+            '🎙️ <b>¡GOLAZO DE CAMPEONA!</b> "¡Grita todo el estadio! Melissa demuestra que tiene una puntería y una garra de campeona mundial. ¡Te ganaste la Copa del Amor!"',
             '🎙️ <b>¡GOOOOOL MAGISTRAL!</b> "¡Qué remate tan perfecto! Eres la dueña absoluta del trofeo de mi corazón hoy, mañana y toda la eternidad. ¡Te amo mi reina!"'
         ];
 
@@ -2548,7 +2548,7 @@ const UniverseGames = (function() {
     }
 
     // =============================================
-    //  DÍA 9: ÁLBUM PANINI DE CARLOS & MELISA 📖🃏
+    //  DÍA 9: ÁLBUM PANINI DE CARLOS & MELISSA 📖🃏
     // =============================================
     function startAlbum(container, config) {
         container.innerHTML = '';
@@ -2589,7 +2589,7 @@ const UniverseGames = (function() {
         packDiv.innerHTML = `
             <div style="font-size:4.2rem; margin-bottom:8px; filter:drop-shadow(0 5px 15px rgba(255,215,0,0.5));">🃏✨</div>
             <h3 style="color:#fff; margin:0 0 8px 0; font-family:'Outfit',sans-serif; font-size:1.35rem;">Sobre Dorado Panini Edición Oro</h3>
-            <p style="color:rgba(255,255,255,0.85); font-size:0.9rem; margin-bottom:20px;">Contiene 1 lámina brillante holográfica con foto real de Carlos & Melisa.</p>
+            <p style="color:rgba(255,255,255,0.85); font-size:0.9rem; margin-bottom:20px;">Contiene 1 lámina brillante holográfica con foto real de Carlos & Melissa.</p>
         `;
 
         const btnsRow = document.createElement('div');
@@ -2641,8 +2641,8 @@ const UniverseGames = (function() {
         wrapper.appendChild(galleryDisplay);
 
         const titles = [
-            '⭐ Selección Melisa & Carlos - Titulares Indiscutibles',
-            '👑 Melisa - Capitana Eterna de mi Corazón',
+            '⭐ Selección Melissa & Carlos - Titulares Indiscutibles',
+            '👑 Melissa - Capitana Eterna de mi Corazón',
             '🏆 Balón de Oro del Amor Incondicional',
             '🇨🇴 Hinchada Oficial de tu Recuperación',
             '✨ Estrellas Brillantes de Nuestro Universo'
@@ -2673,7 +2673,7 @@ const UniverseGames = (function() {
                         ${isRepeated ? '⚠️ FIGURITA REPETIDA' : '🌟 ¡NUEVA FIGURITA!'}
                     </div>
                     <div style="background:#000; border-radius:14px; overflow:hidden; height:280px; display:flex; align-items:center; justify-content:center; margin-bottom:14px; border:2px solid rgba(255,215,0,0.4); box-shadow:0 6px 16px rgba(0,0,0,0.6);">
-                        <img src="${photoUrl}" alt="Recuerdo Melisa y Carlos" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='fotos/foto (1).jpeg';">
+                        <img src="${photoUrl}" alt="Recuerdo Melissa y Carlos" style="width:100%; height:100%; object-fit:cover;" onerror="this.onerror=null; this.src='fotos/foto (1).jpeg';">
                     </div>
                     <div style="background:var(--gold); color:#000; font-weight:900; padding:6px 14px; border-radius:8px; font-size:0.85rem; letter-spacing:1px; margin-bottom:12px; display:inline-block;">
                         EDICIÓN ORO PANINI #${photoNum}
@@ -2810,8 +2810,8 @@ const UniverseGames = (function() {
             { flag: '🇸🇪', name: 'SUECIA', question: '¿Qué selección escandinava que viste de amarillo y azul fue subcampeona del mundo en 1958?', options: ['SUECIA', 'NORUEGA', 'FINLANDIA'] },
             { flag: '🇬🇷', name: 'GRECIA', question: '¿Qué selección europea dio una de las mayores sorpresas de la historia ganando la Eurocopa en 2004?', options: ['GRECIA', 'TURQUIA', 'ITALIA'] },
             { flag: '🇵🇦', name: 'PANAMA', question: '¿Qué selección centroamericana apodada los "Canaleros" jugó su primer e histórico Mundial en Rusia 2018?', options: ['PANAMA', 'COSTA RICA', 'GUATEMALA'] },
-            { flag: '💖', name: 'MELISA', question: '¿Cuál es la selección, reina y jugadora número 1 en el corazón y en el universo entero de Carlos?', options: ['MELISA', 'LA REINA', 'MI AMOR'] },
-            { flag: '👑', name: 'CARLOS', question: '¿Quién es el capitán del amor que dará todo en la cancha de la vida para ver siempre feliz a Melisa?', options: ['CARLOS', 'EL REY', 'MI NOVIO'] },
+            { flag: '💖', name: 'MELISSA', question: '¿Cuál es la selección, reina y jugadora número 1 en el corazón y en el universo entero de Carlos?', options: ['MELISSA', 'LA REINA', 'MI AMOR'] },
+            { flag: '👑', name: 'CARLOS', question: '¿Quién es el capitán del amor que dará todo en la cancha de la vida para ver siempre feliz a Melissa?', options: ['CARLOS', 'EL REY', 'MI NOVIO'] },
             { flag: '🏆', name: 'NUESTRO AMOR', question: '¿Cuál es el trofeo más grande, invencible y eterno que ganaremos todos los días por el resto de nuestras vidas?', options: ['NUESTRO AMOR', 'LA COPA DEL MUNDO', 'EL CHAMPIONSHIP'] }
         ];
 
@@ -3079,9 +3079,9 @@ const UniverseGames = (function() {
             { song: "Reik - Noviembre Sin Ti", prompt: "«Noviembre sin ti es pedirle a la luna...» 🌙 ¿Qué le pide a la luna en esta balada?", correct: "Que brille en la noche de mi corazón", options: ["Que brille en la noche de mi corazón", "Que me devuelva toda la ilusión", "Que cante conmigo esta hermosa canción"] },
             { song: "Camila - Todo Cambió", prompt: "«Todo cambió cuando te vi...» 🎨 ¿Qué transformó el amor en su vida?", correct: "De blanco y negro al color me convertí", options: ["De blanco y negro al color me convertí", "En el momento exacto en que te conocí", "Y desde entonces solo vivo para ti"] },
             { song: "Alejandro Fernández - Me Dediqué a Perderte", prompt: "«Si pudiera volver al pasado...» ⏳ ¿Qué haría diferente si tuviera otra oportunidad?", correct: "Te abrazaría fuerte y no te dejaría", options: ["Te abrazaría fuerte y no te dejaría", "Te regalaría toda mi alegría", "Te cuidaría de noche y de día"] },
-            { song: "Carlos Vives - Volví a Nacer", prompt: "«Quiero casarme contigo...» 💍 ¿Y qué más quiere Carlos con su hermosa Melisa?", correct: "Quedarme a tu lado, ser el bendecido con tu amor", options: ["Quedarme a tu lado, ser el bendecido con tu amor", "Regalarte el mundo entero y todo mi calor", "Cuidarte los sueños sin ningún temor"] },
+            { song: "Carlos Vives - Volví a Nacer", prompt: "«Quiero casarme contigo...» 💍 ¿Y qué más quiere Carlos con su hermosa Melissa?", correct: "Quedarme a tu lado, ser el bendecido con tu amor", options: ["Quedarme a tu lado, ser el bendecido con tu amor", "Regalarte el mundo entero y todo mi calor", "Cuidarte los sueños sin ningún temor"] },
             { song: "Jorge Celedón / Fonseca - Esta Vida", prompt: "«Me gusta el olor a tierra mojada...» 🌿🎶 ¿Y qué es lo que más nos gusta de esta vida?", correct: "Me gusta vivir esta vida a tu lado y amarte", options: ["Me gusta vivir esta vida a tu lado y amarte", "Me gusta cantar por la noche y abrazarte", "Me gusta viajar por el mundo para admirarte"] },
-            { song: "Binomio de Oro - Niña Bonita", prompt: "«Tú eres mi niña bonita...» 👸❤️ ¿Qué representa Melisa en la vida de Carlos?", correct: "La que me quita el sueño y me da alegría", options: ["La que me quita el sueño y me da alegría", "La estrella más brillante de toda mi vida", "La luz que ilumina mi noche y mi día"] },
+            { song: "Binomio de Oro - Niña Bonita", prompt: "«Tú eres mi niña bonita...» 👸❤️ ¿Qué representa Melissa en la vida de Carlos?", correct: "La que me quita el sueño y me da alegría", options: ["La que me quita el sueño y me da alegría", "La estrella más brillante de toda mi vida", "La luz que ilumina mi noche y mi día"] },
             { song: "Fonseca - Prometo", prompt: "«Prometo darte el sol todos los días...» ☀️ ¿Cuál es la promesa eterna del amor?", correct: "Prometo cuidarte y amarte toda la vida", options: ["Prometo cuidarte y amarte toda la vida", "Prometo cantarte canciones de alegría", "Prometo llevarte a bailar cada madrugada"] },
             { song: "Juan Luis Guerra - Burbujas de Amor", prompt: "«Quisiera ser un pez...» 🐠💭 ¿Para qué quiere ser un pez en esta romántica bachata?", correct: "Para tocar mi nariz en tu pecera y hacer burbujas de amor", options: ["Para tocar mi nariz en tu pecera y hacer burbujas de amor", "Para nadar por tus mares de ilusión verdadera", "Para cuidarte de noche en la costa entera"] },
             { song: "Romeo Santos / Aventura - Solo por un Beso", prompt: "«Solo por un beso...» 💋 ¿Qué sucede con tan solo un beso de la persona amada?", correct: "Se puede enamorar sin darte cuenta", options: ["Se puede enamorar sin darte cuenta", "Se detiene el tiempo en cámara lenta", "Se calma la lluvia y la tormenta"] },
@@ -3119,18 +3119,18 @@ const UniverseGames = (function() {
             { song: "Carlos Rivera - Me Muero", prompt: "«Me muero por besarte...» 💋 ¿Y qué más desea hacer con todo su ser?", correct: "Por rodearte con mis brazos llenos de amor", options: ["Por rodearte con mis brazos llenos de amor", "Por cuidarte y quitarte todo el dolor", "Por regalarte una vida llena de color"] },
             { song: "Christian Nodal - De los Besos que te Di", prompt: "«De los besos que te di...» 🤠💋 ¿Qué pregunta se hace sobre esos momentos?", correct: "¿Cuál de todos fue el que te hizo enamorar?", correct_idx: 0, options: ["¿Cuál de todos fue el que te hizo enamorar?", "¿Cuál recuerdas cuando te vas a acostar?", "¿Cuál te gustaría volver a probar?"] },
             { song: "Grupo Frontera & Bad Bunny - un x100to", prompt: "«Me queda un por ciento...» 🔋📱 ¿Y en qué usa ese último porcentaje de batería?", correct: "Y lo uso solo para decirte cuánto te quiero", options: ["Y lo uso solo para decirte cuánto te quiero", "Para mandarte un beso sincero", "Para decirte que eres mi mundo entero"] },
-            { song: "👑 Dedicatoria: Himno de Carlos & Meli", prompt: "«En el Universo de Melisa cada día...» 💖 ¿Cómo continúa esta canción real de su amor?", correct: "Carlos le demuestra su amor infinito", options: ["Carlos le demuestra su amor infinito", "Todo es hermoso y el cielo es muy bonito", "Se escriben poemas en un papelito"] },
-            { song: "💘 Dedicatoria: El Ritmo del Corazón", prompt: "«¿Cuál es la melodía más hermosa que escucha Carlos todos los días?» 🎧", correct: "La risa y la dulce voz de su amada Melisa", correct_idx: 0, options: ["La risa y la dulce voz de su amada Melisa", "Las canciones de la radio por la mañana", "El sonido de la lluvia cayendo en la ventana"] },
+            { song: "👑 Dedicatoria: Himno de Carlos & Meli", prompt: "«En el Universo de Melissa cada día...» 💖 ¿Cómo continúa esta canción real de su amor?", correct: "Carlos le demuestra su amor infinito", options: ["Carlos le demuestra su amor infinito", "Todo es hermoso y el cielo es muy bonito", "Se escriben poemas en un papelito"] },
+            { song: "💘 Dedicatoria: El Ritmo del Corazón", prompt: "«¿Cuál es la melodía más hermosa que escucha Carlos todos los días?» 🎧", correct: "La risa y la dulce voz de su amada Melissa", correct_idx: 0, options: ["La risa y la dulce voz de su amada Melissa", "Las canciones de la radio por la mañana", "El sonido de la lluvia cayendo en la ventana"] },
             { song: "🏆 Dedicatoria: Día 10 de Recuperación", prompt: "«¿Qué celebra hoy todo el Universo con música, aplausos y alegría?» 🎉", correct: "¡10 días de valentía y un amor imparable!", options: ["¡10 días de valentía y un amor imparable!", "Que ganamos el campeonato de fútbol", "Que salió el sol más brillante de todos"] },
-            { song: "🌟 Dedicatoria: La Fuerza de Melisa", prompt: "«Cuando el camino se pone un poco difícil...» 💪🥰 ¿Qué hace Carlos por su reina?", correct: "Le toma la mano y le recuerda que juntos son invencibles", options: ["Le toma la mano y le recuerda que juntos son invencibles", "Le canta una serenata debajo de la ventana", "Le regala un ramo de flores cada mañana"] },
-            { song: "💖 Dedicatoria: El Universo de Melisa", prompt: "«¿Por qué Carlos creó este universo mágico de 30 días?» 🪐✨", correct: "Porque el amor verdadero se demuestra con hechos y detalles", options: ["Porque el amor verdadero se demuestra con hechos y detalles", "Porque quería ganar un concurso de programación", "Porque le gusta mucho jugar en la computadora"] },
+            { song: "🌟 Dedicatoria: La Fuerza de Melissa", prompt: "«Cuando el camino se pone un poco difícil...» 💪🥰 ¿Qué hace Carlos por su reina?", correct: "Le toma la mano y le recuerda que juntos son invencibles", options: ["Le toma la mano y le recuerda que juntos son invencibles", "Le canta una serenata debajo de la ventana", "Le regala un ramo de flores cada mañana"] },
+            { song: "💖 Dedicatoria: El Universo de Melissa", prompt: "«¿Por qué Carlos creó este universo mágico de 30 días?» 🪐✨", correct: "Porque el amor verdadero se demuestra con hechos y detalles", options: ["Porque el amor verdadero se demuestra con hechos y detalles", "Porque quería ganar un concurso de programación", "Porque le gusta mucho jugar en la computadora"] },
             // --- 50 NUEVAS PREGUNTAS EXCLUSIVAS DE MORAT ---
             { song: "Morat - No Se Va", prompt: "«Y aunque todo cambie, hay cosas que no cambian...» 🎸 ¿Qué dice el coro del himno de Morat?", correct: "Y tu recuerdo no se va, no se va, no se va", options: ["Y tu recuerdo no se va, no se va, no se va", "Y mi corazón se queda aquí en el mismo lugar", "Y el amor que te tengo nunca dejará de brillar"] },
             { song: "Morat - No Se Va (Verso)", prompt: "«Quédate otra vez, quédate toda la noche...» 🌙 ¿Cómo continúa esta petición de amor?", correct: "Quédate otra vez, quédate una vida", options: ["Quédate otra vez, quédate una vida", "Quédate conmigo hasta la despedida", "Quédate abrazada sin encontrar salida"] },
             { song: "Morat - Cómo Te Atreves (Verso 2)", prompt: "«Y yo me guardé mil pedazos de mi corazón...» 💔 ¿Para qué se los guardó?", correct: "Esperando por si alguna vez volvías", options: ["Esperando por si alguna vez volvías", "Para escribirte las mejores poesías", "Porque sabía que pronto me amarías"] },
             { song: "Morat - Cómo Te Atreves (Coro)", prompt: "«Cuatro años sin mirarte...» 👀 ¿Y qué pasó después de tanto tiempo?", correct: "Y hoy te tengo frente a frente", options: ["Y hoy te tengo frente a frente", "Y mi amor sigue igual de caliente", "Y te extraño inevitablemente"] },
             { song: "Morat - Besos en Guerra (Verso)", prompt: "«¿Quién te dijo que el amor es una apuesta...?» 🎲 ¿Qué pasa en esa apuesta según Morat?", correct: "Donde siempre uno pierde y otro gana", options: ["Donde siempre uno pierde y otro gana", "Donde se sufre desde la mañana", "Donde la tristeza entra por la ventana"] },
-            { song: "Morat & Juanes - Besos en Guerra (Coro)", prompt: "«Por qué me miras con esos ojos...» 😍 ¿Qué provocan esos ojitos de Melisa?", correct: "Que me roban la razón y la calma", options: ["Que me roban la razón y la calma", "Que me llevan directo hasta el alma", "Que me hacen aplaudir con la palma"] },
+            { song: "Morat & Juanes - Besos en Guerra (Coro)", prompt: "«Por qué me miras con esos ojos...» 😍 ¿Qué provocan esos ojitos de Melissa?", correct: "Que me roban la razón y la calma", options: ["Que me roban la razón y la calma", "Que me llevan directo hasta el alma", "Que me hacen aplaudir con la palma"] },
             { song: "Morat - Amor Con Hielo", prompt: "«Y es que ya no soy el mismo que te amaba a ciegas...» ❄️ ¿Qué pasa ahora en esta canción?", correct: "Ya no me hace falta tu calor", options: ["Ya no me hace falta tu calor", "Ahora vivo lleno de mucho color", "Se acabó para siempre el dolor"] },
             { song: "Morat - Amor Con Hielo (Coro)", prompt: "«Ahora me toca a mí...» ⏰ ¿Qué le toca ver ahora en la canción?", correct: "Ver cómo te derrites por volver", options: ["Ver cómo te derrites por volver", "Ver cómo empieza un nuevo amanecer", "Ver todo lo bonito que va a suceder"] },
             { song: "Morat - A Dónde Vamos", prompt: "«A dónde vamos si no es de tu mano...» 🤝💖 ¿Qué es el camino sin su amor?", correct: "A dónde vamos si el camino no es contigo", options: ["A dónde vamos si el camino no es contigo", "A dónde vamos si no tengo abrigo", "A dónde vamos si no te consigo"] },
@@ -3145,7 +3145,7 @@ const UniverseGames = (function() {
             { song: "Morat - Llamada Perdida", prompt: "«Y tengo mil llamadas perdidas en mi teléfono...» 📱 ¿De quién espera llamada?", correct: "Pero solo espero escuchar tu voz", options: ["Pero solo espero escuchar tu voz", "Porque mi corazón late muy veloz", "Y quiero que estemos juntos los dos"] },
             { song: "Morat - París", prompt: "«¿Cómo te vas a ir a París...?» 🗼 ¿Y dejarlo haciendo qué?", correct: "Y dejarme aquí contando las horas por verte", options: ["Y dejarme aquí contando las horas por verte", "Sin darme un beso para la buena suerte", "Y olvidarte de un amor tan fuerte"] },
             { song: "Morat - Valen Más", prompt: "«Tus defectos valen más...» 💎 ¿Qué valen más los defectos del amor de tu vida?", correct: "Que las virtudes de cualquiera", options: ["Que las virtudes de cualquiera", "Que el oro de la tierra entera", "Que la primavera más sincera"] },
-            { song: "Morat - Valen Más (Coro)", prompt: "«Porque eres perfecta tal como eres...» 👸 ¿Qué cambiaría Carlos de Melisa?", correct: "Y no cambiaría absolutamente nada de ti", options: ["Y no cambiaría absolutamente nada de ti", "Solo pediría que estés siempre junto a mí", "Desde aquel momento hermoso en que te vi"] },
+            { song: "Morat - Valen Más (Coro)", prompt: "«Porque eres perfecta tal como eres...» 👸 ¿Qué cambiaría Carlos de Melissa?", correct: "Y no cambiaría absolutamente nada de ti", options: ["Y no cambiaría absolutamente nada de ti", "Solo pediría que estés siempre junto a mí", "Desde aquel momento hermoso en que te vi"] },
             { song: "Morat & Juanes - 506", prompt: "«Recuerdo el número de tu casa...» 🏠🎶 ¿Qué número mágico recuerdan?", correct: "El 506 donde todo empezó", options: ["El 506 donde todo empezó", "El 100 por ciento que nos unió", "El 30 de nuestro aniversario"] },
             { song: "Morat - 506 (Coro)", prompt: "«¿Cómo hago para no pensarte...?» 💭❤️ ¿Dónde la lleva guardada?", correct: "Si estás tatuada en mi memoria y en mi piel", options: ["Si estás tatuada en mi memoria y en mi piel", "Si eres más dulce y rica que la miel", "Si mi corazón siempre te será fiel"] },
             { song: "Morat - Enamórate de Alguien Más", prompt: "«No quiero que sufras por mi culpa...» 🌹 ¿Qué desea en el fondo en esta balada?", correct: "Pero en el fondo quiero que siempre me recuerdes", options: ["Pero en el fondo quiero que siempre me recuerdes", "Quiero que nunca en la vida te pierdas", "Que cantemos juntos jugando con cuerdas"] },
@@ -3158,7 +3158,7 @@ const UniverseGames = (function() {
             { song: "Morat - Acuérdate de Mí", prompt: "«Cuando mires las estrellas en la noche...» 🌌 ¿Qué le pide al mirar al cielo?", correct: "Acuérdate de cuánto te amo yo", options: ["Acuérdate de cuánto te amo yo", "Pide un deseo con mucha ilusión", "Siente el latido de mi corazón"] },
             { song: "Morat - Otras Se Van", prompt: "«Y aunque otras personas se vayan...» 🚶‍♀️❤️ ¿Qué hace el amor verdadero?", correct: "Yo me quedo contigo en las buenas y en las malas", options: ["Yo me quedo contigo en las buenas y en las malas", "Yo te regalo mis sueños y mis alas", "Te llevo a bailar por todas las salas"] },
             { song: "Morat & Danna Paola - Idiota", prompt: "«Yo fui un idiota al pensar...» 🤦‍♂️ ¿Qué pensamiento tonto tuvo en el pasado?", correct: "Que podría vivir un solo segundo sin tu amor", options: ["Que podría vivir un solo segundo sin tu amor", "Que el tiempo pasaba sin ningún dolor", "Que no necesitaba de todo tu calor"] },
-            { song: "Morat - Mi Suerte", prompt: "«Tú eres mi mayor suerte...» 🍀 ¿Cómo describe a Melisa en esta canción?", correct: "El boleto ganador que la vida me regaló", options: ["El boleto ganador que la vida me regaló", "La estrella más bella que me iluminó", "El amor infinito que me rescató"] },
+            { song: "Morat - Mi Suerte", prompt: "«Tú eres mi mayor suerte...» 🍀 ¿Cómo describe a Melissa en esta canción?", correct: "El boleto ganador que la vida me regaló", options: ["El boleto ganador que la vida me regaló", "La estrella más bella que me iluminó", "El amor infinito que me rescató"] },
             { song: "Morat - Mi Suerte (Coro)", prompt: "«No cambio un minuto a tu lado...» ⏳💖 ¿Por qué no lo cambiaría?", correct: "Por todo el oro del mundo", options: ["Por todo el oro del mundo", "Por un océano profundo", "Por un segundo errabundo"] },
             { song: "Morat - Primeras Veces", prompt: "«Contigo quiero vivir...» 🚀 ¿Qué quiere vivir Carlos con su novia?", correct: "Todas las primeras veces que me faltan por vivir", options: ["Todas las primeras veces que me faltan por vivir", "Los sueños más bonitos antes de dormir", "Una historia eterna para compartir"] },
             { song: "Morat - Debí Suponerlo", prompt: "«Debí suponer que al mirarte...» 😍 ¿Qué debió suponer desde el día 1?", correct: "Me iba a enamorar perdidamente de ti", options: ["Me iba a enamorar perdidamente de ti", "Que serías el centro de mi existir", "Que juntos íbamos siempre a sonreír"] },
@@ -3167,7 +3167,7 @@ const UniverseGames = (function() {
             { song: "Morat - Sobreviviste", prompt: "«A todas las tormentas del pasado...» 🌧️🌈 ¿Para qué sobreviviste mi amor?", correct: "Sobreviviste para ser mi gran amor", options: ["Sobreviviste para ser mi gran amor", "Para llenarme de paz y de valor", "Para brillar con todo tu esplendor"] },
             { song: "Morat & Sebastián Yatra - Bajo La Mesa (Verso 2)", prompt: "«Y tocar tus pies bajo la mesa...» 🥿🤭 ¿Para qué hace ese gesto cómplice?", correct: "Para que sepas que estoy aquí solo para ti", options: ["Para que sepas que estoy aquí solo para ti", "Para hacerte reír sin que nadie se entere", "Para demostrar el amor que se quiere"] },
             { song: "Morat & Sebastián Yatra - Bajo La Mesa (Coro 2)", prompt: "«Que si te vas me llevo una tristeza...» 🧩 ¿Por qué le dolería tanto?", correct: "Porque eres tú mi pieza favorita del rompecabezas", options: ["Porque eres tú mi pieza favorita del rompecabezas", "Porque tu amor me llena de grandezas", "Porque contigo se acaban las asperezas"] },
-            { song: "Morat - Segundos Platos", prompt: "«Yo no nací para ser...» 🍽️ ¿Qué lugar ocupa Melisa en el corazón de Carlos?", correct: "La segunda opción de nadie, contigo soy el número uno", options: ["La segunda opción de nadie, contigo soy el número uno", "El que se rinde cuando llega el desayuno", "Una casualidad sin destino alguno"] },
+            { song: "Morat - Segundos Platos", prompt: "«Yo no nací para ser...» 🍽️ ¿Qué lugar ocupa Melissa en el corazón de Carlos?", correct: "La segunda opción de nadie, contigo soy el número uno", options: ["La segunda opción de nadie, contigo soy el número uno", "El que se rinde cuando llega el desayuno", "Una casualidad sin destino alguno"] },
             { song: "Morat - Mil Tormentas", prompt: "«Aunque vengan mil tormentas...» ⛈️☂️ ¿Qué le promete Carlos en las dificultades?", correct: "Yo seré tu refugio y tu paz", options: ["Yo seré tu refugio y tu paz", "Te amaré como nunca jamás", "No te voy a soltar hacia atrás"] },
             { song: "Morat - Si Ayer Fuera Hoy", prompt: "«Si ayer fuera hoy...» 📅❤️ ¿Qué elección tomaría Carlos una y otra vez?", correct: "Te volvería a elegir una y mil veces más", options: ["Te volvería a elegir una y mil veces más", "Te regalaría mi corazón en paz", "Te llevaría a volar por donde vas"] },
             { song: "Morat - Al Aire", prompt: "«Quiero gritar nuestro amor al aire...» 📢 ¿Para qué gritarlo tan fuerte?", correct: "Para que todo el mundo sepa cuánto te quiero", options: ["Para que todo el mundo sepa cuánto te quiero", "Para mandar un mensaje sincero", "Porque eres tú mi lucero primero"] },
@@ -3178,7 +3178,7 @@ const UniverseGames = (function() {
             // --- 50 NUEVAS PREGUNTAS DE VALLENATO ROMÁNTICO ---
             { song: "Felipe Peláez - El Amor Más Grande del Planeta", prompt: "«Yo te voy a amar como nadie en el planeta...» 🌍❤️ ¿Qué le promete Felipe Peláez a su amada?", correct: "Y te voy a regalar mi vida entera", options: ["Y te voy a regalar mi vida entera", "Porque tú eres mi regalo más bonito", "Y te haré canciones cada madrugada"] },
             { song: "Felipe Peláez - El Amor Más Grande del Planeta (Coro)", prompt: "«Tú me cambiaste la vida desde que llegaste...» 💫 ¿Y por eso qué le da?", correct: "Y por eso te doy el amor más grande del planeta", options: ["Y por eso te doy el amor más grande del planeta", "Y te escribo poesías en una libreta", "Porque eres la reina de mi meta"] },
-            { song: "Felipe Peláez - Tan Natural", prompt: "«Y es que se me da tan natural...» 🍃🎶 ¿Qué se le da natural con Melisa?", correct: "Quererte, adorarte y pensarte cada segundo", options: ["Quererte, adorarte y pensarte cada segundo", "Cuidar tus sueños por todo el mundo", "Darte un beso dulce y profundo"] },
+            { song: "Felipe Peláez - Tan Natural", prompt: "«Y es que se me da tan natural...» 🍃🎶 ¿Qué se le da natural con Melissa?", correct: "Quererte, adorarte y pensarte cada segundo", options: ["Quererte, adorarte y pensarte cada segundo", "Cuidar tus sueños por todo el mundo", "Darte un beso dulce y profundo"] },
             { song: "Felipe Peláez - Te Amo y Te Amo", prompt: "«Te amo, te amo y te amo...» 💘 ¿Qué le dice con tanta insistencia?", correct: "Y no me cansaré de decírtelo toda la vida", options: ["Y no me cansaré de decírtelo toda la vida", "Porque tú eres mi estrella consentida", "Y mi alma jamás estará perdida"] },
             { song: "Felipe Peláez - Lo Tienes Todo", prompt: "«Tú lo tienes todo para hacerme feliz...» 👸✨ ¿Qué es lo que tiene?", correct: "La sonrisa más bella y el alma más pura", options: ["La sonrisa más bella y el alma más pura", "Una mirada llena de ternura", "El amor que me cura toda locura"] },
             { song: "Binomio de Oro - Quiero Que Seas Mi Estrella", prompt: "«Quiero que seas mi estrella...» ⭐ ¿Para qué quiere que sea su estrella?", correct: "La que ilumine mis noches y guíe mi camino", options: ["La que ilumine mis noches y guíe mi camino", "Para llevarla siempre en mi destino", "Porque tu amor es un regalo divino"] },
@@ -3202,7 +3202,7 @@ const UniverseGames = (function() {
             { song: "Jorge Celedón - Cuatro Rosas", prompt: "«Te traigo cuatro rosas rosas...» 🌹🌹🌹🌹 ¿Para qué le lleva esas flores?", correct: "Para decirte cuánto te quiero y cuánto te admiro", options: ["Para decirte cuánto te quiero y cuánto te admiro", "Para que sientas cada suspiro", "Porque me enamoro cuando te miro"] },
             { song: "Jorge Celedón - Ay Hombe", prompt: "«Ay hombe, qué bonito es el amor...» 🪗🥰 ¿Cuándo es bonito el amor en el vallenato?", correct: "Cuando se quiere de verdad como te quiero yo", options: ["Cuando se quiere de verdad como te quiero yo", "Cuando se canta con mucha emoción y voz", "Cuando estamos abrazaditos los dos"] },
             { song: "Jorge Celedón - Qué Bonita Es Esta Vida", prompt: "«Y qué bonita es esta vida...» ☀️🌾 ¿Desde cuándo es tan bonita la vida?", correct: "Desde que me despierto con tu hermosa sonrisa", options: ["Desde que me despierto con tu hermosa sonrisa", "Porque tu amor me acaricia como la brisa", "Cuando te abrazo sin ninguna prisa"] },
-            { song: "Jorge Celedón - Lo Que Tú Necesitas", prompt: "«Yo tengo lo que tú necesitas...» 🎁❤️ ¿Qué es lo que Carlos tiene para Melisa?", correct: "Un corazón sincero y un amor incondicional", options: ["Un corazón sincero y un amor incondicional", "Una devoción y ternura sin igual", "Un cariño eterno y fenomenal"] },
+            { song: "Jorge Celedón - Lo Que Tú Necesitas", prompt: "«Yo tengo lo que tú necesitas...» 🎁❤️ ¿Qué es lo que Carlos tiene para Melissa?", correct: "Un corazón sincero y un amor incondicional", options: ["Un corazón sincero y un amor incondicional", "Una devoción y ternura sin igual", "Un cariño eterno y fenomenal"] },
             { song: "Silvestre Dangond - Las Locuras Mías", prompt: "«Que me perdonen las locuras mías...» 🤪💘 ¿Por qué hace tantas locuras?", correct: "Pero estoy loco de amor por tu hermosura", options: ["Pero estoy loco de amor por tu hermosura", "Porque tu amor es mi única cura", "Para vivir una hermosa aventura"] },
             { song: "Silvestre Dangond - Por Un Beso de Tu Boca", prompt: "«Por un beso de tu boca...» 💋 ¿Qué es capaz de hacer Silvestre por un beso?", correct: "Soy capaz de bajar las estrellas y el cielo", options: ["Soy capaz de bajar las estrellas y el cielo", "Te regalo mi vida y mi consuelo", "Dejo atrás cualquier miedo o desvelo"] },
             { song: "Silvestre Dangond & Nicky Jam - Cásate Conmigo", prompt: "«Cásate conmigo, quédate conmigo...» 💍👰 ¿Para qué le pide matrimonio?", correct: "Para vivir juntos toda una eternidad de amor", options: ["Para vivir juntos toda una eternidad de amor", "Para regalarte todo mi calor", "Y quitar de tu vida cualquier dolor"] },
@@ -3210,7 +3210,7 @@ const UniverseGames = (function() {
             { song: "Silvestre Dangond - Gracias", prompt: "«Le doy gracias a Dios y a la vida...» 🙏✨ ¿Por qué da tantas gracias?", correct: "Por haberme puesto un ángel como tú en el camino", options: ["Por haberme puesto un ángel como tú en el camino", "Por darme el amor más lindo y divino", "Porque contigo encontré mi destino"] },
             { song: "Martin Elias - 10 Razones Para Amarte", prompt: "«Tengo mil razones para amarte...» 🔟❤️ ¿Cuál es la principal razón?", correct: "Y la primera es que eres lo más hermoso en mi mundo", options: ["Y la primera es que eres lo más hermoso en mi mundo", "Que tienes un corazón puro y profundo", "Que me haces feliz cada segundo"] },
             { song: "Martin Elias - 10 Razones Para Amarte (Coro)", prompt: "«Tú me llenas de paz y alegría...» 🕊️😊 ¿Y por eso qué hace Carlos?", correct: "Y por eso te dedico mi amor todos los días", options: ["Y por eso te dedico mi amor todos los días", "Y te canto las más bellas melodías", "Porque tú eres la luz de mis poesías"] },
-            { song: "Martin Elias - Ella Es Mi Todo", prompt: "«Ella es mi todo, mi luz y mi guía...» 🌟 ¿Qué significa Melisa para su novio?", correct: "La que me inspira a ser mejor cada mañana", options: ["La que me inspira a ser mejor cada mañana", "La que entra como el sol por la ventana", "Una princesa hermosa y soberana"] },
+            { song: "Martin Elias - Ella Es Mi Todo", prompt: "«Ella es mi todo, mi luz y mi guía...» 🌟 ¿Qué significa Melissa para su novio?", correct: "La que me inspira a ser mejor cada mañana", options: ["La que me inspira a ser mejor cada mañana", "La que entra como el sol por la ventana", "Una princesa hermosa y soberana"] },
             { song: "Kaleth Morales - Vivo en el Limbo", prompt: "«Y es que te veo y me quedo sin palabras...» 😶😍 ¿Por qué lo deja en el limbo?", correct: "Porque tu dulzura me tiene viviendo en un sueño", options: ["Porque tu dulzura me tiene viviendo en un sueño", "Porque de tu corazón soy el único dueño", "Con un amor infinito y risueño"] },
             { song: "Kaleth Morales - Ella Es Mi Todo", prompt: "«No hay nada más hermoso en este mundo...» 🌎❤️ ¿Qué es lo más hermoso para Kaleth?", correct: "Que ver tus ojos brillando llenos de amor", options: ["Que ver tus ojos brillando llenos de amor", "Sentir tu abrazo y todo tu calor", "Cuidarte siempre sin ningún temor"] },
             { song: "Peter Manjarrés - Tragao de Ti", prompt: "«Estoy completamente tragao de ti...» 🤤💘 ¿Qué tan enamorado está?", correct: "Enamorado hasta los huesos de tu dulce ser", options: ["Enamorado hasta los huesos de tu dulce ser", "Pensando en ti en cada amanecer", "Y feliz de verte florecer"] },
@@ -3340,7 +3340,7 @@ const UniverseGames = (function() {
         // ==========================================
         const pianoQuotes = [
             "🎹 ¡Nota Do de Dulzura! Eres la melodía que alegra mi mañana.",
-            "🎹 ¡Nota Re de Reina! Mi Melisa, para mí no hay mujer más hermosa ni valiente en todo el universo.",
+            "🎹 ¡Nota Re de Reina! Mi Melissa, para mí no hay mujer más hermosa ni valiente en todo el universo.",
             "🎹 ¡Nota Mi de Mi Amor! Cada latido de mi corazón suena con tu dulce nombre.",
             "🎹 ¡Nota Fa de Fascinante! Tu sonrisa tiene el poder de iluminar mi día más oscuro.",
             "🎹 ¡Nota Sol de Sol mío! Eres el sol que ilumina mi vida; muy pronto amaneceremos celebrando tu salud.",
@@ -3351,7 +3351,7 @@ const UniverseGames = (function() {
             "🎼 ¡Armonía Perfecta! Contigo mi vida no es un ensayo, ¡tú eres mi obra maestra más hermosa!",
             "🎹 ¡Ritmo Imparable! Admiro tanto tu valentía; te mereces una ovación de pie en todo mi mundo.",
             "🎹 ¡Melodía Celestial! Si mi amor por ti fuera una canción, sonaría por toda la eternidad sin detenerse.",
-            "🎼 ¡Dúo Perfecto! Tú y yo hacemos el mejor equipo de todo el cosmos. ¡Te amo infinito, mi princesa Melisa!",
+            "🎼 ¡Dúo Perfecto! Tú y yo hacemos el mejor equipo de todo el cosmos. ¡Te amo infinito, mi princesa Melissa!",
             "🎹 ¡Nota de Esperanza! Ya cuento los días para que estemos bailando, riendo y celebrando tu salud completa.",
             "🎼 ¡Serenata de Amor! Cierra los ojos y siente cómo mi abrazo te envuelve en este instante, mi amor.",
             "🎹 ¡Composición Real! Eres el verso más bonito y bendecido que Dios escribió en mi destino.",
@@ -3418,7 +3418,7 @@ const UniverseGames = (function() {
 
             contentArea.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
-                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🎹 MI PIANO ROMÁNTICO PARA MELISA</span>
+                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🎹 MI PIANO ROMÁNTICO PARA MELISSA</span>
                     <span id="piano-counter-txt" style="color:var(--gold); font-weight:900; font-size:0.9rem;">🎵 Notas Tocadas: ${pianoNotesPlayed}</span>
                 </div>
                 <p style="color:#fff; font-size:0.88rem; text-align:center; margin-bottom:16px;">
@@ -3541,8 +3541,8 @@ const UniverseGames = (function() {
         //  TAB 3: LA ROCKOLA ROMÁNTICA (ESTACIONES FM)
         // ==========================================
         const rockolaStations = [
-            { station: "📻 99.9 FM - Radio Besos", title: "¡Hit de Abrazos Apretaditos!", desc: "Sintonizando en directo desde mi corazón para ti: 'Mi Melisa, te mando mil besos al aire para que te llenen de calor y dulzura hoy'." },
-            { station: "📻 100.5 FM - Estación Pasión", title: "Boletín Informativo del Amor", desc: "Se reporta un enamoramiento extremo, incurable y eterno de tu rey hacia la mujer más espectacular del planeta: ¡tú, mi Melisa!" },
+            { station: "📻 99.9 FM - Radio Besos", title: "¡Hit de Abrazos Apretaditos!", desc: "Sintonizando en directo desde mi corazón para ti: 'Mi Melissa, te mando mil besos al aire para que te llenen de calor y dulzura hoy'." },
+            { station: "📻 100.5 FM - Estación Pasión", title: "Boletín Informativo del Amor", desc: "Se reporta un enamoramiento extremo, incurable y eterno de tu rey hacia la mujer más espectacular del planeta: ¡tú, mi Melissa!" },
             { station: "📻 102.3 FM - Frecuencia Destino", title: "La Casualidad más Hermosa", desc: "En esta estación recordamos que coincidir contigo en esta vida ha sido el regalo más grande y maravilloso que Dios me dio." },
             { station: "📻 104.8 FM - Radio Recuperación", title: "¡Fuerza, Salud y Alegría!", desc: "Transmitiendo energía curativa 24/7: Cada día que pasa eres más fuerte, tu cuerpo sana maravillosamente y muy pronto estaremos festejando en la calle." },
             { station: "📻 107.5 FM - Romántica Universal", title: "Dedicatoria VIP de tu Enamorado #1", desc: "'Eres el motivo de mi sonrisa, la inspiración de mis días y la reina indiscutible de todo mi universo. ¡Te amo con el alma!'" },
@@ -3550,7 +3550,7 @@ const UniverseGames = (function() {
             { station: "📻 95.5 FM - Radio Sonrisas", title: "El Sonido de tu Risa", desc: "No hay sinfonía en el mundo que se compare con el sonido de tu risa. Yo estoy contando los segundos para volver a ver tus ojitos brillar de felicidad." },
             { station: "📻 101.1 FM - Frecuencia Ternura", title: "La Guerrera más Hermosa", desc: "Hoy celebramos tu valentía. Has demostrado una fuerza increíble en estos 10 días. ¡Eres el orgullo más grande de mi vida y de mi corazón!" },
             { station: "📻 103.7 FM - Estación Promesas", title: "Un Juramento de Amor", desc: "Pase lo que pase, en los días buenos y en los difíciles, siempre tendrás mi mano sosteniendo la tuya con lealtad absoluta." },
-            { station: "📻 106.2 FM - Radio Universo", title: "El Centro del Sistema Solar", desc: "Todos los planetas, las estrellas y los latidos de mi corazón giran alrededor de una sola reina: ¡Tú, mi hermosa Melisa!" },
+            { station: "📻 106.2 FM - Radio Universo", title: "El Centro del Sistema Solar", desc: "Todos los planetas, las estrellas y los latidos de mi corazón giran alrededor de una sola reina: ¡Tú, mi hermosa Melissa!" },
             { station: "📻 98.4 FM - Frecuencia Poesía", title: "Un Verso para Mi Amada", desc: "'Si el universo entero fuera música, tú serías la melodía perfecta que da sentido a toda mi existencia'." },
             { station: "📻 105.9 FM - Estación Celebración", title: "¡Llegamos al Día 10!", desc: "¡Diez días de recuperación superados con éxito! Preparen el confeti y la música porque mi reina va directo a la victoria total." }
         ];
@@ -3647,6 +3647,554 @@ const UniverseGames = (function() {
         updateTabUI();
     }
 
+    // =============================================
+    //  DÍA 11: ARCADE RETRO - LAS MAQUINITAS DEL AMOR 🕹️👾
+    // =============================================
+    function startArcade(container, config) {
+        container.innerHTML = '';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-arcade-wrapper';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '600px';
+        wrapper.style.margin = '0 auto';
+        wrapper.style.background = 'linear-gradient(180deg, #0f0c20 0%, #1a153b 100%)';
+        wrapper.style.border = '3px solid #00e5ff';
+        wrapper.style.borderRadius = '24px';
+        wrapper.style.padding = '20px';
+        wrapper.style.boxShadow = '0 0 30px rgba(0, 229, 255, 0.4), inset 0 0 20px rgba(255, 0, 127, 0.2)';
+        wrapper.style.position = 'relative';
+        wrapper.style.overflow = 'hidden';
+
+        let tickets = parseInt(localStorage.getItem('melisa_arcade_tickets') || '50', 10);
+        let redeemedPrizes = JSON.parse(localStorage.getItem('melisa_arcade_redeemed') || '[]');
+        let activeTab = 'pacbesos';
+
+        function playArcadeTone(freq, type = 'sine', duration = 0.15) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.25, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        // Header
+        const header = document.createElement('div');
+        header.style.textAlign = 'center';
+        header.style.marginBottom = '18px';
+        header.style.borderBottom = '2px dashed rgba(255, 255, 255, 0.2)';
+        header.style.paddingBottom = '14px';
+        header.innerHTML = `
+            <div style="font-size:2.5rem; margin-bottom:4px; filter:drop-shadow(0 0 10px #ff007f);">🕹️👾</div>
+            <h2 style="color:#fff; font-family:'Outfit',sans-serif; font-size:1.5rem; margin:0 0 8px 0; text-shadow:0 0 10px #00e5ff;">ARCADE RETRO CARLOS & MELISSA</h2>
+            <div style="display:inline-block; background:linear-gradient(90deg, #ffd54f, #ff8f00); color:#000; font-weight:900; padding:6px 16px; border-radius:20px; font-size:0.95rem; box-shadow:0 4px 15px rgba(255, 215, 0, 0.5);">
+                🎟️ TICKETS ARCADE: <span id="arcade-tickets-val">${tickets.toLocaleString('es-CO')}</span>
+            </div>
+        `;
+        wrapper.appendChild(header);
+
+        // Tab Navigation
+        const nav = document.createElement('div');
+        nav.style.display = 'flex';
+        nav.style.gap = '8px';
+        nav.style.marginBottom = '20px';
+        nav.style.justifyContent = 'center';
+        nav.style.flexWrap = 'wrap';
+
+        const tabs = [
+            { id: 'pacbesos', label: '👾 Pac-Besos', color: '#00e5ff' },
+            { id: 'tetrislove', label: '🧱 Tetris del Amor', color: '#ff007f' },
+            { id: 'arcadeprizes', label: '🎟️ Canjear Premios', color: '#ffd54f' }
+        ];
+
+        tabs.forEach(t => {
+            const btn = document.createElement('button');
+            btn.id = `tab-btn-${t.id}`;
+            btn.className = 'btn';
+            btn.style.flex = '1';
+            btn.style.minWidth = '130px';
+            btn.style.padding = '10px 12px';
+            btn.style.borderRadius = '14px';
+            btn.style.fontWeight = '900';
+            btn.style.fontSize = '0.88rem';
+            btn.style.transition = 'all 0.2s ease';
+            btn.textContent = t.label;
+            btn.onclick = () => {
+                activeTab = t.id;
+                updateTabUI();
+            };
+            nav.appendChild(btn);
+        });
+        wrapper.appendChild(nav);
+
+        // Content Area
+        const contentArea = document.createElement('div');
+        contentArea.id = 'arcade-content';
+        wrapper.appendChild(contentArea);
+
+        function updateTicketDisplay() {
+            const el = wrapper.querySelector('#arcade-tickets-val');
+            if (el) el.textContent = tickets.toLocaleString('es-CO');
+        }
+
+        // --- TAB 1: PAC-BESOS ---
+        let pacPlayer = { r: 0, c: 0 };
+        let pacGhosts = [
+            { r: 7, c: 7, name: 'Fantasmita del Aburrimiento 👻', color: '#ff4081' },
+            { r: 0, c: 7, name: 'Fantasmita del Dolor 🕷️', color: '#7c4dff' }
+        ];
+        let pacKisses = [];
+        let pacScore = 0;
+        let pacInterval = null;
+
+        const mazeLayout = [
+            [0,0,0,1,0,0,0,0],
+            [0,1,0,1,0,1,1,0],
+            [0,1,0,0,0,0,1,0],
+            [0,0,0,1,1,0,0,0],
+            [0,1,0,0,0,0,1,0],
+            [0,1,1,0,1,0,1,0],
+            [0,0,0,0,1,0,0,0],
+            [0,0,1,0,0,0,1,0]
+        ];
+
+        function initPacBesos() {
+            pacPlayer = { r: 0, c: 0 };
+            pacGhosts = [
+                { r: 7, c: 7, name: 'Fantasmita del Aburrimiento 👻', color: '#ff4081' },
+                { r: 0, c: 7, name: 'Fantasmita del Dolor 🕷️', color: '#7c4dff' }
+            ];
+            pacKisses = [
+                {r:0, c:2}, {r:0, c:6}, {r:2, c:0}, {r:2, c:4}, {r:3, c:7},
+                {r:4, c:2}, {r:6, c:1}, {r:6, c:5}, {r:7, c:0}, {r:7, c:5}
+            ];
+            pacScore = 0;
+            if (pacInterval) clearInterval(pacInterval);
+            pacInterval = setInterval(moveGhosts, 750);
+        }
+
+        function moveGhosts() {
+            if (activeTab !== 'pacbesos') return;
+            const dirs = [{r:-1,c:0}, {r:1,c:0}, {r:0,c:-1}, {r:0,c:1}];
+            pacGhosts.forEach(g => {
+                const validDirs = dirs.filter(d => {
+                    const nr = g.r + d.r;
+                    const nc = g.c + d.c;
+                    return nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && mazeLayout[nr][nc] === 0;
+                });
+                if (validDirs.length > 0) {
+                    const move = validDirs[Math.floor(Math.random() * validDirs.length)];
+                    g.r += move.r;
+                    g.c += move.c;
+                }
+                if (g.r === pacPlayer.r && g.c === pacPlayer.c) {
+                    playArcadeTone(330, 'sine', 0.25);
+                    const toast = document.createElement('div');
+                    toast.style.position = 'absolute';
+                    toast.style.top = '50%';
+                    toast.style.left = '50%';
+                    toast.style.transform = 'translate(-50%, -50%)';
+                    toast.style.background = 'rgba(255, 0, 127, 0.95)';
+                    toast.style.color = '#fff';
+                    toast.style.padding = '12px 20px';
+                    toast.style.borderRadius = '15px';
+                    toast.style.fontWeight = 'bold';
+                    toast.style.textAlign = 'center';
+                    toast.style.zIndex = '100';
+                    toast.style.boxShadow = '0 0 20px rgba(0,0,0,0.8)';
+                    toast.innerHTML = '🛡️ ¡Escudo de Amor de Carlos activado!<br>No pierdes vidas, ¡el amor nos hace invencibles! 💖';
+                    wrapper.appendChild(toast);
+                    setTimeout(() => { if (toast.parentNode) toast.remove(); }, 2000);
+                    g.r = 7; g.c = 7;
+                    renderPacGrid();
+                }
+            });
+            renderPacGrid();
+        }
+
+        function movePlayer(dr, dc) {
+            const nr = pacPlayer.r + dr;
+            const nc = pacPlayer.c + dc;
+            if (nr >= 0 && nr < 8 && nc >= 0 && nc < 8 && mazeLayout[nr][nc] === 0) {
+                pacPlayer.r = nr;
+                pacPlayer.c = nc;
+                playArcadeTone(440, 'triangle', 0.08);
+
+                // Check Kisses
+                const kissIdx = pacKisses.findIndex(k => k.r === nr && k.c === nc);
+                if (kissIdx !== -1) {
+                    pacKisses.splice(kissIdx, 1);
+                    pacScore += 10;
+                    playArcadeTone(587.33, 'triangle', 0.15);
+                    setTimeout(() => playArcadeTone(880, 'triangle', 0.25), 100);
+
+                    if (pacKisses.length === 0) {
+                        if (pacInterval) clearInterval(pacInterval);
+                        tickets += 100;
+                        localStorage.setItem('melisa_arcade_tickets', tickets.toString());
+                        updateTicketDisplay();
+                        contentArea.innerHTML = `
+                            <div style="text-align:center; padding:30px; background:rgba(0, 255, 136, 0.15); border:2px solid #00ff88; border-radius:20px; animation:popIn 0.4s ease;">
+                                <div style="font-size:3.5rem; margin-bottom:10px;">🏆💋</div>
+                                <h3 style="color:#00ff88; font-family:'Outfit',sans-serif; font-size:1.6rem; margin:0 0 10px 0;">¡NIVEL COMPLETADO!</h3>
+                                <p style="color:#fff; font-size:1.05rem; line-height:1.5; margin-bottom:20px;">
+                                    ¡Eres la reina indiscutible del Pac-Besos! Has atrapado todo mi amor y superado los obstáculos.<br><br>
+                                    <strong style="color:var(--gold); font-size:1.2rem;">+100 TICKETS ARCADE GANADOS 🎟️💖</strong>
+                                </p>
+                                <button id="pac-replay-btn" class="btn" style="background:var(--cyan); color:#000; font-weight:900; padding:12px 28px; border-radius:25px; box-shadow:0 4px 15px rgba(0,229,255,0.4);">
+                                    🔄 Jugar Otra Vez para Más Tickets
+                                </button>
+                            </div>
+                        `;
+                        const replayBtn = contentArea.querySelector('#pac-replay-btn');
+                        if (replayBtn) replayBtn.onclick = () => { initPacBesos(); renderPacBesos(); };
+                        return;
+                    }
+                }
+                renderPacGrid();
+            }
+        }
+
+        function renderPacGrid() {
+            const gridEl = contentArea.querySelector('#pac-grid');
+            if (!gridEl) return;
+            gridEl.innerHTML = '';
+            for (let r = 0; r < 8; r++) {
+                for (let c = 0; c < 8; c++) {
+                    const cell = document.createElement('div');
+                    cell.style.width = '100%';
+                    cell.style.aspectRatio = '1';
+                    cell.style.borderRadius = '8px';
+                    cell.style.display = 'flex';
+                    cell.style.alignItems = 'center';
+                    cell.style.justifyContent = 'center';
+                    cell.style.fontSize = '1.4rem';
+                    cell.style.fontWeight = 'bold';
+
+                    if (mazeLayout[r][c] === 1) {
+                        cell.style.background = 'rgba(0, 229, 255, 0.2)';
+                        cell.style.border = '2px solid #00e5ff';
+                        cell.style.boxShadow = 'inset 0 0 8px rgba(0,229,255,0.5)';
+                        cell.innerHTML = '🧱';
+                    } else {
+                        cell.style.background = 'rgba(255, 255, 255, 0.04)';
+                        cell.style.border = '1px solid rgba(255, 255, 255, 0.08)';
+                        if (pacPlayer.r === r && pacPlayer.c === c) {
+                            cell.innerHTML = '👸';
+                            cell.style.background = 'rgba(255, 215, 0, 0.3)';
+                            cell.style.boxShadow = '0 0 12px var(--gold)';
+                        } else if (pacGhosts.some(g => g.r === r && g.c === c)) {
+                            const gh = pacGhosts.find(g => g.r === r && g.c === c);
+                            cell.innerHTML = gh.name.includes('Aburrimiento') ? '👻' : '🕷️';
+                        } else if (pacKisses.some(k => k.r === r && k.c === c)) {
+                            cell.innerHTML = '💋';
+                        } else {
+                            cell.innerHTML = '<span style="color:rgba(255,255,255,0.2); font-size:0.6rem;">●</span>';
+                        }
+                    }
+                    gridEl.appendChild(cell);
+                }
+            }
+            const scoreEl = contentArea.querySelector('#pac-score-val');
+            if (scoreEl) scoreEl.textContent = `${pacScore} / 100`;
+        }
+
+        function renderPacBesos() {
+            if (pacKisses.length === 0) initPacBesos();
+            contentArea.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
+                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🕹️ NIVEL: LABERINTO DEL AMOR</span>
+                    <span style="color:#ff007f; font-weight:900; font-size:0.9rem;">💋 Besos: <span id="pac-score-val">${pacScore} / 100</span></span>
+                </div>
+                <p style="color:#fff; font-size:0.85rem; text-align:center; margin-bottom:14px;">
+                    ✨ Mueve a tu princesa 👸 para recolectar los 10 besos 💋 de Carlos. ¡Aquí tienes vidas infinitas!
+                </p>
+                <div id="pac-grid" style="display:grid; grid-template-columns:repeat(8, 1fr); gap:6px; max-width:340px; margin:0 auto 18px auto; background:#080612; padding:10px; border-radius:16px; border:2px solid rgba(255,255,255,0.1);"></div>
+                <div style="display:flex; flex-direction:column; align-items:center; gap:8px; max-width:180px; margin:0 auto;">
+                    <button id="pac-btn-up" class="btn" style="background:var(--cyan); color:#000; width:55px; height:48px; border-radius:12px; font-size:1.3rem; font-weight:900; padding:0;">⬆️</button>
+                    <div style="display:flex; gap:12px;">
+                        <button id="pac-btn-left" class="btn" style="background:var(--cyan); color:#000; width:55px; height:48px; border-radius:12px; font-size:1.3rem; font-weight:900; padding:0;">⬅️</button>
+                        <button id="pac-btn-down" class="btn" style="background:var(--cyan); color:#000; width:55px; height:48px; border-radius:12px; font-size:1.3rem; font-weight:900; padding:0;">⬇️</button>
+                        <button id="pac-btn-right" class="btn" style="background:var(--cyan); color:#000; width:55px; height:48px; border-radius:12px; font-size:1.3rem; font-weight:900; padding:0;">➡️</button>
+                    </div>
+                </div>
+            `;
+            renderPacGrid();
+
+            const bUp = contentArea.querySelector('#pac-btn-up');
+            const bDown = contentArea.querySelector('#pac-btn-down');
+            const bLeft = contentArea.querySelector('#pac-btn-left');
+            const bRight = contentArea.querySelector('#pac-btn-right');
+
+            if (bUp) bUp.onclick = () => movePlayer(-1, 0);
+            if (bDown) bDown.onclick = () => movePlayer(1, 0);
+            if (bLeft) bLeft.onclick = () => movePlayer(0, -1);
+            if (bRight) bRight.onclick = () => movePlayer(0, 1);
+        }
+
+        // --- TAB 2: TETRIS DEL AMOR ---
+        let tetrisPiecesCount = 0;
+        const tetrisShapes = [
+            { name: 'Doble Corazón', emoji: '💖💖', color: '#ff007f' },
+            { name: 'Corona Real', emoji: '👑👑', color: '#ffd54f' },
+            { name: 'Abrazo Eterno', emoji: '🫂❤️', color: '#00e5ff' },
+            { name: 'Beso Apasionado', emoji: '💋💋', color: '#00ff88' },
+            { name: 'Estrella de Paz', emoji: '⭐⭐', color: '#7c4dff' }
+        ];
+        let currentShape = tetrisShapes[0];
+
+        function renderTetrisLove() {
+            if (pacInterval) clearInterval(pacInterval);
+            currentShape = tetrisShapes[Math.floor(Math.random() * tetrisShapes.length)];
+
+            contentArea.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
+                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🧱 ENCAJA NUESTRO AMOR</span>
+                    <span style="color:var(--gold); font-weight:900; font-size:0.9rem;">💖 Piezas: ${tetrisPiecesCount}</span>
+                </div>
+                <p style="color:#fff; font-size:0.85rem; text-align:center; margin-bottom:16px;">
+                    ✨ En este Tetris romántico no hay piezas equivocadas: ¡tú y yo encajamos a la perfección siempre!
+                </p>
+
+                <div style="background:#0a0818; border:2px dashed #ff007f; border-radius:18px; padding:20px; text-align:center; margin-bottom:20px; min-height:160px; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+                    <div style="color:var(--text-secondary); font-size:0.85rem; margin-bottom:10px;">PRÓXIMA PIEZA EN CAER:</div>
+                    <div id="tetris-piece-display" style="font-size:2.8rem; margin-bottom:12px; filter:drop-shadow(0 0 10px ${currentShape.color}); animation:bounce 1.5s infinite;">
+                        ${currentShape.emoji}
+                    </div>
+                    <div style="color:#fff; font-weight:bold; font-size:1.05rem;">«${currentShape.name}»</div>
+                </div>
+
+                <div id="tetris-msg-box" style="background:rgba(0,229,255,0.1); border:1px solid var(--cyan); border-radius:14px; padding:12px; text-align:center; color:#fff; font-size:0.95rem; margin-bottom:18px; min-height:50px; display:flex; align-items:center; justify-content:center;">
+                    Presiona el botón para encajar la pieza en nuestro tablero de amor... 💞
+                </div>
+
+                <div style="text-align:center;">
+                    <button id="tetris-drop-btn" class="btn" style="background:linear-gradient(90deg, #ff007f, #00e5ff); color:#fff; font-weight:900; padding:14px 28px; border-radius:30px; box-shadow:0 6px 20px rgba(255,0,127,0.4); font-size:1.08rem; width:100%;">
+                        ⬇️ ¡ENCAJAR PIEZA CON AMOR! (+30 TICKETS) 💖
+                    </button>
+                </div>
+            `;
+
+            const dropBtn = contentArea.querySelector('#tetris-drop-btn');
+            const msgBox = contentArea.querySelector('#tetris-msg-box');
+
+            if (dropBtn) {
+                dropBtn.onclick = () => {
+                    tetrisPiecesCount++;
+                    tickets += 30;
+                    localStorage.setItem('melisa_arcade_tickets', tickets.toString());
+                    updateTicketDisplay();
+
+                    playArcadeTone(523.25, 'sine', 0.15);
+                    setTimeout(() => playArcadeTone(659.25, 'sine', 0.25), 120);
+
+                    const loveQuotes = [
+                        "💖 ¡ENCAJE PERFECTO! Así de natural y hermoso encajan nuestras almas y corazones.",
+                        "👑 ¡LÍNEA COMPLETADA! Eres la pieza que le faltaba al rompecabezas de mi vida para ser feliz.",
+                        "🔥 ¡COMBO DE DULZURA! Contigo a mi lado todo tiene sentido, orden y armonía infinita.",
+                        "🌟 ¡SUPER JACKPOT ROMÁNTICO! No hay espacio vacío en mi pecho, tú lo llenaste todo de luz.",
+                        "💋 ¡BLOQUE DE BESOS! Cada segundo que pasamos juntos construimos un castillo indestructible."
+                    ];
+                    const randomQ = loveQuotes[Math.floor(Math.random() * loveQuotes.length)];
+
+                    if (msgBox) {
+                        msgBox.style.animation = 'none';
+                        void msgBox.offsetWidth;
+                        msgBox.style.animation = 'popIn 0.3s ease';
+                        msgBox.innerHTML = `<span style="color:#00ff88; font-weight:bold;">${randomQ}</span>`;
+                    }
+
+                    // Next piece
+                    currentShape = tetrisShapes[Math.floor(Math.random() * tetrisShapes.length)];
+                    const pDisp = contentArea.querySelector('#tetris-piece-display');
+                    if (pDisp) {
+                        pDisp.innerHTML = currentShape.emoji;
+                        pDisp.style.filter = `drop-shadow(0 0 10px ${currentShape.color})`;
+                    }
+
+                    // Confetti
+                    const cDiv = document.createElement('div');
+                    cDiv.className = 'game-confetti';
+                    cDiv.style.position = 'absolute'; cDiv.style.inset = '0'; cDiv.style.pointerEvents = 'none';
+                    for(let i=0; i<20; i++) {
+                        const p = document.createElement('div');
+                        p.className = 'game-confetti-piece';
+                        p.style.left = `${Math.random()*100}%`;
+                        p.style.backgroundColor = ['#ff007f','#00e5ff','#ffd54f'][Math.floor(Math.random()*3)];
+                        cDiv.appendChild(p);
+                    }
+                    wrapper.appendChild(cDiv);
+                    setTimeout(() => { if (cDiv.parentNode) cDiv.remove(); }, 1800);
+                };
+            }
+        }
+
+        // --- TAB 3: CANJEAR PREMIOS VIP ---
+        const vipPrizes = [
+            { id: 'p_burger', title: '🍔 Hamburguesa Gourmet & Papitas', desc: 'Una salida o pedido a domicilio de tu hamburguesa favorita en cuanto te recuperes.', cost: 5000 },
+            { id: 'p_icecream', title: '🍦 Helado Doble Consentido', desc: 'Una tarde deliciosa comiendo tu helado preferido tomados de la mano.', cost: 2500 },
+            { id: 'p_movie', title: '🎬 Tarde de Cine & Crispetas VIP', desc: 'Película a tu elección, sofá, cobija, crispetas gigantes y abrazos ilimitados.', cost: 300 },
+            { id: 'p_massage', title: '💆‍♀️ Masaje Real de tu Rey (20 min)', desc: 'Sesión especial de masaje relajante en pies y espalda dado exclusivamente por Carlos.', cost: 8000 },
+            { id: 'p_trip', title: '✈️ Paseo Especial de Celebración', desc: 'Una escapada o paseo romántico para festejar tu alta médica por todo lo alto.', cost: 1000000 },
+            { id: 'p_wish', title: '👑 El Gran Deseo de la Reina', desc: '¡Tú pides el capricho o deseo que quieras y tu rey Carlos te lo cumple sin dudarlo!', cost: 5000000 }
+        ];
+
+        function renderArcadePrizes() {
+            if (pacInterval) clearInterval(pacInterval);
+
+            contentArea.innerHTML = `
+                <div style="background:linear-gradient(135deg, #ffd54f, #ff8f00); color:#000; padding:14px; border-radius:16px; text-align:center; font-weight:900; font-size:1.15rem; margin-bottom:18px; box-shadow:0 6px 20px rgba(255,215,0,0.4);">
+                    🎟️ TUS TICKETS DISPONIBLES: ${tickets.toLocaleString('es-CO')}
+                </div>
+                <p style="color:#fff; text-align:center; font-size:0.88rem; margin-bottom:18px;">
+                    ✨ Canjea tus Tickets ganados en los minijuegos por premios reales que tu rey Carlos te hará efectivos en cuanto te recuperes.
+                </p>
+                <div id="prizes-list" style="display:flex; flex-direction:column; gap:14px; margin-bottom:24px;"></div>
+
+                <div style="text-align:center; border-top:1px dashed rgba(255,255,255,0.2); padding-top:18px;">
+                    <button id="magic-tickets-btn" class="btn" style="padding:12px 20px; border-radius:20px; font-size:0.9rem; font-weight:900; width:100%; transition:all 0.3s ease;"></button>
+                </div>
+            `;
+
+            const listEl = contentArea.querySelector('#prizes-list');
+            vipPrizes.forEach(p => {
+                const isRedeemed = redeemedPrizes.includes(p.id);
+                const canAfford = tickets >= p.cost;
+
+                const card = document.createElement('div');
+                card.style.background = isRedeemed ? 'rgba(0, 255, 136, 0.1)' : 'rgba(255, 255, 255, 0.06)';
+                card.style.border = isRedeemed ? '2px solid #00ff88' : '1px solid rgba(255, 255, 255, 0.15)';
+                card.style.borderRadius = '16px';
+                card.style.padding = '14px';
+                card.style.display = 'flex';
+                card.style.flexDirection = 'column';
+                card.style.gap = '10px';
+
+                card.innerHTML = `
+                    <div style="display:flex; justify-content:space-between; align-items:flex-start;">
+                        <h4 style="color:${isRedeemed ? '#00ff88' : '#fff'}; font-family:'Outfit',sans-serif; font-size:1.05rem; margin:0;">${p.title}</h4>
+                        <span style="background:${isRedeemed ? '#00ff88' : 'var(--gold)'}; color:#000; font-weight:900; font-size:0.8rem; padding:4px 10px; border-radius:12px; white-space:nowrap;">
+                            ${isRedeemed ? 'CANJEADO ✅' : `🎟️ ${p.cost.toLocaleString('es-CO')}`}
+                        </span>
+                    </div>
+                    <p style="color:var(--text-secondary); font-size:0.85rem; margin:0; line-height:1.4;">${p.desc}</p>
+                    <div id="prize-action-${p.id}" style="margin-top:4px;"></div>
+                `;
+
+                const actionDiv = card.querySelector(`#prize-action-${p.id}`);
+                if (isRedeemed) {
+                    actionDiv.innerHTML = `<div style="color:#00ff88; font-size:0.85rem; font-weight:bold; text-align:center; padding:6px; background:rgba(0,255,136,0.15); border-radius:10px;">🌟 ¡Premio listo para cobrarle a Carlos! 👑</div>`;
+                } else {
+                    const btn = document.createElement('button');
+                    btn.className = 'btn';
+                    btn.style.width = '100%';
+                    btn.style.padding = '10px';
+                    btn.style.borderRadius = '14px';
+                    btn.style.fontWeight = '900';
+                    btn.style.fontSize = '0.9rem';
+                    if (canAfford) {
+                        btn.style.background = 'var(--cyan)';
+                        btn.style.color = '#000';
+                        btn.style.boxShadow = '0 4px 12px rgba(0,229,255,0.3)';
+                        btn.textContent = `🎁 CANJEAR PREMIO POR ${p.cost.toLocaleString('es-CO')} TICKETS`;
+                        btn.onclick = () => {
+                            tickets -= p.cost;
+                            redeemedPrizes.push(p.id);
+                            localStorage.setItem('melisa_arcade_tickets', tickets.toString());
+                            localStorage.setItem('melisa_arcade_redeemed', JSON.stringify(redeemedPrizes));
+                            playArcadeTone(587.33, 'sine', 0.2);
+                            setTimeout(() => playArcadeTone(880, 'sine', 0.35), 150);
+                            renderArcadePrizes();
+                        };
+                    } else {
+                        btn.style.background = 'rgba(255,255,255,0.1)';
+                        btn.style.color = 'rgba(255,255,255,0.4)';
+                        btn.style.cursor = 'not-allowed';
+                        btn.textContent = `🔒 Faltan ${(p.cost - tickets).toLocaleString('es-CO')} Tickets para canjear`;
+                        btn.disabled = true;
+                    }
+                    actionDiv.appendChild(btn);
+                }
+
+                if (listEl) listEl.appendChild(card);
+            });
+
+            const magicBtn = contentArea.querySelector('#magic-tickets-btn');
+            if (magicBtn) {
+                const lastFreeTime = parseInt(localStorage.getItem('melisa_arcade_last_free_tickets') || '0', 10);
+                const now = Date.now();
+                const twoHoursMs = 2 * 60 * 60 * 1000;
+                const timeDiff = now - lastFreeTime;
+                const canClaimFree = timeDiff >= twoHoursMs;
+
+                if (canClaimFree) {
+                    magicBtn.style.background = 'rgba(255,0,127,0.25)';
+                    magicBtn.style.border = '2px solid #ff007f';
+                    magicBtn.style.color = '#ff80bf';
+                    magicBtn.style.cursor = 'pointer';
+                    magicBtn.style.boxShadow = '0 0 15px rgba(255,0,127,0.4)';
+                    magicBtn.innerHTML = '🎁 Regalo de tu Rey: ¡Canjear +100 Tickets Gratis! 👑';
+                    magicBtn.onclick = () => {
+                        tickets += 100;
+                        localStorage.setItem('melisa_arcade_tickets', tickets.toString());
+                        localStorage.setItem('melisa_arcade_last_free_tickets', Date.now().toString());
+                        playArcadeTone(523.25, 'triangle', 0.2);
+                        setTimeout(() => playArcadeTone(659.25, 'triangle', 0.25), 100);
+                        renderArcadePrizes();
+                    };
+                } else {
+                    const remMs = twoHoursMs - timeDiff;
+                    const remMins = Math.ceil(remMs / (60 * 1000));
+                    const remHours = Math.floor(remMins / 60);
+                    const remOnlyMins = remMins % 60;
+                    const timeStr = remHours > 0 ? `${remHours}h y ${remOnlyMins}m` : `${remOnlyMins} min`;
+
+                    magicBtn.style.background = 'rgba(255,255,255,0.05)';
+                    magicBtn.style.border = '1px solid rgba(255,255,255,0.15)';
+                    magicBtn.style.color = 'rgba(255,255,255,0.4)';
+                    magicBtn.style.cursor = 'not-allowed';
+                    magicBtn.style.boxShadow = 'none';
+                    magicBtn.innerHTML = `⏳ Regalo de tu Rey Carlos: Disponible en ${timeStr} 🔒`;
+                    magicBtn.disabled = true;
+                }
+            }
+        }
+
+        function updateTabUI() {
+            const btnP = wrapper.querySelector('#tab-btn-pacbesos');
+            const btnT = wrapper.querySelector('#tab-btn-tetrislove');
+            const btnA = wrapper.querySelector('#tab-btn-arcadeprizes');
+
+            if (btnP) { btnP.style.background = activeTab === 'pacbesos' ? '#00e5ff' : 'rgba(255,255,255,0.1)'; btnP.style.color = activeTab === 'pacbesos' ? '#000' : '#fff'; btnP.style.boxShadow = activeTab === 'pacbesos' ? '0 0 15px rgba(0,229,255,0.6)' : 'none'; }
+            if (btnT) { btnT.style.background = activeTab === 'tetrislove' ? '#ff007f' : 'rgba(255,255,255,0.1)'; btnT.style.color = activeTab === 'tetrislove' ? '#fff' : '#fff'; btnT.style.boxShadow = activeTab === 'tetrislove' ? '0 0 15px rgba(255,0,127,0.6)' : 'none'; }
+            if (btnA) { btnA.style.background = activeTab === 'arcadeprizes' ? '#ffd54f' : 'rgba(255,255,255,0.1)'; btnA.style.color = activeTab === 'arcadeprizes' ? '#000' : '#fff'; btnA.style.boxShadow = activeTab === 'arcadeprizes' ? '0 0 15px rgba(255,215,0,0.6)' : 'none'; }
+
+            updateTicketDisplay();
+
+            if (activeTab === 'pacbesos') renderPacBesos();
+            else if (activeTab === 'tetrislove') renderTetrisLove();
+            else if (activeTab === 'arcadeprizes') renderArcadePrizes();
+        }
+
+        const btnP = wrapper.querySelector('#tab-btn-pacbesos');
+        const btnT = wrapper.querySelector('#tab-btn-tetrislove');
+        const btnA = wrapper.querySelector('#tab-btn-arcadeprizes');
+
+        if (btnP) btnP.onclick = () => { activeTab = 'pacbesos'; updateTabUI(); };
+        if (btnT) btnT.onclick = () => { activeTab = 'tetrislove'; updateTabUI(); };
+        if (btnA) btnA.onclick = () => { activeTab = 'arcadeprizes'; updateTabUI(); };
+
+        updateTabUI();
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -3663,6 +4211,8 @@ const UniverseGames = (function() {
         startAlbum,
         startKeepyUppy: startWorldCupTeams,
         startWorldCupTeams,
-        startMusicFestival
+        startMusicFestival,
+        startArcade
     };
 })();
+

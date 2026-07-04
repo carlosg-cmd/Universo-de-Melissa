@@ -1,5 +1,5 @@
 // ===================================================================
-//  UNIVERSO MELISA - 30 Days of Content
+//  UNIVERSO MELISSA - 30 Days of Content
 //  Database of messages, game assignments, and configurations
 // ===================================================================
 
@@ -320,7 +320,7 @@ const DailyContent = (function() {
             title: "Día 7 - Las Cajitas Mágicas de Carlos 🎁",
             emoji: "🗝️",
             song: "musica/cancion1.mp3",
-            letter: "Mi hermosa princesa,\n\n¡Hemos llegado al Día 7 de nuestro Universo Melisa! 🎉 Siete días acompañándote en tu recuperación, viéndote ser cada día más fuerte y valiente.\n\nHoy te he preparado un minijuego nuevo y exclusivo: **Las Cajitas Mágicas de Carlos**. En cada cajita de regalo hay un mensaje escrito con todo mi amor.\n\nAbre cada una para descubrir lo mucho que te adoro, ¡y encuentra la **Llave Dorada del Amor** al final para desbloquear tu Premio Real del Día 7!\n\n¡Te amo infinito, mi reina hermosa! 💖",
+            letter: "Mi hermosa princesa,\n\n¡Hemos llegado al Día 7 de nuestro Universo Melissa! 🎉 Siete días acompañándote en tu recuperación, viéndote ser cada día más fuerte y valiente.\n\nHoy te he preparado un minijuego nuevo y exclusivo: **Las Cajitas Mágicas de Carlos**. En cada cajita de regalo hay un mensaje escrito con todo mi amor.\n\nAbre cada una para descubrir lo mucho que te adoro, ¡y encuentra la **Llave Dorada del Amor** al final para desbloquear tu Premio Real del Día 7!\n\n¡Te amo infinito, mi reina hermosa! 💖",
             funPhrase: "¡Una semana de recuperación superada como una verdadera campeona! 👑",
             recoveryQuote: "Siete días menos de espera y siete días más de amor incondicional.",
             gameType: 'magicboxes',
@@ -342,7 +342,7 @@ const DailyContent = (function() {
             title: "Día 9 - ¡Festival Mundialista del Amor! 🏆⚽",
             emoji: "🏆",
             song: "musica/cancion1.mp3",
-            letter: "¡Hola, campeona indiscutible de mi vida!\n\n¡Bienvenida al Día 9! Hoy tu recuperación se viste de gala y entra al **Mundial de Fútbol del Amor**. Has jugado cada día con una garra y una dulzura impresionantes.\n\nPara hoy te preparé no uno, sino **TRES MINIJUEGOS MUNDIALISTAS INFINITOS**:\n1️⃣ **Tanda de Penales del Amor:** ¡Métele golazos románticos al portero!\n2️⃣ **Álbum Panini de Carlos y Melisa:** ¡Abre sobres dorados infinitos y visualiza tu álbum con nuestras fotos reales!\n3️⃣ **Selecciones del Mundial 2026:** ¡Demuestra cuánto sabes de fútbol y escribe los nombres de los países clasificados!\n\n¡Juega todo lo que quieras hoy, mi estrella número 10! Te amo con toda mi alma 💖🇨🇴",
+            letter: "¡Hola, campeona indiscutible de mi vida!\n\n¡Bienvenida al Día 9! Hoy tu recuperación se viste de gala y entra al **Mundial de Fútbol del Amor**. Has jugado cada día con una garra y una dulzura impresionantes.\n\nPara hoy te preparé no uno, sino **TRES MINIJUEGOS MUNDIALISTAS INFINITOS**:\n1️⃣ **Tanda de Penales del Amor:** ¡Métele golazos románticos al portero!\n2️⃣ **Álbum Panini de Carlos y Melissa:** ¡Abre sobres dorados infinitos y visualiza tu álbum con nuestras fotos reales!\n3️⃣ **Selecciones del Mundial 2026:** ¡Demuestra cuánto sabes de fútbol y escribe los nombres de los países clasificados!\n\n¡Juega todo lo que quieras hoy, mi estrella número 10! Te amo con toda mi alma 💖🇨🇴",
             funPhrase: "⚽ ¡En la selección de mi corazón, tú llevas la 10 y eres la capitana eterna! 🏆👑",
             recoveryQuote: "Día 9: Goleando a la recuperación como toda una campeona mundial.",
             games: [
@@ -353,7 +353,7 @@ const DailyContent = (function() {
                     config: {}
                 },
                 {
-                    name: 'Álbum Panini de Carlos y Melisa 📖',
+                    name: 'Álbum Panini de Carlos y Melissa 📖',
                     emoji: '📖',
                     type: 'album',
                     config: {}
@@ -377,10 +377,21 @@ const DailyContent = (function() {
             gameType: 'musicfestival',
             gameConfig: {}
         },
-        // Days 11-29 are placeholders for Carlos to customize
-        ...Array.from({length: 19}, (_, i) => ({
-            day: i + 11,
-            title: `Día ${i + 11} - Sorpresa`,
+        {
+            day: 11,
+            title: "Día 11 - ¡Arcade Retro: Las Maquinitas del Amor! 🕹️👾",
+            emoji: "🕹️",
+            song: "musica/cancion1.mp3",
+            letter: "¡INSERT COIN, MI AMOR! 🪙💖\n\nMi princesa Melissa, hoy cumplimos 11 días en este universo y 11 días de tu maravillosa recuperación. En el gran videojuego de mi vida, tú eres y serás por siempre mi Jugadora Número 1 (Player 1).\n\nAdmiro tanto la garra, la valentía y la energía con la que estás superando cada nivel de esta recuperación. No hay jefe final, ni tormenta, ni obstáculo que pueda con nosotros, porque juntos formamos el equipo más invencible de todo el cosmos.\n\nPara el día de hoy te preparé un salón de maquinitas retro especial, lleno de nostalgia, luces de neón y mucha diversión. Aquí no hay vidas limitadas: mi amor por ti tiene vidas infinitas y códigos secretos de felicidad eterna.\n\n¡Juega en las maquinitas, acumula Tickets Arcade y canjéalos por premios reales que te daré a besos y abrazos en cuanto te recuperes!\n\nTe amo infinito, tu rey y compañero de partida para toda la eternidad. 👑🎮",
+            funPhrase: "¡Tú y yo: El equipo invencible con vidas infinitas! 🎮❤️",
+            recoveryQuote: "¡Nivel 11 superado con éxito! Tu barra de energía se recarga al 100% cada día.",
+            gameType: 'arcade',
+            gameConfig: {}
+        },
+        // Days 12-29 are placeholders for Carlos to customize
+        ...Array.from({length: 18}, (_, i) => ({
+            day: i + 12,
+            title: `Día ${i + 12} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",
