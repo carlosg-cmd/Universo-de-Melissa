@@ -14,6 +14,9 @@
 
 :root {
     --primary: #00e5ff;
+    --cyan: #00e5ff;
+    --danger: #ff5252;
+    --accent-pink: #ff4081;
     --primary-dark: #00bcd4;
     --primary-deeper: #0097a7;
     --primary-glow: rgba(0, 229, 255, 0.4);

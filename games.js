@@ -2995,6 +2995,658 @@ const UniverseGames = (function() {
         renderTeam();
     }
 
+    // =============================================
+    //  DÍA 10: ¡FESTIVAL MUSICAL DEL AMOR! 🎶🎤 (3 MODOS INFINITOS)
+    // =============================================
+    function startMusicFestival(container, config) {
+        container.innerHTML = '';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-musicfestival';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '540px';
+        wrapper.style.display = 'flex';
+        wrapper.style.flexDirection = 'column';
+        wrapper.style.alignItems = 'center';
+        wrapper.style.position = 'relative';
+
+        // Append wrapper FIRST to prevent DOM query errors
+        container.appendChild(wrapper);
+
+        // Top Navigation Tabs
+        let activeTab = 'trivia'; // 'trivia', 'piano', 'rockola'
+
+        const header = document.createElement('div');
+        header.style.textAlign = 'center';
+        header.style.marginBottom = '16px';
+        header.style.width = '100%';
+        header.innerHTML = `
+            <div style="background:linear-gradient(90deg, #ff007f, #00e5ff); color:#fff; font-weight:900; font-size:0.85rem; padding:6px 18px; border-radius:20px; display:inline-block; margin-bottom:10px; letter-spacing:1px; box-shadow:0 4px 12px rgba(255,0,127,0.4);">
+                🎧 DÍA 10: KARAOKE & FESTIVAL ROMÁNTICO 🎹
+            </div>
+            <h2 style="color:var(--gold); font-family:'Outfit',sans-serif; margin-bottom:6px; font-size:1.8rem;">🎶 Festival Musical de Nuestro Amor 🎤</h2>
+            <p style="color:var(--text-secondary); font-size:0.9rem; margin-bottom:14px;">¡Tres escenarios mágicos, sonido real y sorpresas románticas infinitas!</p>
+            
+            <div style="display:flex; gap:8px; justify-content:center; background:rgba(0,0,0,0.5); padding:6px; border-radius:25px; border:1px solid rgba(0,229,255,0.3); width:100%; max-width:480px; margin:0 auto;">
+                <button id="tab-btn-trivia" class="btn" style="flex:1; padding:10px 6px; font-size:0.85rem; border-radius:20px; font-weight:bold; transition:all 0.3s ease;">
+                    🎧 Adivina Letra
+                </button>
+                <button id="tab-btn-piano" class="btn" style="flex:1; padding:10px 6px; font-size:0.85rem; border-radius:20px; font-weight:bold; transition:all 0.3s ease;">
+                    🎹 Piano Mágico
+                </button>
+                <button id="tab-btn-rockola" class="btn" style="flex:1; padding:10px 6px; font-size:0.85rem; border-radius:20px; font-weight:bold; transition:all 0.3s ease;">
+                    📻 Rockola FM
+                </button>
+            </div>
+        `;
+        wrapper.appendChild(header);
+
+        const contentArea = document.createElement('div');
+        contentArea.style.width = '100%';
+        contentArea.style.background = 'linear-gradient(145deg, #121826, #1f293d)';
+        contentArea.style.border = '3px solid var(--cyan)';
+        contentArea.style.borderRadius = '24px';
+        contentArea.style.padding = '22px 18px';
+        contentArea.style.boxShadow = '0 15px 35px rgba(0,0,0,0.7)';
+        contentArea.style.minHeight = '360px';
+        contentArea.style.position = 'relative';
+        contentArea.style.overflow = 'hidden';
+        wrapper.appendChild(contentArea);
+
+        // Helper: shuffle
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+        }
+
+        // ==========================================
+        //  TAB 1: TRIVIA MUSICAL / ADIVINA LA LETRA
+        // ==========================================
+        const triviaData = [
+            { song: "Morat & Sebastián Yatra - Bajo La Mesa", prompt: "«Y es que no sé disimular, la forma en que te miro...» 🎵 ¿Qué sigue en nuestra canción del Día 9?", correct: "Se nota a la legua que te quiero", options: ["Se nota a la legua que te quiero", "Me delata el corazón cuando respiro", "Y me pierdo en tus ojos de lucero"] },
+            { song: "Sebastián Yatra - No Hay Nadie Más", prompt: "«Voy a cuidarte por las noches, voy a amarte sin reproches...» 🎼 ¿Cómo continúa este hermoso juramento?", correct: "Te voy a extrañar en la tempestad", options: ["Te voy a extrañar en la tempestad", "Y seré tu luz en la oscuridad", "Porque tú eres mi única verdad"] },
+            { song: "Morat - Cómo Te Atreves", prompt: "«¿Cómo te atreves a volver...?» 🎸 ¿Qué dice el épico coro de Morat?", correct: "A darle vida a lo que era muerto", options: ["A darle vida a lo que era muerto", "A romper el hielo que había cubierto", "A robarme el corazón en el desierto"] },
+            { song: "Chayanne - Torero", prompt: "«De lunes a domingo voy desesperado...» 💃🕺 ¿Qué busca Chayanne con tanta pasión?", correct: "El corazón con la razón en un partido", options: ["El corazón con la razón en un partido", "Un beso tuyo que me deje adormecido", "Tu amor sincero que jamás he perdido"] },
+            { song: "Shakira - Antología", prompt: "«Y fue por ti que escribí más de cien canciones...» 📝 ¿Y qué más hizo por amor?", correct: "Y hasta perdoné tus equivocaciones", options: ["Y hasta perdoné tus equivocaciones", "Y llené de besos todos los rincones", "Y superé todas mis ilusiones"] },
+            { song: "Fonseca - Te Mando Flores", prompt: "«Te mando flores que recojo en el camino...» 🌸🌺 ¿Para qué se las manda Fonseca?", correct: "Yo te las mando entre sueños porque no puedo hablarte", options: ["Yo te las mando entre sueños porque no puedo hablarte", "Para que siempre recuerdes cuánto quiero amarte", "Porque en mi corazón nunca dejaré de llevarte"] },
+            { song: "Carlos Vives & Shakira - La Bicicleta", prompt: "«Lleva, llévame en tu bicicleta...» 🚲 ¿A dónde quieren ir paseando?", correct: "Óyeme, Carlos, llévame en tu bicicleta", options: ["Óyeme, Carlos, llévame en tu bicicleta", "A recorrer la playa hasta que sea secreta", "Por todo el mundo con el alma discreta"] },
+            { song: "Feid - Normal", prompt: "«Dime cómo te va, cómo te sientes...» 💚🎶 ¿Cuál es el sentimiento que nos une?", correct: "Si tú eres mi estrella entre tanta gente", options: ["Si tú eres mi estrella entre tanta gente", "Aunque la distancia se sienta tan presente", "Porque te llevo guardada en mi mente"] },
+            { song: "Karol G & Nicki Minaj - Tusa / Ocean", prompt: "«Si algún día te vas de casa...» 🌊 ¿A dónde la llevaría por amor en Ocean?", correct: "Yo te llevo a la NASA", options: ["Yo te llevo a la NASA", "Te regalo lo que pasa", "Abrazaditos en la terraza"] },
+            { song: "Juanes - Es Por Ti", prompt: "«Cada vez que me levanto y veo que a mi lado estás...» ☀️ ¿Qué siente Juanes al ver al amor de su vida?", correct: "Me siento renovado y me siento enamorado", options: ["Me siento renovado y me siento enamorado", "Se acaban las tristezas y todo lo pasado", "El mundo es perfecto y todo es dorado"] },
+            { song: "Luis Miguel - La Incondicional", prompt: "«Tú, la misma de ayer...» 🍷🌹 ¿Cómo describe a esa mujer única y leal?", correct: "La incondicional, la que no espera nada", options: ["La incondicional, la que no espera nada", "La reina eterna de mi alma enamorada", "La luz brillante de mi madrugada"] },
+            { song: "Sin Bandera - Entra en mi Vida", prompt: "«Te vi venir y no dudé...» 🚪❤️ ¿Qué hizo al ver llegar a esa persona especial?", correct: "Te vi llegar y te abrí la puerta", options: ["Te vi llegar y te abrí la puerta", "Dejé mi alma totalmente descubierta", "Sabía que mi suerte ya estaba cierta"] },
+            { song: "Reik - Noviembre Sin Ti", prompt: "«Noviembre sin ti es pedirle a la luna...» 🌙 ¿Qué le pide a la luna en esta balada?", correct: "Que brille en la noche de mi corazón", options: ["Que brille en la noche de mi corazón", "Que me devuelva toda la ilusión", "Que cante conmigo esta hermosa canción"] },
+            { song: "Camila - Todo Cambió", prompt: "«Todo cambió cuando te vi...» 🎨 ¿Qué transformó el amor en su vida?", correct: "De blanco y negro al color me convertí", options: ["De blanco y negro al color me convertí", "En el momento exacto en que te conocí", "Y desde entonces solo vivo para ti"] },
+            { song: "Alejandro Fernández - Me Dediqué a Perderte", prompt: "«Si pudiera volver al pasado...» ⏳ ¿Qué haría diferente si tuviera otra oportunidad?", correct: "Te abrazaría fuerte y no te dejaría", options: ["Te abrazaría fuerte y no te dejaría", "Te regalaría toda mi alegría", "Te cuidaría de noche y de día"] },
+            { song: "Carlos Vives - Volví a Nacer", prompt: "«Quiero casarme contigo...» 💍 ¿Y qué más quiere Carlos con su hermosa Melisa?", correct: "Quedarme a tu lado, ser el bendecido con tu amor", options: ["Quedarme a tu lado, ser el bendecido con tu amor", "Regalarte el mundo entero y todo mi calor", "Cuidarte los sueños sin ningún temor"] },
+            { song: "Jorge Celedón / Fonseca - Esta Vida", prompt: "«Me gusta el olor a tierra mojada...» 🌿🎶 ¿Y qué es lo que más nos gusta de esta vida?", correct: "Me gusta vivir esta vida a tu lado y amarte", options: ["Me gusta vivir esta vida a tu lado y amarte", "Me gusta cantar por la noche y abrazarte", "Me gusta viajar por el mundo para admirarte"] },
+            { song: "Binomio de Oro - Niña Bonita", prompt: "«Tú eres mi niña bonita...» 👸❤️ ¿Qué representa Melisa en la vida de Carlos?", correct: "La que me quita el sueño y me da alegría", options: ["La que me quita el sueño y me da alegría", "La estrella más brillante de toda mi vida", "La luz que ilumina mi noche y mi día"] },
+            { song: "Fonseca - Prometo", prompt: "«Prometo darte el sol todos los días...» ☀️ ¿Cuál es la promesa eterna del amor?", correct: "Prometo cuidarte y amarte toda la vida", options: ["Prometo cuidarte y amarte toda la vida", "Prometo cantarte canciones de alegría", "Prometo llevarte a bailar cada madrugada"] },
+            { song: "Juan Luis Guerra - Burbujas de Amor", prompt: "«Quisiera ser un pez...» 🐠💭 ¿Para qué quiere ser un pez en esta romántica bachata?", correct: "Para tocar mi nariz en tu pecera y hacer burbujas de amor", options: ["Para tocar mi nariz en tu pecera y hacer burbujas de amor", "Para nadar por tus mares de ilusión verdadera", "Para cuidarte de noche en la costa entera"] },
+            { song: "Romeo Santos / Aventura - Solo por un Beso", prompt: "«Solo por un beso...» 💋 ¿Qué sucede con tan solo un beso de la persona amada?", correct: "Se puede enamorar sin darte cuenta", options: ["Se puede enamorar sin darte cuenta", "Se detiene el tiempo en cámara lenta", "Se calma la lluvia y la tormenta"] },
+            { song: "Marc Anthony - Valió la Pena", prompt: "«Valió la pena lo que era necesario...» 💃 ¿Por qué valió la pena todo el esfuerzo?", correct: "Para estar contigo amor, tú eres una bendición", options: ["Para estar contigo amor, tú eres una bendición", "Porque al final triunfó nuestra gran ilusión", "Para regalarte entero todo mi corazón"] },
+            { song: "Marc Anthony - Tu Amor Me Hace Bien", prompt: "«Te quiero así deliciosa...» 🌹 ¿Qué le dice Marc Anthony a su gran amor?", correct: "Tranquila, porque tu amor me hace bien", options: ["Tranquila, porque tu amor me hace bien", "Feliz, porque contigo el mundo es un Edén", "Segura, porque te amo como a nadie más"] },
+            { song: "Chayanne - Me Enamoré de Ti", prompt: "«Me enamoré de ti, y qué...» 💘 ¿Qué importa cuando el amor es verdadero?", correct: "Me importa si no es fácil, yo te quiero", options: ["Me importa si no es fácil, yo te quiero", "El mundo entero sabe que soy sincero", "Por un abrazo tuyo yo me muero"] },
+            { song: "Chayanne - Dejaría Todo", prompt: "«Dejaría todo porque te quedaras...» 🥺🙏 ¿Qué estaría dispuesto a dejar por su amor?", correct: "Mi credo, mi pasado, mi religión", options: ["Mi credo, mi pasado, mi religión", "Mis miedos, mis dudas y mi corazón", "El mundo entero sin ninguna condición"] },
+            { song: "Shakira - Día de Enero", prompt: "«Y aunque hayas sido un extranjero...» 🩹❤️ ¿Qué le promete Shakira en este hermoso himno?", correct: "Te voy a curar el corazón partío", options: ["Te voy a curar el corazón partío", "Te voy a dar todo el calor del hogar mío", "Te voy a querer tanto que olvidarás el frío"] },
+            { song: "Sebastián Yatra - Robarte un Beso", prompt: "«Déjame robarte un beso...» 😘 ¿Hasta dónde quiere que llegue ese beso?", correct: "Que me llegue hasta el alma", options: ["Que me llegue hasta el alma", "Que nos devuelva toda la calma", "Que suene fuerte como una palma"] },
+            { song: "Morat - Cuando Nadie Ve", prompt: "«Cuando nadie ve...» 🕶️✨ ¿Qué pasa en la intimidad de ese amor secreto y mágico?", correct: "Te puedo querer, te puedo besar", options: ["Te puedo querer, te puedo besar", "Nos ponemos los dos a cantar y bailar", "El tiempo se detiene sin preguntar"] },
+            { song: "Morat - Besos en Guerra", prompt: "«Sabes que no hay que ser un adivino...» 🔮 ¿Qué se ve claramente en nuestro destino?", correct: "Para ver que el destino nos unió", options: ["Para ver que el destino nos unió", "Para saber que este amor nunca murió", "Para entender todo lo que nos pasó"] },
+            { song: "Camilo - Vida de Rico", prompt: "«Yo no tengo pa' darte un viaje al Polo Norte...» 🏡 ¿Pero qué es lo más valioso que le ofrece?", correct: "Pero tengo un amor que no se rompe", options: ["Pero tengo un amor que no se rompe", "Pero te doy mi vida sin que te importe", "Pero tengo besos de todo corte"] },
+            { song: "Camilo & Evaluna - Por Primera Vez", prompt: "«Por primera vez...» 🌅 ¿Qué ocurrió en ese amanecer tan especial?", correct: "Un amanecer bonito me despertó a tu lado", options: ["Un amanecer bonito me despertó a tu lado", "Sentí mi corazón totalmente enamorado", "Supe que todo lo triste había pasado"] },
+            { song: "Feid - Luna", prompt: "«Te busco en la luna...» 🌕💚 ¿Cómo recuerda a esa persona especial en la distancia?", correct: "Y en cada estrella veo tu mirada", options: ["Y en cada estrella veo tu mirada", "Porque sin ti mi vida no es nada", "Con la esperanza intacta y guardada"] },
+            { song: "Karol G - Mientras Me Curo del Cora", prompt: "«Y mientras me curo del cora...» 🌊☀️ ¿Cuál es la actitud positiva para sanar?", correct: "Hoy salgo para el mar a ver el sol, sé que todo va a estar mejor", options: ["Hoy salgo para el mar a ver el sol, sé que todo va a estar mejor", "Me pongo a cantar con mucha fuerza y amor", "Abrazo a los que quiero sin ningún temor"] },
+            { song: "Karol G - Ocean", prompt: "«Me siento grande por ti...» 🌌 ¿Qué tan inmenso es este amor tan bonito?", correct: "Y aunque lo intentara no podría sin ti", options: ["Y aunque lo intentara no podría sin ti", "Tú eres todo lo que yo siempre pedí", "Desde el primer segundo en que te vi"] },
+            { song: "Luis Fonsi & Daddy Yankee - Despacito", prompt: "«Pasito a pasito, suave suavecito...» 💃🕺 ¿Cómo nos vamos acercando?", correct: "Nos vamos pegando poquito a poquito", options: ["Nos vamos pegando poquito a poquito", "Bailando juntos en este bonito rito", "Gritando nuestro amor al infinito"] },
+            { song: "Enrique Iglesias - Bailando", prompt: "«Yo te miro, se me corta la respiración...» 💓 ¿Qué pasa cuando cruzan las miradas?", correct: "Cuanto tú me miras se me sube el corazón", options: ["Cuanto tú me miras se me sube el corazón", "Se enciende el fuego de nuestra pasión", "Empieza a sonar nuestra mejor canción"] },
+            { song: "Ricky Martin - Tu Recuerdo", prompt: "«Tu recuerdo sigue aquí...» 🌧️ ¿Cómo describe esa presencia constante en su alma?", correct: "Como un aguacero en el desierto", options: ["Como un aguacero en el desierto", "Como un tesoro que mantengo abierto", "Como un sueño del que nunca despierto"] },
+            { song: "David Bisbal - Ave María", prompt: "«Ave María, ¿cuándo serás mía?...» 🌹 ¿Qué estaría dispuesto a dar por su amor?", correct: "Si me quisieras, todo te daría", options: ["Si me quisieras, todo te daría", "De noche y de día yo te cuidaría", "Tu amor sería mi mayor alegría"] },
+            { song: "Ricardo Montaner - Tan Enamorados", prompt: "«Tan enamorados de la madrugada...» 🌃 ¿Qué pasa con el tiempo cuando están juntos?", correct: "Que la noche dura un poco más", options: ["Que la noche dura un poco más", "Que no nos queremos separar jamás", "Que dejamos todo el dolor atrás"] },
+            { song: "Cristian Castro - Azul", prompt: "«Este amor es azul como el mar azul...» 🌊 ¿De dónde nació esta ilusión tan grande?", correct: "Como de tu mirada nació mi ilusión", options: ["Como de tu mirada nació mi ilusión", "Como el cielo puro de nuestra pasión", "Como un poema escrito en el corazón"] },
+            { song: "Luis Miguel - Hasta que me olvides", prompt: "«Hasta que me olvides, voy a intentarlo...» 🍷 ¿Qué tan fuerte es la perseverancia de este amor?", correct: "No habrá quien me seque este amor", options: ["No habrá quien me seque este amor", "Lucharé por ti con todo mi valor", "Te daré mi vida y todo mi calor"] },
+            { song: "Sin Bandera - Mientes Tan Bien / Que Lloro", prompt: "«Que lloro por ti...» 😢❤️ ¿Cómo expresa ese sentimiento profundo en la balada?", correct: "Que lloro sin ti, que ya lo entendí", options: ["Que lloro sin ti, que ya lo entendí", "Que sufro en silencio porque te perdí", "Que daría mi vida entera por ti"] },
+            { song: "Reik - Yo Quisiera", prompt: "«Yo quisiera ser aquel...» 🧥🌙 ¿Qué anhela ser para la dueña de sus sueños?", correct: "Que por ti diera la vida y te abrigara en la noche", options: ["Que por ti diera la vida y te abrigara en la noche", "Que te regale flores en un hermoso coche", "Que te ame por siempre sin ningún reproche"] },
+            { song: "Camila - Mientes / Todo Cambió", prompt: "«Tú llegaste a mi vida...» ☀️ ¿Qué trajo su llegada al corazón?", correct: "Como un sol que me dio calor", options: ["Como un sol que me dio calor", "Borrando para siempre todo dolor", "Llenando mi mundo de mucho color"] },
+            { song: "Alejandro Sanz - Amiga Mía", prompt: "«Amiga mía, princesa de un cuento infinito...» 👑 ¿Qué significa ella en su mundo?", correct: "Tú eres todo lo que necesito", options: ["Tú eres todo lo que necesito", "El verso más hermoso que se ha escrito", "Un amor tan puro y tan bonito"] },
+            { song: "Juanes - A Dios le Pido", prompt: "«Que mis ojos se despierten con la luz de tu mirada...» 🙏✨ ¿Qué es lo que le pide a Dios?", correct: "A Dios le pido que te quedes a mi lado", options: ["A Dios le pido que te quedes a mi lado", "A Dios le pido que siempre seas feliz", "A Dios le pido un amor ilimitado"] },
+            { song: "Jesse & Joy - ¡Corre!", prompt: "«Así que corre, corre, corre corazón...» 🏃‍♀️🏃‍♂️ ¿Hacia dónde corre nuestro destino?", correct: "Hacia mis brazos sin temor", options: ["Hacia mis brazos sin temor", "A buscar un mundo mucho mejor", "Para vivir siempre en nuestro amor"] },
+            { song: "Mon Laferte - Amárrame", prompt: "«Amárrame...» 🎀❤️ ¿Cuál es la petición apasionada en este dueto?", correct: "Abrázame fuerte y no me sueltes jamás", options: ["Abrázame fuerte y no me sueltes jamás", "Cariño mío, dame un beso más", "Y baila conmigo dejando todo atrás"] },
+            { song: "Rosalía & Rauw Alejandro - Beso", prompt: "«Yo ya necesito otro beso...» 😘 ¿De qué tipo de besos está hablando?", correct: "De esos que tú me das", options: ["De esos que tú me das", "Que me llenen de paz", "Que no olvidaré jamás"] },
+            { song: "Manuel Turizo - La Bachata", prompt: "«Ando manejando por las calles que besaste...» 🚗 ¿Y qué va haciendo en el camino?", correct: "Y escuchando la canción que me cantaste", options: ["Y escuchando la canción que me cantaste", "Y recordando todo lo que me regalaste", "Y pensando en el amor que me dejaste"] },
+            { song: "Piso 21 - Te Vi", prompt: "«Te vi, me enamoré...» 😍 ¿Qué supe en ese preciso instante?", correct: "Y supe que eras tú la mujer de mi vida", options: ["Y supe que eras tú la mujer de mi vida", "Que mi alma por fin estaba completa y sanada", "Que mi suerte para siempre cambió de medida"] },
+            { song: "Mike Bahía - Amantes / Detente", prompt: "«Detente un minuto...» ⏱️🌹 ¿Para qué le pide detener el tiempo?", correct: "Y mírame a los ojos para decirte que te amo", options: ["Y mírame a los ojos para decirte que te amo", "Para abrazarte fuerte y decirte que te extraño", "Para que sepas que contigo nunca me engaño"] },
+            { song: "Carlos Rivera - Me Muero", prompt: "«Me muero por besarte...» 💋 ¿Y qué más desea hacer con todo su ser?", correct: "Por rodearte con mis brazos llenos de amor", options: ["Por rodearte con mis brazos llenos de amor", "Por cuidarte y quitarte todo el dolor", "Por regalarte una vida llena de color"] },
+            { song: "Christian Nodal - De los Besos que te Di", prompt: "«De los besos que te di...» 🤠💋 ¿Qué pregunta se hace sobre esos momentos?", correct: "¿Cuál de todos fue el que te hizo enamorar?", correct_idx: 0, options: ["¿Cuál de todos fue el que te hizo enamorar?", "¿Cuál recuerdas cuando te vas a acostar?", "¿Cuál te gustaría volver a probar?"] },
+            { song: "Grupo Frontera & Bad Bunny - un x100to", prompt: "«Me queda un por ciento...» 🔋📱 ¿Y en qué usa ese último porcentaje de batería?", correct: "Y lo uso solo para decirte cuánto te quiero", options: ["Y lo uso solo para decirte cuánto te quiero", "Para mandarte un beso sincero", "Para decirte que eres mi mundo entero"] },
+            { song: "👑 Dedicatoria: Himno de Carlos & Meli", prompt: "«En el Universo de Melisa cada día...» 💖 ¿Cómo continúa esta canción real de su amor?", correct: "Carlos le demuestra su amor infinito", options: ["Carlos le demuestra su amor infinito", "Todo es hermoso y el cielo es muy bonito", "Se escriben poemas en un papelito"] },
+            { song: "💘 Dedicatoria: El Ritmo del Corazón", prompt: "«¿Cuál es la melodía más hermosa que escucha Carlos todos los días?» 🎧", correct: "La risa y la dulce voz de su amada Melisa", correct_idx: 0, options: ["La risa y la dulce voz de su amada Melisa", "Las canciones de la radio por la mañana", "El sonido de la lluvia cayendo en la ventana"] },
+            { song: "🏆 Dedicatoria: Día 10 de Recuperación", prompt: "«¿Qué celebra hoy todo el Universo con música, aplausos y alegría?» 🎉", correct: "¡10 días de valentía y un amor imparable!", options: ["¡10 días de valentía y un amor imparable!", "Que ganamos el campeonato de fútbol", "Que salió el sol más brillante de todos"] },
+            { song: "🌟 Dedicatoria: La Fuerza de Melisa", prompt: "«Cuando el camino se pone un poco difícil...» 💪🥰 ¿Qué hace Carlos por su reina?", correct: "Le toma la mano y le recuerda que juntos son invencibles", options: ["Le toma la mano y le recuerda que juntos son invencibles", "Le canta una serenata debajo de la ventana", "Le regala un ramo de flores cada mañana"] },
+            { song: "💖 Dedicatoria: El Universo de Melisa", prompt: "«¿Por qué Carlos creó este universo mágico de 30 días?» 🪐✨", correct: "Porque el amor verdadero se demuestra con hechos y detalles", options: ["Porque el amor verdadero se demuestra con hechos y detalles", "Porque quería ganar un concurso de programación", "Porque le gusta mucho jugar en la computadora"] },
+            // --- 50 NUEVAS PREGUNTAS EXCLUSIVAS DE MORAT ---
+            { song: "Morat - No Se Va", prompt: "«Y aunque todo cambie, hay cosas que no cambian...» 🎸 ¿Qué dice el coro del himno de Morat?", correct: "Y tu recuerdo no se va, no se va, no se va", options: ["Y tu recuerdo no se va, no se va, no se va", "Y mi corazón se queda aquí en el mismo lugar", "Y el amor que te tengo nunca dejará de brillar"] },
+            { song: "Morat - No Se Va (Verso)", prompt: "«Quédate otra vez, quédate toda la noche...» 🌙 ¿Cómo continúa esta petición de amor?", correct: "Quédate otra vez, quédate una vida", options: ["Quédate otra vez, quédate una vida", "Quédate conmigo hasta la despedida", "Quédate abrazada sin encontrar salida"] },
+            { song: "Morat - Cómo Te Atreves (Verso 2)", prompt: "«Y yo me guardé mil pedazos de mi corazón...» 💔 ¿Para qué se los guardó?", correct: "Esperando por si alguna vez volvías", options: ["Esperando por si alguna vez volvías", "Para escribirte las mejores poesías", "Porque sabía que pronto me amarías"] },
+            { song: "Morat - Cómo Te Atreves (Coro)", prompt: "«Cuatro años sin mirarte...» 👀 ¿Y qué pasó después de tanto tiempo?", correct: "Y hoy te tengo frente a frente", options: ["Y hoy te tengo frente a frente", "Y mi amor sigue igual de caliente", "Y te extraño inevitablemente"] },
+            { song: "Morat - Besos en Guerra (Verso)", prompt: "«¿Quién te dijo que el amor es una apuesta...?» 🎲 ¿Qué pasa en esa apuesta según Morat?", correct: "Donde siempre uno pierde y otro gana", options: ["Donde siempre uno pierde y otro gana", "Donde se sufre desde la mañana", "Donde la tristeza entra por la ventana"] },
+            { song: "Morat & Juanes - Besos en Guerra (Coro)", prompt: "«Por qué me miras con esos ojos...» 😍 ¿Qué provocan esos ojitos de Melisa?", correct: "Que me roban la razón y la calma", options: ["Que me roban la razón y la calma", "Que me llevan directo hasta el alma", "Que me hacen aplaudir con la palma"] },
+            { song: "Morat - Amor Con Hielo", prompt: "«Y es que ya no soy el mismo que te amaba a ciegas...» ❄️ ¿Qué pasa ahora en esta canción?", correct: "Ya no me hace falta tu calor", options: ["Ya no me hace falta tu calor", "Ahora vivo lleno de mucho color", "Se acabó para siempre el dolor"] },
+            { song: "Morat - Amor Con Hielo (Coro)", prompt: "«Ahora me toca a mí...» ⏰ ¿Qué le toca ver ahora en la canción?", correct: "Ver cómo te derrites por volver", options: ["Ver cómo te derrites por volver", "Ver cómo empieza un nuevo amanecer", "Ver todo lo bonito que va a suceder"] },
+            { song: "Morat - A Dónde Vamos", prompt: "«A dónde vamos si no es de tu mano...» 🤝💖 ¿Qué es el camino sin su amor?", correct: "A dónde vamos si el camino no es contigo", options: ["A dónde vamos si el camino no es contigo", "A dónde vamos si no tengo abrigo", "A dónde vamos si no te consigo"] },
+            { song: "Morat - A Dónde Vamos (Coro)", prompt: "«Y no nos importa hacia dónde sople el viento...» 🌬️ ¿Por qué no les importa el viento?", correct: "Si tengo tus besos yo tengo mi destino", options: ["Si tengo tus besos yo tengo mi destino", "Porque nuestro amor es un camino divino", "Porque superamos cualquier torbellino"] },
+            { song: "Morat & Álvaro Soler - Yo Contigo, Tú Conmigo", prompt: "«¿Por qué parar para pensar...?» 🌍 ¿Qué hacen cuando están juntos?", correct: "Si yo contigo, tú conmigo, le damos vuelta al mundo", options: ["Si yo contigo, tú conmigo, le damos vuelta al mundo", "Y nos damos un abrazo súper profundo", "Porque nuestro amor es el más rotundo"] },
+            { song: "Morat & Feid - Salir con Vida", prompt: "«Yo nunca había visto un espectáculo igual...» ✨ ¿A qué espectáculo se refiere?", correct: "Que el de ver tus ojos al despertar", options: ["Que el de ver tus ojos al despertar", "Como verte sonreír y bailar", "Como el de la luna sobre el mar"] },
+            { song: "Morat & Feid - Salir con Vida (Coro)", prompt: "«De este amor yo no quiero...» 💓 ¿Cuál es la declaración de este temazo?", correct: "Salir con vida si no es a tu lado", options: ["Salir con vida si no es a tu lado", "Olvidar ni un segundo lo pasado", "Dejar mi corazón desamparado"] },
+            { song: "Morat - Cuando Nadie Ve (Verso 2)", prompt: "«Y me pongo a contar los segundos...» ⏱️ ¿Para qué cuenta los segundos Carlos?", correct: "Para que estemos solos tú y yo", options: ["Para que estemos solos tú y yo", "Para que empiece de nuevo el reloj", "Para darte un beso con mucho fervor"] },
+            { song: "Morat - Cuando Nadie Ve (Coro 2)", prompt: "«Se me nota en la mirada...» 🥰 ¿Qué se le nota a Carlos a leguas?", correct: "Lo mucho que me muero por tenerte", options: ["Lo mucho que me muero por tenerte", "Que tengo una increíble buena suerte", "Que mi amor por ti es súper fuerte"] },
+            { song: "Morat - Porfa No Te Vayas", prompt: "«Porfa no te vayas...» 🙏❤️ ¿Qué pasa si ella se va?", correct: "Que sin ti mi vida pierde toda la magia", options: ["Que sin ti mi vida pierde toda la magia", "Que me quedo triste en esta terraza", "Que se apagan las luces de la casa"] },
+            { song: "Morat - Porfa No Te Vayas (Verso)", prompt: "«Y es que te miro y se me olvida el mundo...» 🌎 ¿Por qué se olvida el mundo?", correct: "Porque tú eres todo lo que quiero", options: ["Porque tú eres todo lo que quiero", "Porque tu amor es verdadero", "Porque te amo desde enero"] },
+            { song: "Morat - Llamada Perdida", prompt: "«Y tengo mil llamadas perdidas en mi teléfono...» 📱 ¿De quién espera llamada?", correct: "Pero solo espero escuchar tu voz", options: ["Pero solo espero escuchar tu voz", "Porque mi corazón late muy veloz", "Y quiero que estemos juntos los dos"] },
+            { song: "Morat - París", prompt: "«¿Cómo te vas a ir a París...?» 🗼 ¿Y dejarlo haciendo qué?", correct: "Y dejarme aquí contando las horas por verte", options: ["Y dejarme aquí contando las horas por verte", "Sin darme un beso para la buena suerte", "Y olvidarte de un amor tan fuerte"] },
+            { song: "Morat - Valen Más", prompt: "«Tus defectos valen más...» 💎 ¿Qué valen más los defectos del amor de tu vida?", correct: "Que las virtudes de cualquiera", options: ["Que las virtudes de cualquiera", "Que el oro de la tierra entera", "Que la primavera más sincera"] },
+            { song: "Morat - Valen Más (Coro)", prompt: "«Porque eres perfecta tal como eres...» 👸 ¿Qué cambiaría Carlos de Melisa?", correct: "Y no cambiaría absolutamente nada de ti", options: ["Y no cambiaría absolutamente nada de ti", "Solo pediría que estés siempre junto a mí", "Desde aquel momento hermoso en que te vi"] },
+            { song: "Morat & Juanes - 506", prompt: "«Recuerdo el número de tu casa...» 🏠🎶 ¿Qué número mágico recuerdan?", correct: "El 506 donde todo empezó", options: ["El 506 donde todo empezó", "El 100 por ciento que nos unió", "El 30 de nuestro aniversario"] },
+            { song: "Morat - 506 (Coro)", prompt: "«¿Cómo hago para no pensarte...?» 💭❤️ ¿Dónde la lleva guardada?", correct: "Si estás tatuada en mi memoria y en mi piel", options: ["Si estás tatuada en mi memoria y en mi piel", "Si eres más dulce y rica que la miel", "Si mi corazón siempre te será fiel"] },
+            { song: "Morat - Enamórate de Alguien Más", prompt: "«No quiero que sufras por mi culpa...» 🌹 ¿Qué desea en el fondo en esta balada?", correct: "Pero en el fondo quiero que siempre me recuerdes", options: ["Pero en el fondo quiero que siempre me recuerdes", "Quiero que nunca en la vida te pierdas", "Que cantemos juntos jugando con cuerdas"] },
+            { song: "Morat - Punto y Aparte", prompt: "«Tú eres mi punto y aparte...» 📖 ¿Qué significa ella en su historia?", correct: "El comienzo de la historia más bonita de mi vida", options: ["El comienzo de la historia más bonita de mi vida", "La razón por la que mi alma no está perdida", "La luz que ilumina toda mi avenida"] },
+            { song: "Morat - Aprender a Quererte", prompt: "«Cuando te vi sentí que mi vida...» ⚡ ¿Qué sintió al verla por primera vez?", correct: "Estaba a punto de cambiar para siempre", options: ["Estaba a punto de cambiar para siempre", "Se llenó de luz en el mes de diciembre", "Era una semilla que quería que siembre"] },
+            { song: "Morat - Aprender a Quererte (Coro)", prompt: "«Y es que yo quiero aprender a quererte...» 🎓❤️ ¿Cómo quiere quererla?", correct: "Como nadie en este mundo te ha querido jamás", options: ["Como nadie en este mundo te ha querido jamás", "Con una pasión que te llene de paz", "Sin mirar ni un segundo hacia atrás"] },
+            { song: "Morat - La Correcta", prompt: "«Tú eres la persona correcta...» 🎯 ¿En qué momento llegó?", correct: "En el momento perfecto y en el lugar ideal", options: ["En el momento perfecto y en el lugar ideal", "Para hacerme sentir un amor sin igual", "Como un hermoso sueño celestial"] },
+            { song: "Morat - La Correcta (Coro)", prompt: "«No hay dudas cuando te miro...» 👁️✨ ¿Qué certeza tiene Carlos?", correct: "Sé que eres el amor de toda mi vida", options: ["Sé que eres el amor de toda mi vida", "Que mi alma jamás se sentirá abatida", "Que eres mi reina consentida"] },
+            { song: "Morat - Mi Nuevo Vicio", prompt: "«Tú eres mi nuevo vicio...» 🍬 ¿Qué le produce ese vicio tan bonito?", correct: "El que me hace feliz y me quita el dolor", options: ["El que me hace feliz y me quita el dolor", "El que me llena de mucho calor", "El que le da a mi vida su color"] },
+            { song: "Morat - Acuérdate de Mí", prompt: "«Cuando mires las estrellas en la noche...» 🌌 ¿Qué le pide al mirar al cielo?", correct: "Acuérdate de cuánto te amo yo", options: ["Acuérdate de cuánto te amo yo", "Pide un deseo con mucha ilusión", "Siente el latido de mi corazón"] },
+            { song: "Morat - Otras Se Van", prompt: "«Y aunque otras personas se vayan...» 🚶‍♀️❤️ ¿Qué hace el amor verdadero?", correct: "Yo me quedo contigo en las buenas y en las malas", options: ["Yo me quedo contigo en las buenas y en las malas", "Yo te regalo mis sueños y mis alas", "Te llevo a bailar por todas las salas"] },
+            { song: "Morat & Danna Paola - Idiota", prompt: "«Yo fui un idiota al pensar...» 🤦‍♂️ ¿Qué pensamiento tonto tuvo en el pasado?", correct: "Que podría vivir un solo segundo sin tu amor", options: ["Que podría vivir un solo segundo sin tu amor", "Que el tiempo pasaba sin ningún dolor", "Que no necesitaba de todo tu calor"] },
+            { song: "Morat - Mi Suerte", prompt: "«Tú eres mi mayor suerte...» 🍀 ¿Cómo describe a Melisa en esta canción?", correct: "El boleto ganador que la vida me regaló", options: ["El boleto ganador que la vida me regaló", "La estrella más bella que me iluminó", "El amor infinito que me rescató"] },
+            { song: "Morat - Mi Suerte (Coro)", prompt: "«No cambio un minuto a tu lado...» ⏳💖 ¿Por qué no lo cambiaría?", correct: "Por todo el oro del mundo", options: ["Por todo el oro del mundo", "Por un océano profundo", "Por un segundo errabundo"] },
+            { song: "Morat - Primeras Veces", prompt: "«Contigo quiero vivir...» 🚀 ¿Qué quiere vivir Carlos con su novia?", correct: "Todas las primeras veces que me faltan por vivir", options: ["Todas las primeras veces que me faltan por vivir", "Los sueños más bonitos antes de dormir", "Una historia eterna para compartir"] },
+            { song: "Morat - Debí Suponerlo", prompt: "«Debí suponer que al mirarte...» 😍 ¿Qué debió suponer desde el día 1?", correct: "Me iba a enamorar perdidamente de ti", options: ["Me iba a enamorar perdidamente de ti", "Que serías el centro de mi existir", "Que juntos íbamos siempre a sonreír"] },
+            { song: "Morat - Feo", prompt: "«No importa lo que diga la gente...» 🗣️¿Qué pasa con su amor?", correct: "Nuestro amor es lo más hermoso del universo", options: ["Nuestro amor es lo más hermoso del universo", "Cada día se convierte en un nuevo verso", "Es un sentimiento puro e inmerso"] },
+            { song: "Morat - Nunca Volvieron", prompt: "«Las tristezas se fueron...» ☀️ ¿Y cuándo volvieron?", correct: "Y desde que estás tú nunca volvieron", options: ["Y desde que estás tú nunca volvieron", "Se desvanecieron y desaparecieron", "Con nuestro amor se resolvieron"] },
+            { song: "Morat - Sobreviviste", prompt: "«A todas las tormentas del pasado...» 🌧️🌈 ¿Para qué sobreviviste mi amor?", correct: "Sobreviviste para ser mi gran amor", options: ["Sobreviviste para ser mi gran amor", "Para llenarme de paz y de valor", "Para brillar con todo tu esplendor"] },
+            { song: "Morat & Sebastián Yatra - Bajo La Mesa (Verso 2)", prompt: "«Y tocar tus pies bajo la mesa...» 🥿🤭 ¿Para qué hace ese gesto cómplice?", correct: "Para que sepas que estoy aquí solo para ti", options: ["Para que sepas que estoy aquí solo para ti", "Para hacerte reír sin que nadie se entere", "Para demostrar el amor que se quiere"] },
+            { song: "Morat & Sebastián Yatra - Bajo La Mesa (Coro 2)", prompt: "«Que si te vas me llevo una tristeza...» 🧩 ¿Por qué le dolería tanto?", correct: "Porque eres tú mi pieza favorita del rompecabezas", options: ["Porque eres tú mi pieza favorita del rompecabezas", "Porque tu amor me llena de grandezas", "Porque contigo se acaban las asperezas"] },
+            { song: "Morat - Segundos Platos", prompt: "«Yo no nací para ser...» 🍽️ ¿Qué lugar ocupa Melisa en el corazón de Carlos?", correct: "La segunda opción de nadie, contigo soy el número uno", options: ["La segunda opción de nadie, contigo soy el número uno", "El que se rinde cuando llega el desayuno", "Una casualidad sin destino alguno"] },
+            { song: "Morat - Mil Tormentas", prompt: "«Aunque vengan mil tormentas...» ⛈️☂️ ¿Qué le promete Carlos en las dificultades?", correct: "Yo seré tu refugio y tu paz", options: ["Yo seré tu refugio y tu paz", "Te amaré como nunca jamás", "No te voy a soltar hacia atrás"] },
+            { song: "Morat - Si Ayer Fuera Hoy", prompt: "«Si ayer fuera hoy...» 📅❤️ ¿Qué elección tomaría Carlos una y otra vez?", correct: "Te volvería a elegir una y mil veces más", options: ["Te volvería a elegir una y mil veces más", "Te regalaría mi corazón en paz", "Te llevaría a volar por donde vas"] },
+            { song: "Morat - Al Aire", prompt: "«Quiero gritar nuestro amor al aire...» 📢 ¿Para qué gritarlo tan fuerte?", correct: "Para que todo el mundo sepa cuánto te quiero", options: ["Para que todo el mundo sepa cuánto te quiero", "Para mandar un mensaje sincero", "Porque eres tú mi lucero primero"] },
+            { song: "Morat - No Termino", prompt: "«Y es que yo nunca termino...» ♾️ ¿De qué no termina Carlos jamás?", correct: "De admirar tu belleza y tu valentía", options: ["De admirar tu belleza y tu valentía", "De pensar en ti de noche y de día", "De escribirte nuestra hermosa melodía"] },
+            { song: "Morat - Antes de los Veinte", prompt: "«Desde que te conocí...» ⏳ ¿Qué supe sobre mi futuro?", correct: "Supe que mi futuro solo tenía sentido contigo", options: ["Supe que mi futuro solo tenía sentido contigo", "Sabía que serías mi mejor abrigo", "Que Dios te mandó como un regalo amigo"] },
+            { song: "Morat - Causa Perdida", prompt: "«No eres una causa perdida...» 🏆 ¿Qué eres para el corazón de tu novio?", correct: "Eres la victoria más hermosa de mi corazón", options: ["Eres la victoria más hermosa de mi corazón", "La dueña de toda mi razón", "El motivo de mi mejor canción"] },
+            { song: "Morat - Labios Rotos", prompt: "«Y con un solo beso tuyo...» 💋 ¿Qué pasa con todas las heridas?", correct: "Se sanan todas mis heridas por completo", options: ["Se sanan todas mis heridas por completo", "Se olvida el mundo y todo su secreto", "Se cumple mi amoroso decreto"] },
+            // --- 50 NUEVAS PREGUNTAS DE VALLENATO ROMÁNTICO ---
+            { song: "Felipe Peláez - El Amor Más Grande del Planeta", prompt: "«Yo te voy a amar como nadie en el planeta...» 🌍❤️ ¿Qué le promete Felipe Peláez a su amada?", correct: "Y te voy a regalar mi vida entera", options: ["Y te voy a regalar mi vida entera", "Porque tú eres mi regalo más bonito", "Y te haré canciones cada madrugada"] },
+            { song: "Felipe Peláez - El Amor Más Grande del Planeta (Coro)", prompt: "«Tú me cambiaste la vida desde que llegaste...» 💫 ¿Y por eso qué le da?", correct: "Y por eso te doy el amor más grande del planeta", options: ["Y por eso te doy el amor más grande del planeta", "Y te escribo poesías en una libreta", "Porque eres la reina de mi meta"] },
+            { song: "Felipe Peláez - Tan Natural", prompt: "«Y es que se me da tan natural...» 🍃🎶 ¿Qué se le da natural con Melisa?", correct: "Quererte, adorarte y pensarte cada segundo", options: ["Quererte, adorarte y pensarte cada segundo", "Cuidar tus sueños por todo el mundo", "Darte un beso dulce y profundo"] },
+            { song: "Felipe Peláez - Te Amo y Te Amo", prompt: "«Te amo, te amo y te amo...» 💘 ¿Qué le dice con tanta insistencia?", correct: "Y no me cansaré de decírtelo toda la vida", options: ["Y no me cansaré de decírtelo toda la vida", "Porque tú eres mi estrella consentida", "Y mi alma jamás estará perdida"] },
+            { song: "Felipe Peláez - Lo Tienes Todo", prompt: "«Tú lo tienes todo para hacerme feliz...» 👸✨ ¿Qué es lo que tiene?", correct: "La sonrisa más bella y el alma más pura", options: ["La sonrisa más bella y el alma más pura", "Una mirada llena de ternura", "El amor que me cura toda locura"] },
+            { song: "Binomio de Oro - Quiero Que Seas Mi Estrella", prompt: "«Quiero que seas mi estrella...» ⭐ ¿Para qué quiere que sea su estrella?", correct: "La que ilumine mis noches y guíe mi camino", options: ["La que ilumine mis noches y guíe mi camino", "Para llevarla siempre en mi destino", "Porque tu amor es un regalo divino"] },
+            { song: "Binomio de Oro - Quiero Que Seas Mi Estrella (Coro)", prompt: "«Y es que yo me ilusioné con tu mirada...» 😍 ¿Qué pasó después de ilusionarse?", correct: "Y ahora solo vivo para entregarte mi amor", options: ["Y ahora solo vivo para entregarte mi amor", "Y se acabó para siempre todo el dolor", "Y mi mundo se llenó de mucho color"] },
+            { song: "Binomio de Oro - Un Osito Dormilón", prompt: "«Te regalaré un osito dormilón...» 🧸😴 ¿Para qué le regala ese osito?", correct: "Para que te acompañe y te abrace en mis ausencias", options: ["Para que te acompañe y te abrace en mis ausencias", "Para que escuches todas mis vivencias", "Porque tu amor no tiene competencias"] },
+            { song: "Binomio de Oro - Me Ilusioné", prompt: "«Me ilusioné, me enamoré...» 💖 ¿De qué se enamoró profundamente?", correct: "De tu sonrisa dulce y de tus ojos hermosos", options: ["De tu sonrisa dulce y de tus ojos hermosos", "De los momentos mágicos y dichosos", "De tus abrazos cálidos y cariñosos"] },
+            { song: "Binomio de Oro - Niña Bonita (Verso)", prompt: "«Cuando te veo caminar se detiene el tiempo...» ⌛ ¿Por qué le causa esa sensación?", correct: "Porque eres la reina consentida de mi corazón", options: ["Porque eres la reina consentida de mi corazón", "Porque eres la musa de mi canción", "Porque eres mi más grande bendición"] },
+            { song: "Binomio de Oro - Cómo Te Olvido", prompt: "«Si te llevo en cada latido de mi pecho...» 💓 ¿Qué pasa con su recuerdo?", correct: "Es imposible olvidarte porque eres mi vida", options: ["Es imposible olvidarte porque eres mi vida", "Tu imagen jamás estará perdida", "Eres mi princesa y mi consentida"] },
+            { song: "Diomedes Díaz - Tú Eres La Reina", prompt: "«Tú eres la reina de mi alma...» 👑 ¿Qué reina en la vida de Carlos?", correct: "La que manda en mi corazón y en mi destino", options: ["La que manda en mi corazón y en mi destino", "La inspiración de este canto vallenato", "La que me hace feliz a cada rato"] },
+            { song: "Diomedes Díaz - Tú Eres La Reina (Coro)", prompt: "«Y es que para ti son mis mejores canciones...» 🪗 ¿Por qué le canta a ella?", correct: "Porque te adoro con todo el alma mía", options: ["Porque te adoro con todo el alma mía", "Porque me llenas de paz y alegría", "Porque te pienso de noche y de día"] },
+            { song: "Diomedes Díaz - Amarte Más No Pude", prompt: "«Yo te amé con todo el corazón...» ❤️🔥 ¿Y cómo sigue ese sentimiento?", correct: "Y te sigo amando más que a mi propia vida", options: ["Y te sigo amando más que a mi propia vida", "Y te amaré sin encontrar medida", "Porque eres tú mi única salida"] },
+            { song: "Diomedes Díaz - Sin Medir Distancias", prompt: "«Sin medir distancias yo te busco...» 🚶‍♂️💌 ¿Por qué no le importan las distancias?", correct: "Porque el amor verdadero no conoce fronteras", options: ["Porque el amor verdadero no conoce fronteras", "Porque quiero que siempre me quieras", "Para esperarte en todas las primaveras"] },
+            { song: "Diomedes Díaz - Te Necesito", prompt: "«Te necesito como el aire para respirar...» 🌬️ ¿Qué tan vital es su amor?", correct: "Porque sin tu presencia no soy nada", options: ["Porque sin tu presencia no soy nada", "Tú eres mi estrella iluminada", "La dueña de mi alma enamorada"] },
+            { song: "Los Inquietos del Vallenato - Nunca Niegues Que Te Amo", prompt: "«Nunca niegues que te amo con locura...» 🥺💖 ¿Qué certeza le da?", correct: "Porque por ti he dado mi vida y mi verdad", options: ["Porque por ti he dado mi vida y mi verdad", "Te amo por toda la eternidad", "Eres mi luz y mi felicidad"] },
+            { song: "Los Inquietos del Vallenato - Entrégame Tu Amor", prompt: "«Entrégame tu amor sin condiciones...» 🤝 ¿Qué promete hacer con ese amor?", correct: "Que yo te prometo cuidarlo eternamente", options: ["Que yo te prometo cuidarlo eternamente", "Que lo llevaré grabado en mi mente", "Porque te amo inevitablemente"] },
+            { song: "Los Inquietos del Vallenato - Quiero Saber de Ti", prompt: "«Quiero saber de ti, de tus sueños...» 💭✨ ¿Para qué quiere saberlo todo?", correct: "Para compartir cada segundo de esta vida a tu lado", options: ["Para compartir cada segundo de esta vida a tu lado", "Para tener mi corazón enamorado", "Para olvidar todo lo triste del pasado"] },
+            { song: "Los Inquietos del Vallenato - Regálame una Noche", prompt: "«Regálame una noche bajo el cielo azul...» 🌃🎶 ¿Qué le haría en esa noche?", correct: "Para cantarte al oído lo mucho que te quiero", options: ["Para cantarte al oído lo mucho que te quiero", "Para entregarte mi corazón sincero", "Porque eres tú mi lucero primero"] },
+            { song: "Los Diablitos - Mi Destino Eres Tú", prompt: "«He descubierto que mi destino eres tú...» 🧭❤️ ¿Quién es ella?", correct: "La mujer que siempre soñé y esperaba", options: ["La mujer que siempre soñé y esperaba", "La que mi corazón tanto anhelaba", "La que con mi tristeza acababa"] },
+            { song: "Los Diablitos - Busco Alguien Que Me Quiera", prompt: "«Y encontré en ti el amor más sincero...» 🌹 ¿Qué le trajo ese amor?", correct: "El que sanó mi alma y me dio la felicidad", options: ["El que sanó mi alma y me dio la felicidad", "Un sentimiento de pura verdad", "La luz en medio de la oscuridad"] },
+            { song: "Los Diablitos - Historia de Amor", prompt: "«Esta es nuestra historia de amor...» 📖✍️ ¿Cómo está escrita?", correct: "Escrita con besos, abrazos y promesas eternas", options: ["Escrita con besos, abrazos y promesas eternas", "Con las canciones más románticas y tiernas", "En las noches más bonitas y modernas"] },
+            { song: "Jorge Celedón - Cuatro Rosas", prompt: "«Te traigo cuatro rosas rosas...» 🌹🌹🌹🌹 ¿Para qué le lleva esas flores?", correct: "Para decirte cuánto te quiero y cuánto te admiro", options: ["Para decirte cuánto te quiero y cuánto te admiro", "Para que sientas cada suspiro", "Porque me enamoro cuando te miro"] },
+            { song: "Jorge Celedón - Ay Hombe", prompt: "«Ay hombe, qué bonito es el amor...» 🪗🥰 ¿Cuándo es bonito el amor en el vallenato?", correct: "Cuando se quiere de verdad como te quiero yo", options: ["Cuando se quiere de verdad como te quiero yo", "Cuando se canta con mucha emoción y voz", "Cuando estamos abrazaditos los dos"] },
+            { song: "Jorge Celedón - Qué Bonita Es Esta Vida", prompt: "«Y qué bonita es esta vida...» ☀️🌾 ¿Desde cuándo es tan bonita la vida?", correct: "Desde que me despierto con tu hermosa sonrisa", options: ["Desde que me despierto con tu hermosa sonrisa", "Porque tu amor me acaricia como la brisa", "Cuando te abrazo sin ninguna prisa"] },
+            { song: "Jorge Celedón - Lo Que Tú Necesitas", prompt: "«Yo tengo lo que tú necesitas...» 🎁❤️ ¿Qué es lo que Carlos tiene para Melisa?", correct: "Un corazón sincero y un amor incondicional", options: ["Un corazón sincero y un amor incondicional", "Una devoción y ternura sin igual", "Un cariño eterno y fenomenal"] },
+            { song: "Silvestre Dangond - Las Locuras Mías", prompt: "«Que me perdonen las locuras mías...» 🤪💘 ¿Por qué hace tantas locuras?", correct: "Pero estoy loco de amor por tu hermosura", options: ["Pero estoy loco de amor por tu hermosura", "Porque tu amor es mi única cura", "Para vivir una hermosa aventura"] },
+            { song: "Silvestre Dangond - Por Un Beso de Tu Boca", prompt: "«Por un beso de tu boca...» 💋 ¿Qué es capaz de hacer Silvestre por un beso?", correct: "Soy capaz de bajar las estrellas y el cielo", options: ["Soy capaz de bajar las estrellas y el cielo", "Te regalo mi vida y mi consuelo", "Dejo atrás cualquier miedo o desvelo"] },
+            { song: "Silvestre Dangond & Nicky Jam - Cásate Conmigo", prompt: "«Cásate conmigo, quédate conmigo...» 💍👰 ¿Para qué le pide matrimonio?", correct: "Para vivir juntos toda una eternidad de amor", options: ["Para vivir juntos toda una eternidad de amor", "Para regalarte todo mi calor", "Y quitar de tu vida cualquier dolor"] },
+            { song: "Silvestre Dangond - Un Amor Verdadero", prompt: "«Lo nuestro es un amor verdadero...» 🔒💞 ¿Cómo es ese amor de verdad?", correct: "De esos que no se rompen ni con las tormentas", options: ["De esos que no se rompen ni con las tormentas", "Que supera todas las adversidades que sientas", "Que crece con las alegrías que me cuentas"] },
+            { song: "Silvestre Dangond - Gracias", prompt: "«Le doy gracias a Dios y a la vida...» 🙏✨ ¿Por qué da tantas gracias?", correct: "Por haberme puesto un ángel como tú en el camino", options: ["Por haberme puesto un ángel como tú en el camino", "Por darme el amor más lindo y divino", "Porque contigo encontré mi destino"] },
+            { song: "Martin Elias - 10 Razones Para Amarte", prompt: "«Tengo mil razones para amarte...» 🔟❤️ ¿Cuál es la principal razón?", correct: "Y la primera es que eres lo más hermoso en mi mundo", options: ["Y la primera es que eres lo más hermoso en mi mundo", "Que tienes un corazón puro y profundo", "Que me haces feliz cada segundo"] },
+            { song: "Martin Elias - 10 Razones Para Amarte (Coro)", prompt: "«Tú me llenas de paz y alegría...» 🕊️😊 ¿Y por eso qué hace Carlos?", correct: "Y por eso te dedico mi amor todos los días", options: ["Y por eso te dedico mi amor todos los días", "Y te canto las más bellas melodías", "Porque tú eres la luz de mis poesías"] },
+            { song: "Martin Elias - Ella Es Mi Todo", prompt: "«Ella es mi todo, mi luz y mi guía...» 🌟 ¿Qué significa Melisa para su novio?", correct: "La que me inspira a ser mejor cada mañana", options: ["La que me inspira a ser mejor cada mañana", "La que entra como el sol por la ventana", "Una princesa hermosa y soberana"] },
+            { song: "Kaleth Morales - Vivo en el Limbo", prompt: "«Y es que te veo y me quedo sin palabras...» 😶😍 ¿Por qué lo deja en el limbo?", correct: "Porque tu dulzura me tiene viviendo en un sueño", options: ["Porque tu dulzura me tiene viviendo en un sueño", "Porque de tu corazón soy el único dueño", "Con un amor infinito y risueño"] },
+            { song: "Kaleth Morales - Ella Es Mi Todo", prompt: "«No hay nada más hermoso en este mundo...» 🌎❤️ ¿Qué es lo más hermoso para Kaleth?", correct: "Que ver tus ojos brillando llenos de amor", options: ["Que ver tus ojos brillando llenos de amor", "Sentir tu abrazo y todo tu calor", "Cuidarte siempre sin ningún temor"] },
+            { song: "Peter Manjarrés - Tragao de Ti", prompt: "«Estoy completamente tragao de ti...» 🤤💘 ¿Qué tan enamorado está?", correct: "Enamorado hasta los huesos de tu dulce ser", options: ["Enamorado hasta los huesos de tu dulce ser", "Pensando en ti en cada amanecer", "Y feliz de verte florecer"] },
+            { song: "Peter Manjarrés - Que Dios Te Bendiga", prompt: "«Que Dios te bendiga mi amor...» 🙏🌹 ¿Cuál es el deseo vallenato más lindo?", correct: "Y que guarde nuestra relación por mil años más", options: ["Y que guarde nuestra relación por mil años más", "Que te llene de mucha luz y paz", "Y que no nos separemos jamás"] },
+            { song: "Peter Manjarrés - El Amor de Mi Tierra", prompt: "«Con el amor más puro de mi tierra...» 🇨🇴❤️ ¿Qué le entrega?", correct: "Te entrego mi corazón sin ninguna reserva", options: ["Te entrego mi corazón sin ninguna reserva", "Una pasión que mi alma conserva", "Una promesa que el cielo observa"] },
+            { song: "Carlos Vives - Fruta Fresca", prompt: "«Sí, sí, sí, tu amor es como fruta fresca...» 🍉🍎 ¿Qué le hace ese amor de fruta fresca?", correct: "Que me llena de vida y me alegra el corazón", options: ["Que me llena de vida y me alegra el corazón", "Que me inspira a cantar una nueva canción", "Que me envuelve en la más bella ilusión"] },
+            { song: "Carlos Vives - Bailar Contigo", prompt: "«Quiero bailar contigo bajo la luna...» 🌙💃 ¿Qué siente al bailar con su reina?", correct: "Y sentir que el tiempo se detiene en tus abrazos", options: ["Y sentir que el tiempo se detiene en tus abrazos", "Y estrecharte fuerte entre mis brazos", "Uniéndonos con mil tiernos lazos"] },
+            { song: "Carlos Vives - Ella Es Mi Fiesta", prompt: "«Ella es mi fiesta, mi alegría y mi canción...» 🎉¿Cómo celebra Carlos la vida de Meli?", correct: "La celebración más grande que tiene mi alma", options: ["La celebración más grande que tiene mi alma", "La que me devuelve toda la calma", "Aplaudiendo feliz con la palma"] },
+            { song: "Carlos Vives - Dejame Entrar", prompt: "«Déjame entrar en tu corazón...» 🚪❤️ ¿Para qué quiere entrar Vives?", correct: "Para llenarlo de detalles, ternura y calor", options: ["Para llenarlo de detalles, ternura y calor", "Para borrarte cualquier dolor", "Para pintar tu mundo de color"] },
+            { song: "Los Gigantes del Vallenato - Yo Te Vi", prompt: "«Te vi llegar como un regalo del cielo...» 🎁☁️ ¿Qué supo al verla?", correct: "Y supe que serías la dueña de mi destino", options: ["Y supe que serías la dueña de mi destino", "Que tu amor era el más divino", "Que iluminarías todo mi camino"] },
+            { song: "Los Gigantes del Vallenato - Te Amo", prompt: "«Te amo con una fuerza imparable...» 💪💖 ¿Cómo es esa fuerza?", correct: "Que crece más y más con cada amanecer", options: ["Que crece más y más con cada amanecer", "Que me hace tan feliz en mi ser", "Que no se puede romper ni vencer"] },
+            { song: "Jean Carlos Centeno - Distintos Destinos", prompt: "«Aunque el mundo dé mil vueltas...» 🌍💞 ¿Qué le promete Jean Carlos?", correct: "Mi puerto seguro siempre será tu amor", options: ["Mi puerto seguro siempre será tu amor", "Yo seré tu protector y tu valor", "Te regalaré una vida sin dolor"] },
+            { song: "Jean Carlos Centeno - Amándote", prompt: "«Amándote de noche y de día...» 🌞🌜 ¿Qué encuentra en ese amor?", correct: "Es como encuentro la verdadera felicidad", options: ["Es como encuentro la verdadera felicidad", "Una vida de pura verdad", "Una luz en la oscuridad"] },
+            { song: "Nelson Velásquez - Ven a Mí", prompt: "«Ven a mí, mi amor bonita...» 🤗🌹 ¿Qué le espera en sus brazos?", correct: "Que mis brazos están abiertos solo para ti", options: ["Que mis brazos están abiertos solo para ti", "Un corazón que late muy feliz", "Una historia con raíz"] },
+            { song: "Nelson Velásquez - Regálame Tu Amor", prompt: "«Regálame tu amor por toda la vida...» 💝 ¿Qué promete hacer por ella?", correct: "Que yo te haré la mujer más feliz del universo", options: ["Que yo te haré la mujer más feliz del universo", "Y te escribiré un hermoso verso", "En este amor tan bonito e inmerso"] }
+        ];
+
+        let triviaPool = [];
+        try {
+            const sp = localStorage.getItem('melisa_music_trivia_pool');
+            if (sp) triviaPool = JSON.parse(sp);
+        } catch(e) {}
+        if (!Array.isArray(triviaPool)) triviaPool = [];
+        triviaPool = triviaPool.filter(i => typeof i === 'number' && i >= 0 && i < triviaData.length && triviaData[i]);
+        if (triviaPool.length === 0) {
+            triviaPool = Array.from({length: triviaData.length}, (_, i) => i);
+            shuffle(triviaPool);
+            localStorage.setItem('melisa_music_trivia_pool', JSON.stringify(triviaPool));
+        }
+
+        let triviaScore = parseInt(localStorage.getItem('melisa_music_trivia_score') || '0', 10);
+
+        function renderTriviaTab() {
+            if (!Array.isArray(triviaPool) || triviaPool.length === 0 || triviaPool[0] === undefined || !triviaData[triviaPool[0]]) {
+                triviaPool = Array.from({length: triviaData.length}, (_, i) => i);
+                shuffle(triviaPool);
+                localStorage.setItem('melisa_music_trivia_pool', JSON.stringify(triviaPool));
+            }
+
+            const qIdx = triviaPool[0];
+            const q = triviaData[qIdx];
+            const opts = [...q.options];
+            shuffle(opts);
+
+            contentArea.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
+                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🎧 MODO KARAOKE</span>
+                    <span style="color:var(--gold); font-weight:900; font-size:0.95rem;">🏆 Discos de Oro: ${triviaScore}</span>
+                </div>
+                <div style="background:rgba(255,0,127,0.15); border:1px solid #ff007f; padding:6px 14px; border-radius:12px; color:#ff80bf; font-size:0.82rem; font-weight:bold; display:inline-block; margin-bottom:12px;">
+                    📌 CANCIÓN: ${q.song}
+                </div>
+                <h3 style="color:#fff; font-family:'Outfit',sans-serif; font-size:1.15rem; line-height:1.4; margin-bottom:20px;">
+                    ${q.prompt}
+                </h3>
+                <div id="trivia-options" style="display:flex; flex-direction:column; gap:10px; width:100%;"></div>
+                <div id="trivia-feedback" style="margin-top:18px; min-height:45px; text-align:center;"></div>
+            `;
+
+            const optContainer = contentArea.querySelector('#trivia-options');
+            const feedbackEl = contentArea.querySelector('#trivia-feedback');
+
+            opts.forEach(optText => {
+                const btn = document.createElement('button');
+                btn.className = 'btn';
+                btn.style.background = 'rgba(255,255,255,0.08)';
+                btn.style.border = '2px solid rgba(255,255,255,0.2)';
+                btn.style.color = '#fff';
+                btn.style.padding = '14px 16px';
+                btn.style.borderRadius = '14px';
+                btn.style.fontSize = '0.98rem';
+                btn.style.fontWeight = 'bold';
+                btn.style.textAlign = 'left';
+                btn.style.transition = 'all 0.2s ease';
+                btn.innerHTML = `🎵 ${optText}`;
+
+                btn.onclick = () => {
+                    if (optText === q.correct) {
+                        btn.style.background = 'rgba(0,255,136,0.25)';
+                        btn.style.borderColor = '#00ff88';
+                        btn.style.color = '#00ff88';
+                        triviaScore++;
+                        localStorage.setItem('melisa_music_trivia_score', triviaScore.toString());
+
+                        triviaPool.shift();
+                        if (triviaPool.length === 0) {
+                            triviaPool = Array.from({length: triviaData.length}, (_, i) => i);
+                            shuffle(triviaPool);
+                        }
+                        localStorage.setItem('melisa_music_trivia_pool', JSON.stringify(triviaPool));
+
+                        feedbackEl.innerHTML = `
+                            <div style="color:#00ff88; font-weight:900; font-size:1.25rem; margin-bottom:12px; animation:popIn 0.3s ease;">🎉 ¡CORRECTO! ¡ERES LA REINA DEL KARAOKE! 🎤✨</div>
+                            <button id="next-song-btn" class="btn" style="background:var(--cyan); color:#000; width:100%; font-weight:900; padding:12px; border-radius:25px; box-shadow:0 4px 15px rgba(0,229,255,0.4);">
+                                ➡️ Siguiente Canción
+                            </button>
+                        `;
+
+                        // Confetti
+                        const cDiv = document.createElement('div');
+                        cDiv.className = 'game-confetti';
+                        cDiv.style.position = 'absolute'; cDiv.style.inset = '0'; cDiv.style.pointerEvents = 'none';
+                        for(let i=0; i<30; i++) {
+                            const p = document.createElement('div');
+                            p.className = 'game-confetti-piece';
+                            p.style.left = `${Math.random()*100}%`;
+                            p.style.backgroundColor = ['#00e5ff','#ff007f','#ffd54f','#00ff88'][Math.floor(Math.random()*4)];
+                            cDiv.appendChild(p);
+                        }
+                        contentArea.appendChild(cDiv);
+                        setTimeout(() => { if (cDiv.parentNode) cDiv.remove(); }, 2000);
+
+                        const nextBtn = feedbackEl.querySelector('#next-song-btn');
+                        if (nextBtn) nextBtn.onclick = () => renderTriviaTab();
+                    } else {
+                        btn.style.background = 'rgba(255,64,129,0.25)';
+                        btn.style.borderColor = '#ff4081';
+                        feedbackEl.innerHTML = `<span style="color:#ff4081; font-weight:bold;">❌ ¡Uy casi! Esa no es la letra, inténtalo con otra opción mi campeona 💪</span>`;
+                    }
+                };
+                if (optContainer) optContainer.appendChild(btn);
+            });
+        }
+
+        // ==========================================
+        //  TAB 2: PIANO MÁGICO DE CARLOS (WEB AUDIO API)
+        // ==========================================
+        const pianoQuotes = [
+            "🎹 ¡Nota Do de Dulzura! Eres la melodía que alegra cada mañana de Carlos.",
+            "🎹 ¡Nota Re de Reina! Melisa, no hay mujer más hermosa ni valiente en todo el universo.",
+            "🎹 ¡Nota Mi de Mi Amor! Cada latido del corazón de Carlos suena con tu nombre.",
+            "🎹 ¡Nota Fa de Fascinante! Tu sonrisa tiene el poder de iluminar el día más oscuro.",
+            "🎹 ¡Nota Sol de Sol mío! Eres el sol que abrigará todas nuestras mañanas cuando sanes.",
+            "🎹 ¡Nota La de Lealtad! Carlos estará a tu lado hoy, mañana y en cada segundo de tu vida.",
+            "🎹 ¡Nota Si de Siempre Juntos! Nada ni nadie podrá apagar la música de nuestro amor.",
+            "🎼 ¡Acorde Mágico! La distancia es solo un silencio temporal antes de nuestro gran concierto de abrazos.",
+            "🎼 ¡Sinfonía del Corazón! Carlos te envía 10,000 besos musicales para que te cures más rápido.",
+            "🎼 ¡Armonía Perfecta! Contigo la vida no es un ensayo, ¡es la obra maestra más hermosa!",
+            "🎹 ¡Ritmo Imparable! Tu valentía en esta recuperación merece una ovación de pie en todo el universo.",
+            "🎹 ¡Melodía Celestial! Si mi amor por ti fuera una canción, sonaría por toda la eternidad sin detenerse.",
+            "🎼 ¡Dúo Perfecto! Tú y yo hacemos el mejor equipo de todo el cosmos. ¡Te amo infinito Melisa!",
+            "🎹 ¡Nota de Esperanza! Muy pronto estaremos bailando, riendo y celebrando tu salud completa.",
+            "🎼 ¡Serenata de Amor! Cierra los ojos y siente cómo mi abrazo te envuelve en este instante.",
+            "🎹 ¡Composición Real! Eres el verso más bonito que Dios escribió en el destino de Carlos.",
+            "🎼 ¡Concierto de Besos! Cada día que pasa es una nota más cerca de volver a tenerte entre mis brazos.",
+            "🎹 ¡Sonido de Paz! Descansa, recupérate tranquila, que aquí está tu rey velando siempre por ti.",
+            "🎼 ¡Inspiración Eterna! Eres la musa que inspira toda la alegría y el amor en el Universo de Melisa.",
+            "🎹 ¡Aplauso Infinito! ¡Eres la campeona indiscutible de mi corazón y de mi vida entera!"
+        ];
+
+        let pianoPool = [];
+        try {
+            const pp = localStorage.getItem('melisa_music_piano_pool');
+            if (pp) pianoPool = JSON.parse(pp);
+        } catch(e) {}
+        if (!Array.isArray(pianoPool)) pianoPool = [];
+        pianoPool = pianoPool.filter(i => typeof i === 'number' && i >= 0 && i < pianoQuotes.length && pianoQuotes[i]);
+        if (pianoPool.length === 0) {
+            pianoPool = Array.from({length: pianoQuotes.length}, (_, i) => i);
+            shuffle(pianoPool);
+            localStorage.setItem('melisa_music_piano_pool', JSON.stringify(pianoPool));
+        }
+
+        let pianoNotesPlayed = parseInt(localStorage.getItem('melisa_music_piano_count') || '0', 10);
+        let audioCtx = null;
+
+        function playTone(freq, type = 'sine') {
+            try {
+                if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+                // Elegant piano envelope
+                gain.gain.setValueAtTime(0.35, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 1.2);
+
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + 1.2);
+            } catch(e) {}
+        }
+
+        const keysData = [
+            { note: "DO", freq: 261.63, color: "#ff007f", key: "1" },
+            { note: "RE", freq: 293.66, color: "#ff4081", key: "2" },
+            { note: "MI", freq: 329.63, color: "#ffd54f", key: "3" },
+            { note: "FA", freq: 349.23, color: "#00e5ff", key: "4" },
+            { note: "SOL", freq: 392.00, color: "#00ff88", key: "5" },
+            { note: "LA", freq: 440.00, color: "#7c4dff", key: "6" },
+            { note: "SI", freq: 493.88, color: "#ff80bf", key: "7" },
+            { note: "DO*", freq: 523.25, color: "#ffffff", key: "8" }
+        ];
+
+        function renderPianoTab() {
+            if (!Array.isArray(pianoPool) || pianoPool.length === 0 || pianoPool[0] === undefined || !pianoQuotes[pianoPool[0]]) {
+                pianoPool = Array.from({length: pianoQuotes.length}, (_, i) => i);
+                shuffle(pianoPool);
+                localStorage.setItem('melisa_music_piano_pool', JSON.stringify(pianoPool));
+            }
+
+            contentArea.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
+                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">🎹 PIANO DE CARLOS</span>
+                    <span id="piano-counter-txt" style="color:var(--gold); font-weight:900; font-size:0.9rem;">🎵 Notas Tocadas: ${pianoNotesPlayed}</span>
+                </div>
+                <p style="color:#fff; font-size:0.88rem; text-align:center; margin-bottom:16px;">
+                    ✨ Toca las teclas para escuchar sonido real y liberar dedicatorias mágicas del corazón de Carlos.
+                </p>
+
+                <div id="piano-keyboard" style="display:flex; justify-content:center; gap:6px; margin-bottom:20px; padding:10px; background:#0a0e17; border-radius:18px; border:2px solid rgba(255,255,255,0.1); overflow-x:auto;"></div>
+
+                <div style="text-align:center; margin-bottom:16px;">
+                    <button id="magic-chord-btn" class="btn" style="background:linear-gradient(90deg, #ff007f, #00e5ff); color:#fff; font-weight:900; padding:12px 24px; border-radius:30px; box-shadow:0 6px 20px rgba(255,0,127,0.4); font-size:1.05rem;">
+                        ✨ ¡Tocar Acorde Mágico de Amor! 💖
+                    </button>
+                </div>
+
+                <div id="piano-quote-box" style="background:rgba(0,229,255,0.1); border:2px dashed var(--cyan); border-radius:16px; padding:16px; text-align:center; min-height:80px; display:flex; align-items:center; justify-content:center;">
+                    <span style="color:var(--text-secondary); font-style:italic;">🎶 Toca cualquier tecla o presiona el botón mágico para recibir un mensaje de amor...</span>
+                </div>
+            `;
+
+            const kbDiv = contentArea.querySelector('#piano-keyboard');
+            const quoteBox = contentArea.querySelector('#piano-quote-box');
+            const counterTxt = contentArea.querySelector('#piano-counter-txt');
+
+            function triggerQuote() {
+                if (pianoPool.length === 0) {
+                    pianoPool = Array.from({length: pianoQuotes.length}, (_, i) => i);
+                    shuffle(pianoPool);
+                }
+                const qIdx = pianoPool.shift();
+                localStorage.setItem('melisa_music_piano_pool', JSON.stringify(pianoPool));
+
+                if (quoteBox) {
+                    quoteBox.style.animation = 'none';
+                    void quoteBox.offsetWidth;
+                    quoteBox.style.animation = 'popIn 0.4s ease';
+                    quoteBox.innerHTML = `
+                        <div style="color:#fff; font-size:1.05rem; font-weight:bold; line-height:1.4;">
+                            ${pianoQuotes[qIdx]}
+                        </div>
+                    `;
+                }
+            }
+
+            keysData.forEach(k => {
+                const keyBtn = document.createElement('button');
+                keyBtn.style.width = '45px';
+                keyBtn.style.height = '150px';
+                keyBtn.style.background = k.note === 'DO*' ? '#fff' : 'linear-gradient(180deg, #fff 0%, #e0e0e0 100%)';
+                keyBtn.style.border = '2px solid #333';
+                keyBtn.style.borderRadius = '0 0 10px 10px';
+                keyBtn.style.display = 'flex';
+                keyBtn.style.flexDirection = 'column';
+                keyBtn.style.justifyContent = 'flex-end';
+                keyBtn.style.alignItems = 'center';
+                keyBtn.style.paddingBottom = '12px';
+                keyBtn.style.color = '#000';
+                keyBtn.style.fontWeight = '900';
+                keyBtn.style.fontSize = '0.85rem';
+                keyBtn.style.boxShadow = '0 6px 12px rgba(0,0,0,0.5)';
+                keyBtn.style.cursor = 'pointer';
+                keyBtn.style.transition = 'all 0.1s ease';
+                keyBtn.innerHTML = `<span style="color:${k.color}; font-size:1.1rem;">●</span><span style="margin-top:4px;">${k.note}</span>`;
+
+                keyBtn.onmousedown = () => {
+                    keyBtn.style.transform = 'translateY(4px) scale(0.96)';
+                    keyBtn.style.background = k.color;
+                    keyBtn.style.color = '#fff';
+                    playTone(k.freq, 'triangle');
+
+                    pianoNotesPlayed++;
+                    localStorage.setItem('melisa_music_piano_count', pianoNotesPlayed.toString());
+                    if (counterTxt) counterTxt.innerHTML = `🎵 Notas Tocadas: ${pianoNotesPlayed}`;
+
+                    if (pianoNotesPlayed % 4 === 0) triggerQuote();
+                };
+
+                keyBtn.onmouseup = () => {
+                    keyBtn.style.transform = 'translateY(0) scale(1)';
+                    keyBtn.style.background = k.note === 'DO*' ? '#fff' : 'linear-gradient(180deg, #fff 0%, #e0e0e0 100%)';
+                    keyBtn.style.color = '#000';
+                };
+                keyBtn.onmouseleave = keyBtn.onmouseup;
+
+                if (kbDiv) kbDiv.appendChild(keyBtn);
+            });
+
+            const magicBtn = contentArea.querySelector('#magic-chord-btn');
+            if (magicBtn) {
+                magicBtn.onclick = () => {
+                    // Play a sweet 3-note arpeggio
+                    playTone(261.63); // DO
+                    setTimeout(() => playTone(329.63), 180); // MI
+                    setTimeout(() => playTone(392.00), 360); // SOL
+                    setTimeout(() => playTone(523.25), 540); // DO*
+                    
+                    pianoNotesPlayed += 4;
+                    localStorage.setItem('melisa_music_piano_count', pianoNotesPlayed.toString());
+                    if (counterTxt) counterTxt.innerHTML = `🎵 Notas Tocadas: ${pianoNotesPlayed}`;
+
+                    triggerQuote();
+
+                    // Confetti hearts
+                    const cDiv = document.createElement('div');
+                    cDiv.className = 'game-confetti';
+                    cDiv.style.position = 'absolute'; cDiv.style.inset = '0'; cDiv.style.pointerEvents = 'none';
+                    for(let i=0; i<25; i++) {
+                        const p = document.createElement('div');
+                        p.className = 'game-confetti-piece';
+                        p.style.left = `${Math.random()*100}%`;
+                        p.style.backgroundColor = ['#ff007f','#00e5ff','#ffd54f'][Math.floor(Math.random()*3)];
+                        cDiv.appendChild(p);
+                    }
+                    contentArea.appendChild(cDiv);
+                    setTimeout(() => { if (cDiv.parentNode) cDiv.remove(); }, 2000);
+                };
+            }
+        }
+
+        // ==========================================
+        //  TAB 3: LA ROCKOLA ROMÁNTICA (ESTACIONES FM)
+        // ==========================================
+        const rockolaStations = [
+            { station: "📻 99.9 FM - Radio Besos", title: "¡Hit de Abrazos Apretaditos!", desc: "Sintonizando en directo desde el corazón de Carlos: 'Melisa, te mando mil besos al aire para que te llenen de calor y dulzura hoy'." },
+            { station: "📻 100.5 FM - Estación Pasión", title: "Boletín Informativo del Amor", desc: "Se reporta un enamoramiento extremo, incurable y eterno del rey Carlos hacia la mujer más espectacular del planeta: ¡Melisa!" },
+            { station: "📻 102.3 FM - Frecuencia Destino", title: "La Casualidad más Hermosa", desc: "En esta estación recordamos que coincidir contigo en esta vida ha sido el regalo más grande y maravilloso que Dios le dio a Carlos." },
+            { station: "📻 104.8 FM - Radio Recuperación", title: "¡Fuerza, Salud y Alegría!", desc: "Transmitiendo energía curativa 24/7: Cada día que pasa eres más fuerte, tu cuerpo sana maravillosamente y muy pronto estaremos festejando en la calle." },
+            { station: "📻 107.5 FM - Romántica Universal", title: "Dedicatoria VIP del Oyente Carlos", desc: "'Eres el motivo de mi sonrisa, la inspiración de mis días y la reina indiscutible de todo mi universo. ¡Te amo con el alma!'" },
+            { station: "📻 108.0 FM - Estación Futuro", title: "Pronóstico del Tiempo Juntos", desc: "Pronóstico del clima para cuando te recuperes: ¡100% de probabilidad de salidas a cenar, paseos tomados de la mano, risas y felicidad total!" },
+            { station: "📻 95.5 FM - Radio Sonrisas", title: "El Sonido de tu Risa", desc: "No hay sinfonía en el mundo que se compare con el sonido de tu risa. Carlos está contando los segundos para volver a ver tus ojitos brillar de felicidad." },
+            { station: "📻 101.1 FM - Frecuencia Ternura", title: "La Guerrera más Hermosa", desc: "Hoy celebramos tu valentía. Has demostrado una fuerza increíble en estos 10 días. ¡Eres el orgullo más grande de tu novio!" },
+            { station: "📻 103.7 FM - Estación Promesas", title: "Un Juramento de Amor", desc: "Pase lo que pase, en los días buenos y en los difíciles, siempre tendrás la mano de Carlos sosteniendo la tuya con lealtad absoluta." },
+            { station: "📻 106.2 FM - Radio Universo", title: "El Centro del Sistema Solar", desc: "Todos los planetas, las estrellas y los latidos del corazón de Carlos giran alrededor de una sola reina: ¡Tú, mi hermosa Melisa!" },
+            { station: "📻 98.4 FM - Frecuencia Poesía", title: "Un Verso para Mi Amada", desc: "'Si el universo entero fuera música, tú serías la melodía perfecta que da sentido a toda mi existencia'." },
+            { station: "📻 105.9 FM - Estación Celebración", title: "¡Llegamos al Día 10!", desc: "¡Diez días de recuperación superados con éxito! Preparen el confeti y la música porque esta reina va directo a la victoria total." }
+        ];
+
+        let rockolaPool = [];
+        try {
+            const rp = localStorage.getItem('melisa_music_rockola_pool');
+            if (rp) rockolaPool = JSON.parse(rp);
+        } catch(e) {}
+        if (!Array.isArray(rockolaPool)) rockolaPool = [];
+        rockolaPool = rockolaPool.filter(i => typeof i === 'number' && i >= 0 && i < rockolaStations.length && rockolaStations[i]);
+        if (rockolaPool.length === 0) {
+            rockolaPool = Array.from({length: rockolaStations.length}, (_, i) => i);
+            shuffle(rockolaPool);
+            localStorage.setItem('melisa_music_rockola_pool', JSON.stringify(rockolaPool));
+        }
+
+        function renderRockolaTab() {
+            if (!Array.isArray(rockolaPool) || rockolaPool.length === 0 || rockolaPool[0] === undefined || !rockolaStations[rockolaPool[0]]) {
+                rockolaPool = Array.from({length: rockolaStations.length}, (_, i) => i);
+                shuffle(rockolaPool);
+                localStorage.setItem('melisa_music_rockola_pool', JSON.stringify(rockolaPool));
+            }
+
+            const stIdx = rockolaPool[0];
+            const st = rockolaStations[stIdx];
+
+            contentArea.innerHTML = `
+                <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; background:rgba(0,0,0,0.4); padding:8px 14px; border-radius:15px; border:1px solid rgba(0,229,255,0.2);">
+                    <span style="color:var(--cyan); font-weight:bold; font-size:0.9rem;">📻 ROCKOLA ROMÁNTICA</span>
+                    <span style="color:#00ff88; font-weight:900; font-size:0.85rem;">● TRANSMITIENDO EN VIVO</span>
+                </div>
+
+                <div style="background:linear-gradient(135deg, #2a0845, #6441a5); border:3px solid var(--gold); border-radius:20px; padding:20px; text-align:center; box-shadow:0 10px 25px rgba(0,0,0,0.6); margin-bottom:20px; position:relative;">
+                    <div style="background:#000; border:2px solid #00e5ff; border-radius:12px; padding:10px; margin-bottom:14px; color:#00e5ff; font-family:monospace; font-size:1.1rem; font-weight:bold; letter-spacing:1px; box-shadow:inset 0 0 10px rgba(0,229,255,0.5);">
+                        ${st.station}
+                    </div>
+                    <h3 style="color:var(--gold); font-family:'Outfit',sans-serif; font-size:1.3rem; margin-bottom:10px;">
+                        ✨ ${st.title} ✨
+                    </h3>
+                    <p style="color:#fff; font-size:1rem; line-height:1.5; background:rgba(0,0,0,0.3); padding:14px; border-radius:12px; border:1px solid rgba(255,255,255,0.1);">
+                        «${st.desc}»
+                    </p>
+                </div>
+
+                <div style="text-align:center;">
+                    <button id="next-station-btn" class="btn" style="background:linear-gradient(90deg, #00e5ff, #ffd54f); color:#000; font-weight:900; padding:14px 28px; border-radius:30px; box-shadow:0 6px 20px rgba(0,229,255,0.4); font-size:1.08rem; width:100%;">
+                        🎰 ¡Sintonizar Siguiente Estación Random! 📻
+                    </button>
+                </div>
+            `;
+
+            const nextStBtn = contentArea.querySelector('#next-station-btn');
+            if (nextStBtn) {
+                nextStBtn.onclick = () => {
+                    rockolaPool.shift();
+                    if (rockolaPool.length === 0) {
+                        rockolaPool = Array.from({length: rockolaStations.length}, (_, i) => i);
+                        shuffle(rockolaPool);
+                    }
+                    localStorage.setItem('melisa_music_rockola_pool', JSON.stringify(rockolaPool));
+                    
+                    // Sound effect or tone
+                    playTone(440, 'sine');
+                    setTimeout(() => playTone(587.33, 'sine'), 150);
+
+                    renderRockolaTab();
+                };
+            }
+        }
+
+        function updateTabUI() {
+            const btnT = wrapper.querySelector('#tab-btn-trivia');
+            const btnP = wrapper.querySelector('#tab-btn-piano');
+            const btnR = wrapper.querySelector('#tab-btn-rockola');
+
+            if (btnT) { btnT.style.background = activeTab === 'trivia' ? '#00e5ff' : 'rgba(255,255,255,0.1)'; btnT.style.color = activeTab === 'trivia' ? '#000' : '#fff'; btnT.style.fontWeight = '900'; btnT.style.boxShadow = activeTab === 'trivia' ? '0 0 15px rgba(0,229,255,0.6)' : 'none'; }
+            if (btnP) { btnP.style.background = activeTab === 'piano' ? '#00e5ff' : 'rgba(255,255,255,0.1)'; btnP.style.color = activeTab === 'piano' ? '#000' : '#fff'; btnP.style.fontWeight = '900'; btnP.style.boxShadow = activeTab === 'piano' ? '0 0 15px rgba(0,229,255,0.6)' : 'none'; }
+            if (btnR) { btnR.style.background = activeTab === 'rockola' ? '#00e5ff' : 'rgba(255,255,255,0.1)'; btnR.style.color = activeTab === 'rockola' ? '#000' : '#fff'; btnR.style.fontWeight = '900'; btnR.style.boxShadow = activeTab === 'rockola' ? '0 0 15px rgba(0,229,255,0.6)' : 'none'; }
+
+            if (activeTab === 'trivia') renderTriviaTab();
+            else if (activeTab === 'piano') renderPianoTab();
+            else if (activeTab === 'rockola') renderRockolaTab();
+        }
+
+        const btnT = wrapper.querySelector('#tab-btn-trivia');
+        const btnP = wrapper.querySelector('#tab-btn-piano');
+        const btnR = wrapper.querySelector('#tab-btn-rockola');
+
+        if (btnT) btnT.onclick = () => { activeTab = 'trivia'; updateTabUI(); };
+        if (btnP) btnP.onclick = () => { activeTab = 'piano'; updateTabUI(); };
+        if (btnR) btnR.onclick = () => { activeTab = 'rockola'; updateTabUI(); };
+
+        updateTabUI();
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -3010,6 +3662,7 @@ const UniverseGames = (function() {
         startPenalties,
         startAlbum,
         startKeepyUppy: startWorldCupTeams,
-        startWorldCupTeams
+        startWorldCupTeams,
+        startMusicFestival
     };
 })();

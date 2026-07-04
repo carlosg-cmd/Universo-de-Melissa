@@ -1,4 +1,4 @@
-const CACHE_NAME = 'melisa-store-v39';
+const CACHE_NAME = 'melisa-store-v45';
 
 self.addEventListener('install', (e) => {
   self.skipWaiting();
@@ -12,9 +12,8 @@ self.addEventListener('install', (e) => {
       './games.js',
       './fotos/foto_139.jpeg',
       './fotos/foto_186.jpeg',
-      './musica/cancion5.mp3',
-      './musica/cancion6.mp3',
-      './musica/cancion7.mp3'
+      './musica/cancion1.mp3',
+      './musica/cancion10.mp3'
     ]))
   );
 });
@@ -34,7 +33,7 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   e.respondWith(
-    fetch(e.request).then(response => {
+    fetch(e.request, { cache: 'no-store' }).then(response => {
       return caches.open(CACHE_NAME).then(cache => {
         cache.put(e.request, response.clone());
         return response;

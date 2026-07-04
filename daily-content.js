@@ -178,7 +178,7 @@ const DailyContent = (function() {
             day: 5,
             title: "Día 5 - Festival de Juegos 🎪",
             emoji: "🎠",
-            song: "musica/cancion5.mp3",
+            song: "musica/cancion1.mp3",
             letter: "Mi amor,\n\nHoy es una fecha especial, 5 de junio, el día en que nos dimos nuestro primer beso en la oficina, que fue un jueves y nos comimos un helado. Para celebrar esta fecha, he preparado un festival de juegos solo para ti.\n\nDisfruta de todos tus juegos favoritos y recuerda todos nuestros hermosos momentos.",
             funPhrase: "¡Gira la ruleta y prueba tu suerte! 🎡",
             recoveryQuote: "Cada día es una nueva oportunidad para sonreír.",
@@ -298,7 +298,7 @@ const DailyContent = (function() {
             day: 6,
             title: "Día 6 - Conexión de Corazones 💖",
             emoji: "✨",
-            song: "musica/cancion6.mp3",
+            song: "musica/cancion1.mp3",
             letter: "Mi amor,\n\n📢 **AVISO OFICIAL (Desde las 5:30 PM):**\n¡Hola hermosa! Los premios que habías ganado jugando anteriormente eran solamente de prueba para calentar motores 😉.\n\n¡Pero desde hoy a las 5:30 PM empiezan los **VERDADEROS PREMIOS SORPRESA**! 🎁\n\nEl nivel de dificultad ha aumentado: ahora sumas puntos de **2 en 2** y si te equivocas pierdes **1 punto**.\n\nPara ganar tu premio real y desbloquear el regalo, debes lograr una de dos cosas (lo que suceda primero):\n1️⃣ Llegar a la meta de **1000 puntos**.\n2️⃣ Demostrar tu perseverancia jugando al menos **15 veces**.\n\n¡Esfuérzate mucho mi reina, tú puedes ganar los verdaderos regalos! Te amo muchísimo 💖",
             funPhrase: "🚨 ¡Desde las 5:30 PM valen los premios reales! Juega 15 veces o llega a 1000 puntos 👑",
             recoveryQuote: "La constancia y el esfuerzo tienen su gran recompensa. ¡A jugar mi amor!",
@@ -319,7 +319,7 @@ const DailyContent = (function() {
             day: 7,
             title: "Día 7 - Las Cajitas Mágicas de Carlos 🎁",
             emoji: "🗝️",
-            song: "musica/cancion7.mp3",
+            song: "musica/cancion1.mp3",
             letter: "Mi hermosa princesa,\n\n¡Hemos llegado al Día 7 de nuestro Universo Melisa! 🎉 Siete días acompañándote en tu recuperación, viéndote ser cada día más fuerte y valiente.\n\nHoy te he preparado un minijuego nuevo y exclusivo: **Las Cajitas Mágicas de Carlos**. En cada cajita de regalo hay un mensaje escrito con todo mi amor.\n\nAbre cada una para descubrir lo mucho que te adoro, ¡y encuentra la **Llave Dorada del Amor** al final para desbloquear tu Premio Real del Día 7!\n\n¡Te amo infinito, mi reina hermosa! 💖",
             funPhrase: "¡Una semana de recuperación superada como una verdadera campeona! 👑",
             recoveryQuote: "Siete días menos de espera y siete días más de amor incondicional.",
@@ -341,7 +341,7 @@ const DailyContent = (function() {
             day: 9,
             title: "Día 9 - ¡Festival Mundialista del Amor! 🏆⚽",
             emoji: "🏆",
-            song: "musica/Morat, Sebastián Yatra - Bajo La Mesa.mp3",
+            song: "musica/cancion1.mp3",
             letter: "¡Hola, campeona indiscutible de mi vida!\n\n¡Bienvenida al Día 9! Hoy tu recuperación se viste de gala y entra al **Mundial de Fútbol del Amor**. Has jugado cada día con una garra y una dulzura impresionantes.\n\nPara hoy te preparé no uno, sino **TRES MINIJUEGOS MUNDIALISTAS INFINITOS**:\n1️⃣ **Tanda de Penales del Amor:** ¡Métele golazos románticos al portero!\n2️⃣ **Álbum Panini de Carlos y Melisa:** ¡Abre sobres dorados infinitos y visualiza tu álbum con nuestras fotos reales!\n3️⃣ **Selecciones del Mundial 2026:** ¡Demuestra cuánto sabes de fútbol y escribe los nombres de los países clasificados!\n\n¡Juega todo lo que quieras hoy, mi estrella número 10! Te amo con toda mi alma 💖🇨🇴",
             funPhrase: "⚽ ¡En la selección de mi corazón, tú llevas la 10 y eres la capitana eterna! 🏆👑",
             recoveryQuote: "Día 9: Goleando a la recuperación como toda una campeona mundial.",
@@ -366,10 +366,21 @@ const DailyContent = (function() {
                 }
             ]
         },
-        // Days 10-29 are placeholders for Carlos to customize
-        ...Array.from({length: 20}, (_, i) => ({
-            day: i + 10,
-            title: `Día ${i + 10} - Sorpresa`,
+        {
+            day: 10,
+            title: "Día 10 - ¡Festival Musical del Amor! 🎶🎤",
+            emoji: "🎧",
+            song: "musica/cancion10.mp3",
+            letter: "¡Mi amor hermosa, mi reina y mi canción favorita!\n\n¡Llegamos al Día 10! Diez días de una valentía increíble, diez días donde me has demostrado la fuerza tan maravillosa que tienes en tu corazón y en tu espíritu.\n\nHoy quiero que celebremos al ritmo de nuestro amor. Porque si el universo fuera una sinfonía, tú serías la melodía perfecta que le da sentido a toda mi existencia. Cada latido de mi pecho canta tu nombre, y cada segundo que pasa es una nota más cerca de volver a tenerte entre mis brazos, bailando y sonriendo como tanto nos gusta.\n\nDiviértete con este festival musical que preparé para ti: canta nuestras canciones, toca el piano mágico y sintoniza las frecuencias de mi corazón.\n\n¡Te amo con toda mi alma hoy, mañana y siempre!",
+            funPhrase: "¡Tú eres mi hit número 1 para toda la vida! 🎼🥰",
+            recoveryQuote: "Diez días demostrando tu fuerza. ¡El ritmo de tu recuperación es imparable!",
+            gameType: 'musicfestival',
+            gameConfig: {}
+        },
+        // Days 11-29 are placeholders for Carlos to customize
+        ...Array.from({length: 19}, (_, i) => ({
+            day: i + 11,
+            title: `Día ${i + 11} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",
