@@ -3702,6 +3702,46 @@ const UniverseGames = (function() {
         `;
         wrapper.appendChild(header);
 
+        // Timer & Deadline Logic
+        const deadline = new Date();
+        deadline.setHours(23, 55, 0, 0); // 11:55 PM today
+        const isPastDeadline = Date.now() > deadline.getTime();
+        let countdownInterval = null;
+
+        const banner = document.createElement('div');
+        banner.style.background = isPastDeadline ? 'rgba(255, 0, 0, 0.2)' : 'rgba(255, 0, 127, 0.2)';
+        banner.style.border = isPastDeadline ? '2px solid red' : '2px solid #ff007f';
+        banner.style.padding = '12px';
+        banner.style.borderRadius = '16px';
+        banner.style.marginBottom = '20px';
+        banner.style.textAlign = 'center';
+        banner.style.boxShadow = isPastDeadline ? '0 0 15px rgba(255,0,0,0.4)' : '0 0 15px rgba(255,0,127,0.4)';
+
+        if (isPastDeadline) {
+            banner.innerHTML = '<strong style="color:#ff4444; font-size:1.1rem;">⏳ TIEMPO AGOTADO</strong><br><span style="color:#fff; font-size:0.9rem;">La tienda de canje ha cerrado, ¡pero tus puntos están intactos! 💖</span>';
+        } else {
+            banner.innerHTML = '<strong style="color:#00ff88; font-size:1.15rem;">🔥 ¡EMPEZÓ LA RECTA FINAL! 🔥</strong><br><span style="color:#fff; font-size:0.9rem;">Tienes hasta las 11:55 PM de hoy para acumular y canjear tus premios antes de que la tienda cierre.</span><br><div id="arcade-countdown" style="font-size:1.4rem; font-weight:900; color:var(--gold); margin-top:8px;"></div>';
+        }
+        wrapper.appendChild(banner);
+
+        if (!isPastDeadline) {
+            countdownInterval = setInterval(() => {
+                const t = deadline.getTime() - Date.now();
+                if (t <= 0) {
+                    clearInterval(countdownInterval);
+                    location.reload(); // Reload to apply "Closed" state
+                } else {
+                    const el = wrapper.querySelector('#arcade-countdown');
+                    if (el) {
+                        const h = Math.floor((t / (1000 * 60 * 60)) % 24);
+                        const m = Math.floor((t / 1000 / 60) % 60);
+                        const s = Math.floor((t / 1000) % 60);
+                        el.textContent = `⏱️ ${h}h ${m}m ${s}s restantes`;
+                    }
+                }
+            }, 1000);
+        }
+
         // Tab Navigation
         const nav = document.createElement('div');
         nav.style.display = 'flex';
@@ -3728,10 +3768,25 @@ const UniverseGames = (function() {
             btn.style.fontSize = '0.88rem';
             btn.style.transition = 'all 0.2s ease';
             btn.textContent = t.label;
-            btn.onclick = () => {
-                activeTab = t.id;
-                updateTabUI();
-            };
+
+            if (t.id === 'arcadeprizes' && isPastDeadline) {
+                btn.style.opacity = '0.5';
+                btn.style.textDecoration = 'line-through';
+                btn.textContent = '🔒 Cerrado';
+                btn.onclick = () => {
+                    const alertEl = document.createElement('div');
+                    alertEl.style.position = 'absolute'; alertEl.style.top = '50%'; alertEl.style.left = '50%'; alertEl.style.transform = 'translate(-50%, -50%)';
+                    alertEl.style.background = 'rgba(255,0,0,0.95)'; alertEl.style.color = '#fff'; alertEl.style.padding = '15px'; alertEl.style.borderRadius = '15px'; alertEl.style.zIndex = '1000'; alertEl.style.textAlign = 'center'; alertEl.style.fontWeight = 'bold';
+                    alertEl.innerHTML = '¡El tiempo de canje finalizó! ⏳<br>Pero tranquila, tus tickets están guardados a salvo. 💖';
+                    wrapper.appendChild(alertEl);
+                    setTimeout(() => { if (alertEl.parentNode) alertEl.remove(); }, 3500);
+                };
+            } else {
+                btn.onclick = () => {
+                    activeTab = t.id;
+                    updateTabUI();
+                };
+            }
             nav.appendChild(btn);
         });
         wrapper.appendChild(nav);
@@ -3839,7 +3894,7 @@ const UniverseGames = (function() {
 
                     if (pacKisses.length === 0) {
                         if (pacInterval) clearInterval(pacInterval);
-                        tickets += 100;
+                        tickets += 10000000;
                         localStorage.setItem('melisa_arcade_tickets', tickets.toString());
                         updateTicketDisplay();
                         contentArea.innerHTML = `
@@ -3848,7 +3903,7 @@ const UniverseGames = (function() {
                                 <h3 style="color:#00ff88; font-family:'Outfit',sans-serif; font-size:1.6rem; margin:0 0 10px 0;">¡NIVEL COMPLETADO!</h3>
                                 <p style="color:#fff; font-size:1.05rem; line-height:1.5; margin-bottom:20px;">
                                     ¡Eres la reina indiscutible del Pac-Besos! Has atrapado todo mi amor y superado los obstáculos.<br><br>
-                                    <strong style="color:var(--gold); font-size:1.2rem;">+100 TICKETS ARCADE GANADOS 🎟️💖</strong>
+                                    <strong style="color:var(--gold); font-size:1.2rem;">+10.000.000 TICKETS ARCADE GANADOS 🎟️💖</strong>
                                 </p>
                                 <button id="pac-replay-btn" class="btn" style="background:var(--cyan); color:#000; font-weight:900; padding:12px 28px; border-radius:25px; box-shadow:0 4px 15px rgba(0,229,255,0.4);">
                                     🔄 Jugar Otra Vez para Más Tickets
@@ -4025,7 +4080,7 @@ const UniverseGames = (function() {
                 }
                 tetrisBoard[colIdx].push(currentShape);
                 tetrisPiecesCount++;
-                tickets += 30;
+                tickets += 10000000;
                 playArcadeTone(523.25, 'triangle', 0.15);
 
                 // Check if bottom row (row 0) is full across all 3 columns
@@ -4035,7 +4090,7 @@ const UniverseGames = (function() {
                     tetrisBoard[0].shift();
                     tetrisBoard[1].shift();
                     tetrisBoard[2].shift();
-                    tickets += 100;
+                    tickets += 50000000;
                     lineCleared = true;
                     playArcadeTone(587.33, 'sine', 0.2);
                     setTimeout(() => playArcadeTone(880, 'sine', 0.35), 150);
@@ -4051,9 +4106,9 @@ const UniverseGames = (function() {
                     void msgBox.offsetWidth;
                     msgBox.style.animation = 'popIn 0.3s ease';
                     if (lineCleared) {
-                        msgBox.innerHTML = '<strong style="color:#00ff88;">💥 ¡LÍNEA COMPLETADA! +130 TICKETS EN TOTAL 🎟️<br>¡Así de perfecto encajan nuestras almas! 💖</strong>';
+                        msgBox.innerHTML = '<strong style="color:#00ff88;">💥 ¡LÍNEA COMPLETADA! Súper Bono de +50.000.000 TICKETS 🎟️<br>¡Así de perfecto encajan nuestras almas! 💖</strong>';
                     } else {
-                        msgBox.innerHTML = `<span style="color:#00e5ff;">+30 Tickets ganados 🎟️ ¡Sigue encajando piezas para armar la línea!</span>`;
+                        msgBox.innerHTML = `<span style="color:#00e5ff;">+10.000.000 Tickets ganados 🎟️ ¡Sigue encajando piezas para armar la línea!</span>`;
                     }
                 }
 
@@ -4182,9 +4237,9 @@ const UniverseGames = (function() {
                     magicBtn.style.color = '#ff80bf';
                     magicBtn.style.cursor = 'pointer';
                     magicBtn.style.boxShadow = '0 0 15px rgba(255,0,127,0.4)';
-                    magicBtn.innerHTML = '🎁 Regalo de tu Rey: ¡Canjear +100 Tickets Gratis! 👑';
+                    magicBtn.innerHTML = '🎁 Regalo de tu Rey: ¡Canjear +10.000.000 Tickets Gratis! 👑';
                     magicBtn.onclick = () => {
-                        tickets += 100;
+                        tickets += 10000000;
                         localStorage.setItem('melisa_arcade_tickets', tickets.toString());
                         localStorage.setItem('melisa_arcade_last_free_tickets', Date.now().toString());
                         playArcadeTone(523.25, 'triangle', 0.2);
@@ -4237,6 +4292,7 @@ const UniverseGames = (function() {
         return {
             destroy: () => {
                 if (pacInterval) clearInterval(pacInterval);
+                if (countdownInterval) clearInterval(countdownInterval);
             }
         };
     }
