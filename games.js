@@ -3894,7 +3894,7 @@ const UniverseGames = (function() {
 
                     if (pacKisses.length === 0) {
                         if (pacInterval) clearInterval(pacInterval);
-                        tickets += 10000000;
+                        tickets += 100;
                         localStorage.setItem('melisa_arcade_tickets', tickets.toString());
                         updateTicketDisplay();
                         contentArea.innerHTML = `
@@ -3903,7 +3903,7 @@ const UniverseGames = (function() {
                                 <h3 style="color:#00ff88; font-family:'Outfit',sans-serif; font-size:1.6rem; margin:0 0 10px 0;">¡NIVEL COMPLETADO!</h3>
                                 <p style="color:#fff; font-size:1.05rem; line-height:1.5; margin-bottom:20px;">
                                     ¡Eres la reina indiscutible del Pac-Besos! Has atrapado todo mi amor y superado los obstáculos.<br><br>
-                                    <strong style="color:var(--gold); font-size:1.2rem;">+10.000.000 TICKETS ARCADE GANADOS 🎟️💖</strong>
+                                    <strong style="color:var(--gold); font-size:1.2rem;">+100 TICKETS ARCADE GANADOS 🎟️💖</strong>
                                 </p>
                                 <button id="pac-replay-btn" class="btn" style="background:var(--cyan); color:#000; font-weight:900; padding:12px 28px; border-radius:25px; box-shadow:0 4px 15px rgba(0,229,255,0.4);">
                                     🔄 Jugar Otra Vez para Más Tickets
@@ -4080,7 +4080,7 @@ const UniverseGames = (function() {
                 }
                 tetrisBoard[colIdx].push(currentShape);
                 tetrisPiecesCount++;
-                tickets += 10000000;
+                tickets += 30;
                 playArcadeTone(523.25, 'triangle', 0.15);
 
                 // Check if bottom row (row 0) is full across all 3 columns
@@ -4090,7 +4090,7 @@ const UniverseGames = (function() {
                     tetrisBoard[0].shift();
                     tetrisBoard[1].shift();
                     tetrisBoard[2].shift();
-                    tickets += 50000000;
+                    tickets += 100;
                     lineCleared = true;
                     playArcadeTone(587.33, 'sine', 0.2);
                     setTimeout(() => playArcadeTone(880, 'sine', 0.35), 150);
@@ -4106,9 +4106,9 @@ const UniverseGames = (function() {
                     void msgBox.offsetWidth;
                     msgBox.style.animation = 'popIn 0.3s ease';
                     if (lineCleared) {
-                        msgBox.innerHTML = '<strong style="color:#00ff88;">💥 ¡LÍNEA COMPLETADA! Súper Bono de +50.000.000 TICKETS 🎟️<br>¡Así de perfecto encajan nuestras almas! 💖</strong>';
+                        msgBox.innerHTML = '<strong style="color:#00ff88;">💥 ¡LÍNEA COMPLETADA! +130 TICKETS EN TOTAL 🎟️<br>¡Así de perfecto encajan nuestras almas! 💖</strong>';
                     } else {
-                        msgBox.innerHTML = `<span style="color:#00e5ff;">+10.000.000 Tickets ganados 🎟️ ¡Sigue encajando piezas para armar la línea!</span>`;
+                        msgBox.innerHTML = `<span style="color:#00e5ff;">+30 Tickets ganados 🎟️ ¡Sigue encajando piezas para armar la línea!</span>`;
                     }
                 }
 
@@ -4135,12 +4135,12 @@ const UniverseGames = (function() {
 
         // --- TAB 3: CANJEAR PREMIOS VIP ---
         const vipPrizes = [
-            { id: 'p_burger', title: '🍔 Hamburguesa Gourmet & Papitas', desc: 'Una salida o pedido a domicilio de tu hamburguesa favorita en cuanto te recuperes.', cost: 5000 },
-            { id: 'p_icecream', title: '🍦 Helado Doble Consentido', desc: 'Una tarde deliciosa comiendo tu helado preferido tomados de la mano.', cost: 2500 },
-            { id: 'p_movie', title: '🎬 Tarde de Cine & Crispetas VIP', desc: 'Película a tu elección, sofá, cobija, crispetas gigantes y abrazos ilimitados.', cost: 300 },
-            { id: 'p_massage', title: '💆‍♀️ Masaje Real de tu Rey (20 min)', desc: 'Sesión especial de masaje relajante en pies y espalda dado exclusivamente por Carlos.', cost: 8000000 },
-            { id: 'p_trip', title: '✈️ Paseo Especial de Celebración', desc: 'Una escapada o paseo romántico para festejar tu alta médica por todo lo alto.', cost: 1000000 },
-            { id: 'p_wish', title: '👑 El Gran Deseo de la Reina', desc: '¡Tú pides el capricho o deseo que quieras y tu rey Carlos te lo cumple sin dudarlo!', cost: 5000000 }
+            { id: 'p_burger', title: '🍔 Hamburguesa Gourmet & Papitas', desc: 'Una salida o pedido a domicilio de tu hamburguesa favorita en cuanto te recuperes.', cost: 10005000 },
+            { id: 'p_icecream', title: '🍦 Helado Doble Consentido', desc: 'Una tarde deliciosa comiendo tu helado preferido tomados de la mano.', cost: 10002500 },
+            { id: 'p_movie', title: '🎬 Tarde de Cine & Crispetas VIP', desc: 'Película a tu elección, sofá, cobija, crispetas gigantes y abrazos ilimitados.', cost: 10000300 },
+            { id: 'p_massage', title: '💆‍♀️ Masaje Real de tu Rey (20 min)', desc: 'Sesión especial de masaje relajante en pies y espalda dado exclusivamente por Carlos.', cost: 18000000 },
+            { id: 'p_trip', title: '✈️ Paseo Especial de Celebración', desc: 'Una escapada o paseo romántico para festejar tu alta médica por todo lo alto.', cost: 11000000 },
+            { id: 'p_wish', title: '👑 El Gran Deseo de la Reina', desc: '¡Tú pides el capricho o deseo que quieras y tu rey Carlos te lo cumple sin dudarlo!', cost: 15000000 }
         ];
 
         function renderArcadePrizes() {
@@ -4237,9 +4237,9 @@ const UniverseGames = (function() {
                     magicBtn.style.color = '#ff80bf';
                     magicBtn.style.cursor = 'pointer';
                     magicBtn.style.boxShadow = '0 0 15px rgba(255,0,127,0.4)';
-                    magicBtn.innerHTML = '🎁 Regalo de tu Rey: ¡Canjear +10.000.000 Tickets Gratis! 👑';
+                    magicBtn.innerHTML = '🎁 Regalo de tu Rey: ¡Canjear +100 Tickets Gratis! 👑';
                     magicBtn.onclick = () => {
-                        tickets += 10000000;
+                        tickets += 100;
                         localStorage.setItem('melisa_arcade_tickets', tickets.toString());
                         localStorage.setItem('melisa_arcade_last_free_tickets', Date.now().toString());
                         playArcadeTone(523.25, 'triangle', 0.2);
