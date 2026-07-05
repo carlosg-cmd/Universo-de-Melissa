@@ -4139,7 +4139,7 @@ const UniverseGames = (function() {
             { id: 'p_icecream', title: '🍦 Helado Doble Consentido', desc: 'Una tarde deliciosa comiendo tu helado preferido tomados de la mano.', cost: 10002500 },
             { id: 'p_movie', title: '🎬 Tarde de Cine & Crispetas VIP', desc: 'Película a tu elección, sofá, cobija, crispetas gigantes y abrazos ilimitados.', cost: 10000300 },
             { id: 'p_massage', title: '💆‍♀️ Masaje Real de tu Rey (20 min)', desc: 'Sesión especial de masaje relajante en pies y espalda dado exclusivamente por Carlos.', cost: 18000000 },
-            { id: 'p_trip', title: '✈️ Paseo Especial de Celebración', desc: 'Una escapada o paseo romántico para festejar tu alta médica por todo lo alto.', cost: 11000000 },
+            { id: 'p_trip', title: '✈️ Paseo Especial de Celebración', desc: 'Una escapada o paseo romántico para festejar tu alta médica por todo lo alto.', cost: 20000000 },
             { id: 'p_wish', title: '👑 El Gran Deseo de la Reina', desc: '¡Tú pides el capricho o deseo que quieras y tu rey Carlos te lo cumple sin dudarlo!', cost: 15000000 }
         ];
 
@@ -4154,10 +4154,6 @@ const UniverseGames = (function() {
                     ✨ Canjea tus Tickets ganados en los minijuegos por premios reales que tu rey Carlos te hará efectivos en cuanto te recuperes.
                 </p>
                 <div id="prizes-list" style="display:flex; flex-direction:column; gap:14px; margin-bottom:24px;"></div>
-
-                <div style="text-align:center; border-top:1px dashed rgba(255,255,255,0.2); padding-top:18px;">
-                    <button id="magic-tickets-btn" class="btn" style="padding:12px 20px; border-radius:20px; font-size:0.9rem; font-weight:900; width:100%; transition:all 0.3s ease;"></button>
-                </div>
             `;
 
             const listEl = contentArea.querySelector('#prizes-list');
@@ -4223,45 +4219,6 @@ const UniverseGames = (function() {
                 if (listEl) listEl.appendChild(card);
             });
 
-            const magicBtn = contentArea.querySelector('#magic-tickets-btn');
-            if (magicBtn) {
-                const lastFreeTime = parseInt(localStorage.getItem('melisa_arcade_last_free_tickets') || '0', 10);
-                const now = Date.now();
-                const twoHoursMs = 2 * 60 * 60 * 1000;
-                const timeDiff = now - lastFreeTime;
-                const canClaimFree = timeDiff >= twoHoursMs;
-
-                if (canClaimFree) {
-                    magicBtn.style.background = 'rgba(255,0,127,0.25)';
-                    magicBtn.style.border = '2px solid #ff007f';
-                    magicBtn.style.color = '#ff80bf';
-                    magicBtn.style.cursor = 'pointer';
-                    magicBtn.style.boxShadow = '0 0 15px rgba(255,0,127,0.4)';
-                    magicBtn.innerHTML = '🎁 Regalo de tu Rey: ¡Canjear +100 Tickets Gratis! 👑';
-                    magicBtn.onclick = () => {
-                        tickets += 100;
-                        localStorage.setItem('melisa_arcade_tickets', tickets.toString());
-                        localStorage.setItem('melisa_arcade_last_free_tickets', Date.now().toString());
-                        playArcadeTone(523.25, 'triangle', 0.2);
-                        setTimeout(() => playArcadeTone(659.25, 'triangle', 0.25), 100);
-                        renderArcadePrizes();
-                    };
-                } else {
-                    const remMs = twoHoursMs - timeDiff;
-                    const remMins = Math.ceil(remMs / (60 * 1000));
-                    const remHours = Math.floor(remMins / 60);
-                    const remOnlyMins = remMins % 60;
-                    const timeStr = remHours > 0 ? `${remHours}h y ${remOnlyMins}m` : `${remOnlyMins} min`;
-
-                    magicBtn.style.background = 'rgba(255,255,255,0.05)';
-                    magicBtn.style.border = '1px solid rgba(255,255,255,0.15)';
-                    magicBtn.style.color = 'rgba(255,255,255,0.4)';
-                    magicBtn.style.cursor = 'not-allowed';
-                    magicBtn.style.boxShadow = 'none';
-                    magicBtn.innerHTML = `⏳ Regalo de tu Rey Carlos: Disponible en ${timeStr} 🔒`;
-                    magicBtn.disabled = true;
-                }
-            }
         }
 
         function updateTabUI() {
