@@ -4332,6 +4332,7 @@ const UniverseGames = (function() {
             ctx.translate(bird.x, bird.y);
             const angle = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (bird.velocity * 0.08)));
             ctx.rotate(angle);
+            ctx.scale(-1, 1); // Flip horizontally so the dove faces right
             ctx.fillText(bird.emoji, 0, 0);
             ctx.restore();
         }
@@ -4343,16 +4344,12 @@ const UniverseGames = (function() {
                 ctx.fillRect(p.x, 0, pipeWidth, p.topHeight);
                 ctx.fillRect(p.x, canvas.height - p.bottomHeight, pipeWidth, p.bottomHeight);
 
-                // Leaves/Roses decoration
-                ctx.font = '24px Arial';
+                // Caps (only draw one rose at the top and one leaf at the bottom to avoid lag)
+                ctx.font = '28px Arial';
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'middle';
-                for(let i=30; i < p.topHeight; i+= 50) {
-                    ctx.fillText('🌹', p.x + pipeWidth/2, i);
-                }
-                for(let i=canvas.height - p.bottomHeight + 30; i < canvas.height; i+= 50) {
-                    ctx.fillText('🍃', p.x + pipeWidth/2, i);
-                }
+                ctx.fillText('🌹', p.x + pipeWidth/2, p.topHeight - 15);
+                ctx.fillText('🍃', p.x + pipeWidth/2, canvas.height - p.bottomHeight + 15);
             });
         }
 
@@ -4483,7 +4480,7 @@ const UniverseGames = (function() {
             overlay.innerHTML = `
                 <h2 style="font-family:'Outfit',sans-serif; color:#ff007f; text-shadow:0 0 15px #fff; margin:0 0 10px 0; font-size:3rem;">Flappy Love</h2>
                 <div style="font-size:3rem; margin-bottom:10px;">🕊️💖</div>
-                <p style="font-size:1.1rem; margin-bottom:25px; font-weight:500;">Toca la pantalla para volar y esquiva las rosas.</p>
+                <p style="font-size:1.1rem; margin-bottom:25px; font-weight:500;">Toca la pantalla para volar y esquiva las rosas. ¡Intenta superar los 1000 puntos!</p>
                 <button class="btn" id="flappy-start" style="background:#ff007f; color:#fff; font-weight:900; font-size:1.2rem; padding:14px 35px; border-radius:30px; box-shadow:0 6px 20px rgba(255,0,127,0.5);">¡EMPEZAR! 💖</button>
             `;
             setTimeout(() => {
