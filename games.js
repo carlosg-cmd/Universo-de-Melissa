@@ -4254,6 +4254,262 @@ const UniverseGames = (function() {
         };
     }
 
+    // =============================================
+    //  DÍA 12: FLAPPY LOVE 🕊️💖
+    // =============================================
+    function startFlappyLove(container, config) {
+        container.innerHTML = '';
+        const wrapper = document.createElement('div');
+        wrapper.className = 'game-flappy-wrapper';
+        wrapper.style.position = 'relative';
+        wrapper.style.width = '100%';
+        wrapper.style.maxWidth = '400px';
+        wrapper.style.height = '500px';
+        wrapper.style.margin = '0 auto';
+        wrapper.style.background = 'linear-gradient(to bottom, #87CEEB 0%, #e0f6ff 100%)';
+        wrapper.style.border = '4px solid #ff007f';
+        wrapper.style.borderRadius = '16px';
+        wrapper.style.overflow = 'hidden';
+        wrapper.style.boxShadow = '0 8px 20px rgba(255,0,127,0.3)';
+        container.appendChild(wrapper);
+
+        const canvas = document.createElement('canvas');
+        canvas.width = 400;
+        canvas.height = 500;
+        canvas.style.width = '100%';
+        canvas.style.height = '100%';
+        wrapper.appendChild(canvas);
+
+        const ctx = canvas.getContext('2d');
+
+        // Game State
+        let isPlaying = false;
+        let isGameOver = false;
+        let score = 0;
+        let animationId = null;
+
+        const bird = {
+            x: 50,
+            y: 200,
+            velocity: 0,
+            gravity: 0.5,
+            jump: -7.5,
+            size: 36, // Using 36px font for emoji
+            emoji: '🕊️'
+        };
+
+        const pipes = [];
+        const pipeWidth = 60;
+        const pipeGap = 160;
+        const speed = 2.5;
+
+        // Overlay for Instructions & Game Over
+        const overlay = document.createElement('div');
+        overlay.style.position = 'absolute';
+        overlay.style.top = '0'; overlay.style.left = '0'; overlay.style.width = '100%'; overlay.style.height = '100%';
+        overlay.style.display = 'flex'; overlay.style.flexDirection = 'column'; overlay.style.alignItems = 'center'; overlay.style.justifyContent = 'center';
+        overlay.style.background = 'rgba(0,0,0,0.6)';
+        overlay.style.color = '#fff'; overlay.style.textAlign = 'center'; overlay.style.padding = '20px';
+        overlay.style.zIndex = '20';
+        wrapper.appendChild(overlay);
+
+        const scoreDisplay = document.createElement('div');
+        scoreDisplay.style.position = 'absolute';
+        scoreDisplay.style.top = '10px'; scoreDisplay.style.left = '0'; scoreDisplay.style.width = '100%';
+        scoreDisplay.style.textAlign = 'center'; scoreDisplay.style.fontSize = '3rem'; scoreDisplay.style.fontWeight = '900';
+        scoreDisplay.style.color = '#fff'; scoreDisplay.style.textShadow = '3px 3px 0 #ff007f, -1px -1px 0 #ff007f, 1px -1px 0 #ff007f, -1px 1px 0 #ff007f';
+        scoreDisplay.style.zIndex = '10';
+        scoreDisplay.style.pointerEvents = 'none';
+        scoreDisplay.textContent = '0';
+        scoreDisplay.style.display = 'none';
+        wrapper.appendChild(scoreDisplay);
+
+        function drawBird() {
+            ctx.font = `${bird.size}px Arial`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.save();
+            ctx.translate(bird.x, bird.y);
+            const angle = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, (bird.velocity * 0.08)));
+            ctx.rotate(angle);
+            ctx.fillText(bird.emoji, 0, 0);
+            ctx.restore();
+        }
+
+        function drawPipes() {
+            pipes.forEach(p => {
+                // Stems
+                ctx.fillStyle = '#2e7d32'; 
+                ctx.fillRect(p.x, 0, pipeWidth, p.topHeight);
+                ctx.fillRect(p.x, canvas.height - p.bottomHeight, pipeWidth, p.bottomHeight);
+
+                // Leaves/Roses decoration
+                ctx.font = '24px Arial';
+                ctx.textAlign = 'center';
+                ctx.textBaseline = 'middle';
+                for(let i=30; i < p.topHeight; i+= 50) {
+                    ctx.fillText('🌹', p.x + pipeWidth/2, i);
+                }
+                for(let i=canvas.height - p.bottomHeight + 30; i < canvas.height; i+= 50) {
+                    ctx.fillText('🍃', p.x + pipeWidth/2, i);
+                }
+            });
+        }
+
+        function playTone(freq, type, dur) {
+            try {
+                const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                if (audioCtx.state === 'suspended') audioCtx.resume();
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.3, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + dur);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + dur);
+            } catch(e) {}
+        }
+
+        function update() {
+            if (!isPlaying) return;
+
+            // Clear
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Bird physics
+            bird.velocity += bird.gravity;
+            bird.y += bird.velocity;
+
+            // Pipes spawn
+            if (pipes.length === 0 || pipes[pipes.length - 1].x < canvas.width - 220) {
+                const topHeight = Math.random() * (canvas.height - pipeGap - 100) + 50;
+                const bottomHeight = canvas.height - topHeight - pipeGap;
+                pipes.push({ x: canvas.width, topHeight, bottomHeight, passed: false });
+            }
+
+            // Move pipes
+            pipes.forEach(p => {
+                p.x -= speed;
+                
+                // Score
+                if (!p.passed && bird.x > p.x + pipeWidth) {
+                    p.passed = true;
+                    score++;
+                    scoreDisplay.textContent = score;
+                    playTone(880, 'sine', 0.1);
+                }
+            });
+
+            // Remove off-screen pipes
+            if (pipes.length > 0 && pipes[0].x < -pipeWidth) {
+                pipes.shift();
+            }
+
+            drawPipes();
+            drawBird();
+
+            // Collision detection
+            // Bird bounding box (approximate for the emoji)
+            const birdR = 14; 
+            const hitGround = bird.y + birdR > canvas.height;
+            const hitCeiling = bird.y - birdR < 0;
+
+            let hitPipe = false;
+            pipes.forEach(p => {
+                if (bird.x + birdR > p.x && bird.x - birdR < p.x + pipeWidth) {
+                    if (bird.y - birdR < p.topHeight || bird.y + birdR > canvas.height - p.bottomHeight) {
+                        hitPipe = true;
+                    }
+                }
+            });
+
+            if (hitGround || hitCeiling || hitPipe) {
+                gameOver();
+            } else {
+                animationId = requestAnimationFrame(update);
+            }
+        }
+
+        function flap() {
+            if (isGameOver) return;
+            bird.velocity = bird.jump;
+            if (!isPlaying) {
+                isPlaying = true;
+                overlay.style.display = 'none';
+                scoreDisplay.style.display = 'block';
+                update();
+            } else {
+                playTone(330, 'triangle', 0.1);
+            }
+        }
+
+        function gameOver() {
+            isPlaying = false;
+            isGameOver = true;
+            cancelAnimationFrame(animationId);
+            playTone(150, 'sawtooth', 0.4);
+
+            overlay.style.display = 'flex';
+            overlay.innerHTML = `
+                <div style="font-size:4rem; margin-bottom:10px; filter:drop-shadow(0 0 10px #ff007f);">💥</div>
+                <h2 style="color:#fff; margin:0 0 10px 0; font-family:'Outfit',sans-serif;">¡Uy! Nos caímos 😅</h2>
+                <p style="font-size:1.5rem; color:var(--gold); font-weight:900; margin-bottom:10px;">Puntaje: ${score}</p>
+                <p style="font-size:1rem; margin-bottom:20px; padding:0 15px; color:#ddd;">No importa cuántas veces caigamos, nuestro amor siempre nos dará alas para volver a volar. ❤️</p>
+                <button id="flappy-restart" class="btn" style="background:var(--cyan); color:#000; font-weight:900; font-size:1.1rem; padding:12px 28px; border-radius:25px; box-shadow:0 4px 15px rgba(0,229,255,0.4);">VOLVER A VOLAR 🕊️</button>
+            `;
+
+            setTimeout(() => {
+                const btn = overlay.querySelector('#flappy-restart');
+                if (btn) btn.onclick = (e) => { e.stopPropagation(); resetGame(); };
+            }, 300);
+        }
+
+        function resetGame() {
+            bird.y = 200;
+            bird.velocity = 0;
+            pipes.length = 0;
+            score = 0;
+            scoreDisplay.textContent = '0';
+            isGameOver = false;
+            isPlaying = false;
+            
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            drawBird();
+
+            overlay.style.display = 'flex';
+            overlay.innerHTML = `
+                <h2 style="font-family:'Outfit',sans-serif; color:#ff007f; text-shadow:0 0 15px #fff; margin:0 0 10px 0; font-size:3rem;">Flappy Love</h2>
+                <div style="font-size:3rem; margin-bottom:10px;">🕊️💖</div>
+                <p style="font-size:1.1rem; margin-bottom:25px; font-weight:500;">Toca la pantalla para volar y esquiva las rosas.</p>
+                <button class="btn" id="flappy-start" style="background:#ff007f; color:#fff; font-weight:900; font-size:1.2rem; padding:14px 35px; border-radius:30px; box-shadow:0 6px 20px rgba(255,0,127,0.5);">¡EMPEZAR! 💖</button>
+            `;
+            setTimeout(() => {
+                const btn = overlay.querySelector('#flappy-start');
+                if (btn) btn.onclick = (e) => { e.stopPropagation(); flap(); };
+            }, 100);
+        }
+
+        // Init screen
+        resetGame();
+
+        // Global listeners for the wrapper
+        wrapper.addEventListener('mousedown', (e) => {
+            if (e.target.tagName !== 'BUTTON') flap();
+        });
+        wrapper.addEventListener('touchstart', (e) => { 
+            if (e.target.tagName !== 'BUTTON') { e.preventDefault(); flap(); }
+        }, {passive: false});
+
+        return {
+            destroy: () => {
+                if (animationId) cancelAnimationFrame(animationId);
+            }
+        };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -4271,7 +4527,8 @@ const UniverseGames = (function() {
         startKeepyUppy: startWorldCupTeams,
         startWorldCupTeams,
         startMusicFestival,
-        startArcade
+        startArcade,
+        startFlappyLove
     };
 })();
 

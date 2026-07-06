@@ -388,10 +388,21 @@ const DailyContent = (function() {
             gameType: 'arcade',
             gameConfig: {}
         },
-        // Days 12-29 are placeholders for Carlos to customize
-        ...Array.from({length: 18}, (_, i) => ({
-            day: i + 12,
-            title: `Día ${i + 12} - Sorpresa`,
+        {
+            day: 12,
+            title: "Día 12 - ¡Volando Juntos! 🕊️💖",
+            emoji: "🕊️",
+            song: "musica/cancion12.mp3",
+            letter: "¡Mi reina hermosa, mi pajarita linda!\n\nYa llegamos al Día 12 de esta recuperación que has llevado con tanta fuerza y valentía. Quiero que sepas que cada día que pasa me siento más orgulloso de la mujer increíble que tengo a mi lado.\n\nSé que hay momentos donde todo parece un obstáculo o una enredadera difícil de pasar, pero quiero recordarte que nuestro amor nos da alas. No importa cuántas veces sintamos que caemos, siempre tomaremos impulso para volar más alto, superando cualquier rosa con espinas que se cruce en nuestro camino.\n\nHoy quiero que te relajes y juegues a 'Flappy Love'. Cada vez que toques la pantalla, recuerda que así de ligero se siente mi corazón cada vez que te veo sonreír. Eres el aire bajo mis alas y la razón por la que quiero volar siempre a tu lado.\n\n¡Te amo con todo mi ser, hoy y siempre! A volar mi amor. 💖✨",
+            funPhrase: "¡Ni la gravedad puede con nuestro amor! 🌌🥰",
+            recoveryQuote: "Con cada aleteo, más cerca de abrazarnos y no soltarnos nunca.",
+            gameType: 'flappylove',
+            gameConfig: {}
+        },
+        // Days 13-29 are placeholders for Carlos to customize
+        ...Array.from({length: 17}, (_, i) => ({
+            day: i + 13,
+            title: `Día ${i + 13} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

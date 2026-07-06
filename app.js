@@ -957,6 +957,9 @@
                 case 'arcade':
                     titleEl.textContent = '🕹️ Arcade Retro: Maquinitas del Amor';
                     return UniverseGames.startArcade(container, gConfig);
+                case 'flappylove':
+                    titleEl.textContent = '🕊️ Flappy Love';
+                    return UniverseGames.startFlappyLove(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
