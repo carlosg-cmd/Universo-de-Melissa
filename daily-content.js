@@ -399,10 +399,155 @@ const DailyContent = (function() {
             gameType: 'flappylove',
             gameConfig: {}
         },
-        // Days 13-29 are placeholders for Carlos to customize
-        ...Array.from({length: 17}, (_, i) => ({
-            day: i + 13,
-            title: `Día ${i + 13} - Sorpresa`,
+        {
+            day: 13,
+            title: "Día 13 - ¡El Gran Repaso del Amor! 🎪✨",
+            emoji: "🎪",
+            song: "musica/cancion12.mp3",
+            letter: "¡Mi amor, mi reina, mi vida entera!\n\n¡Llegamos al Día 13! Y qué mejor manera de celebrarlo que haciendo un repaso de todos los momentos mágicos que hemos vivido en estos días.\n\nEste universo que construí para ti es un reflejo de todo lo que eres para mí: la persona que ilumina cada rincón de mi corazón. Cada juego que hemos jugado juntos (aunque estemos separados por la distancia de tu recuperación) ha sido un recordatorio de lo mucho que te amo.\n\nHoy te abro las puertas del Gran Festival del Repaso: todos los juegos de nuestros días anteriores, reunidos en un solo lugar para que juegues lo que más te guste, las veces que quieras, sin límites.\n\nEres la aventura más hermosa de mi vida. ¡Te amo infinito! 💖🌟",
+            funPhrase: "¡13 días de amor, risas y recuperación juntos! 🎉👑",
+            recoveryQuote: "Cada día que pasa eres más fuerte. ¡13 días lo demuestran!",
+            games: [
+                {
+                    name: 'Memoria del Amor 🧠',
+                    emoji: '🧠',
+                    type: 'memory',
+                    config: {
+                        pairs: 8,
+                        emojiFallback: ['💋', '💕', '🥰', '🌻', '🎬', '🍦', '🎡', '💌']
+                    }
+                },
+                {
+                    name: 'Sopa de Letras 🔤',
+                    emoji: '🔤',
+                    type: 'wordsearch',
+                    config: {
+                        words: ['OFICINA', 'JUNIO', 'JUEVES', 'HELADO', 'BESO', 'CRISPETAS', 'MARGARITAS', 'AMOR', 'MELISSA', 'CARLOS'],
+                        gridSize: 12
+                    }
+                },
+                {
+                    name: 'Trivia de los Dos ❓',
+                    emoji: '❓',
+                    type: 'trivia',
+                    config: {
+                        questions: [
+                            { q: '¿Cuál es mi jugo favorito?', options: ['Fresa', 'Mora', 'Milo', 'Lulo'], correct: 2, explanation: 'El Milo, ¡obvio!' },
+                            { q: 'Canción que te dediqué junto con el ramo de rosas:', options: ['Flores Amarillas', '25 rosas', 'Perfecta', 'Mi Universo'], correct: 1, explanation: '25 rosas para ti.' },
+                            { q: '¿Qué día nos hicimos novios?', options: ['5 de junio', '25 de diciembre', '14 de febrero', '19 de octubre'], correct: 3, explanation: 'El 19 de octubre.' },
+                            { q: 'Yo siempre te he dicho que eres mi...', options: ['Reina', '2025', 'Princesa', 'Vida'], correct: 1, explanation: 'Eres mi 2025.' },
+                            { q: '¿Dónde fue nuestro primer beso?', options: ['Cine', 'Parque', 'Tu oficina', 'Mi casa'], correct: 2, explanation: 'Fue en tu oficina.' },
+                            { q: '¿En qué mes fue nuestro primer beso?', options: ['Mayo', 'Junio', 'Julio', 'Agosto'], correct: 1, explanation: 'En junio.' },
+                            { q: '¿Qué día de la semana fue nuestro primer beso?', options: ['Lunes', 'Miércoles', 'Jueves', 'Viernes'], correct: 2, explanation: 'Fue un hermoso jueves.' },
+                            { q: 'El primer ramo de flores que te di eran rojas.', options: ['Verdadero', 'Falso'], correct: 1, explanation: 'Fueron amarillas.' },
+                            { q: 'Yo dije primero te amo.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Fui yo el primero.' },
+                            { q: 'Alquilé una sala de cine solo para los dos.', options: ['Falso', 'Verdadero'], correct: 1, explanation: '¡Lo hice por ti!' },
+                            { q: '¿A cuál de estos lugares hemos ido?', options: ['Tarazá', 'Bogotá', 'Cartagena', 'San Andrés'], correct: 0, explanation: '¡A Tarazá!' },
+                            { q: '¿A cuál de estos lugares hemos ido?', options: ['Cali', 'Medellín', 'Barranquilla', 'Santa Marta'], correct: 1, explanation: '¡A Medellín!' },
+                            { q: 'Morat es de nuestros cantantes favoritos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'Nos encantan.' },
+                            { q: 'Hemos dormido juntos.', options: ['Verdadero', 'Falso'], correct: 0, explanation: 'De los mejores momentos.' },
+                            { q: 'Ambos tenemos pasaporte.', options: ['Falso', 'Verdadero'], correct: 1, explanation: 'Listos para viajar.' }
+                        ]
+                    }
+                },
+                {
+                    name: 'Rompecabezas de Foto 🧩',
+                    emoji: '🧩',
+                    type: 'puzzle',
+                    config: {
+                        images: [
+                            'fotos/foto (7).jpeg', 'fotos/foto (31).jpeg', 'fotos/foto (32).jpeg',
+                            'fotos/foto (72).jpeg', 'fotos/foto (146).jpeg', 'fotos/foto_139.jpeg',
+                            'fotos/foto (129).jpeg', 'fotos/foto (130).jpeg', 'fotos/foto (76).jpeg'
+                        ],
+                        gridSize: 3,
+                        fallbackEmoji: '💕'
+                    }
+                },
+                {
+                    name: 'Descubre la Frase 🔡',
+                    emoji: '🔡',
+                    type: 'hangman',
+                    config: {
+                        phrases: [
+                            'NUESTRO PRIMER BESO CINCO DE JUNIO',
+                            'VIAJANDO EN MOTO A TARAZA UN FIN DE SEMANA JUNTOS',
+                            'NUESTRA PRIMERA NAVIDAD JUNTOS',
+                            'MARATON DE LA SERIE LUPIN',
+                            'CARLOS Y MELISSA VEINTE VEINTICINCO',
+                            'VIAJANDO A MEDELLIN POR LA VIA VIEJA',
+                            'VIAJANDO A PLAYA HASTA QUE TE CONQUISTE',
+                            'COCINANDO JUNTOS O BUENO YO COCINANDOTE A TI',
+                            'PROMETEME TU Y YO POR UN LARGO RATO'
+                        ]
+                    }
+                },
+                {
+                    name: 'Atrapa mi Corazón ❤️',
+                    emoji: '❤️',
+                    type: 'catchhearts',
+                    config: {}
+                },
+                {
+                    name: 'Simón Dice del Amor 🎵',
+                    emoji: '🎵',
+                    type: 'simonsays',
+                    config: {}
+                },
+                {
+                    name: 'Cajitas Mágicas de Carlos 🎁',
+                    emoji: '🎁',
+                    type: 'magicboxes',
+                    config: {}
+                },
+                {
+                    name: 'Tragamonedas del Amor 🎰',
+                    emoji: '🎰',
+                    type: 'slots',
+                    config: {}
+                },
+                {
+                    name: 'Penales del Amor ⚽',
+                    emoji: '⚽',
+                    type: 'penalties',
+                    config: {}
+                },
+                {
+                    name: 'Álbum Panini de Nosotros 📖',
+                    emoji: '📖',
+                    type: 'album',
+                    config: {}
+                },
+                {
+                    name: 'Selecciones del Mundial 🌍',
+                    emoji: '🌍',
+                    type: 'worldcupteams',
+                    config: {}
+                },
+                {
+                    name: 'Festival Musical 🎶',
+                    emoji: '🎶',
+                    type: 'musicfestival',
+                    config: {}
+                },
+                {
+                    name: 'Arcade Retro 🕹️',
+                    emoji: '🕹️',
+                    type: 'arcade',
+                    config: {}
+                },
+                {
+                    name: 'Flappy Love 🕊️',
+                    emoji: '🕊️',
+                    type: 'flappylove',
+                    config: {}
+                }
+            ]
+        },
+        // Days 14-29 are placeholders for Carlos to customize
+        ...Array.from({length: 16}, (_, i) => ({
+            day: i + 14,
+            title: `Día ${i + 14} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

@@ -969,7 +969,7 @@
 
         if (today && typeof UniverseGames !== 'undefined') {
             if (today.games && Array.isArray(today.games)) {
-                titleEl.textContent = today.day === 9 ? '🏆 Festival Mundialista del Amor' : '🎡 Festival de Juegos';
+                titleEl.textContent = today.day === 9 ? '🏆 Festival Mundialista del Amor' : today.day === 13 ? '🎪 El Gran Repaso del Amor' : '🎡 Festival de Juegos';
                 if (window.notifyCarlos) window.notifyCarlos(`Melissa abrió el Festival de Juegos del Día ${dayNumber}.`);
                 
                 const menuDiv = document.createElement('div');
