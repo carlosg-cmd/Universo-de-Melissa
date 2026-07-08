@@ -548,7 +548,7 @@ const DailyContent = (function() {
             day: 14,
             title: "Día 14 - El Buzón de tu Corazón 💌",
             emoji: "💌",
-            song: "musica/cancion14.mp3",
+            song: "musica/cancio14.mp3",
             letter: "¡Mi amor, mi reina hermosa!\n\nLlegamos al Día 14, ¡ya vas por la mitad del camino! Hoy quiero que imagines que tienes un buzón justo en el centro de tu corazón, y que cada día yo dejo ahí una cartita nueva para ti.\n\nHoy la carta dice esto: no importa la distancia, ni los días que faltan, mis mensajes de amor siempre van a encontrar el camino hasta ti, como si tu corazón tuviera su propio buzón esperando por mis palabras.\n\nQuise que disfrutaras de nuevo todos tus juegos favoritos, los mismos que tanto te han gustado, para que juegues las veces que quieras sin afán. Cada juego es un pedacito de nuestra historia, y quiero que hoy solo te relajes y disfrutes.\n\nRevisa tu buzón todos los días, mi amor, porque ahí siempre vas a encontrar una carta mía esperándote. Te amo infinito, mi cómplice de vida. 💖",
             funPhrase: "¡Tu corazón tiene buzón y yo tengo cartas de sobra! 💌👑",
             recoveryQuote: "Día 14: la mitad del camino recorrida con toda tu fuerza.",
