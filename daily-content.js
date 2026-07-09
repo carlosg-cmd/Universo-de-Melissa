@@ -689,10 +689,25 @@ const DailyContent = (function() {
                 }
             ]
         },
-        // Days 15-29 are placeholders for Carlos to customize
-        ...Array.from({length: 15}, (_, i) => ({
-            day: i + 15,
-            title: `Día ${i + 15} - Sorpresa`,
+        {
+            day: 15,
+            title: "Día 15 - Caza Corazones 💘",
+            emoji: "💘",
+            song: "musica/cancion15.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nYa vamos por el Día 15, ¡más de la mitad del camino! Hoy te traigo un juego que hice especialmente para ti, uno que nunca antes habíamos jugado: corazones que aparecen y se esconden, y tú tienes que atraparlos antes de que se vayan.\n\nEntre más rápido reacciones, más puntos ganas. Juega las veces que quieras, trata de superar tu propio récord, y disfruta cazando corazoncitos.\n\nTe amo infinito, mi cómplice de vida. 💖",
+            funPhrase: "¡A cazar corazones, mi campeona! 💘🏆",
+            recoveryQuote: "Día 15: más de la mitad recorrida, ¡qué orgulloso estoy de ti!",
+            gameType: 'whackhearts',
+            gameConfig: {
+                duration: 45,
+                holeCount: 9,
+                emojis: ['💖', '💗', '💕']
+            }
+        },
+        // Days 16-29 are placeholders for Carlos to customize
+        ...Array.from({length: 14}, (_, i) => ({
+            day: i + 16,
+            title: `Día ${i + 16} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",
