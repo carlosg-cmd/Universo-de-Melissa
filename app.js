@@ -960,6 +960,12 @@
                 case 'flappylove':
                     titleEl.textContent = '🕊️ Flappy Love';
                     return UniverseGames.startFlappyLove(container, gConfig);
+                case 'timeline':
+                    titleEl.textContent = '📜 Ordena Nuestra Historia';
+                    return UniverseGames.startTimeline(container, gConfig);
+                case 'whackhearts':
+                    titleEl.textContent = '💘 Caza Corazones';
+                    return UniverseGames.startWhackHearts(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
