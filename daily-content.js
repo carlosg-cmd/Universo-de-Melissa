@@ -694,7 +694,7 @@ const DailyContent = (function() {
             title: "Día 15 - Caza Corazones 💘",
             emoji: "💘",
             song: "musica/cancion15.mp3",
-            letter: "¡Mi amor, mi reina hermosa!\n\nYa vamos por el Día 15, ¡más de la mitad del camino! Hoy te traigo un juego que hice especialmente para ti, uno que nunca antes habíamos jugado: corazones que aparecen y se esconden, y tú tienes que atraparlos antes de que se vayan.\n\nEntre más rápido reacciones, más puntos ganas. Juega las veces que quieras, trata de superar tu propio récord, y disfruta cazando corazoncitos.\n\nTe amo infinito, mi cómplice de vida. 💖",
+            letter: "¡Mi amor, mi reina hermosa!\n\n¿Quién te espera cada día con un juego nuevo? Yo.\n¿Quién te escribe cartitas mientras te recuperas? Yo.\n¿Quién te manda flores amarillas antes de siquiera ser tu novio? Yo.\n¿Quién te sube fotos y recuerdos para que sonrías en tus días de descanso? Yo.\n¿Quién respeta tu espacio y tus tiempos, y aun así piensa en ti a cada rato? Yo.\n¿Quién entiende tus días difíciles y sigue ahí, sin irse a ningún lado? Yo.\n\nYa vamos por el Día 15, más de la mitad del camino, y hoy te traigo un juego nuevo: corazones que aparecen y se esconden, y tú tienes que atraparlos antes de que se vayan. Entre más rápido reacciones, más puntos ganas, y puedes jugarlo las veces que quieras tratando de superar tu propio récord.\n\nPor favor no lo olvides, mi amor: nadie te va a querer, cuidar y consentir como yo. Te amo infinito, mi cómplice de vida. 💖",
             funPhrase: "¡A cazar corazones, mi campeona! 💘🏆",
             recoveryQuote: "Día 15: más de la mitad recorrida, ¡qué orgulloso estoy de ti!",
             gameType: 'whackhearts',
