@@ -4507,6 +4507,268 @@ const UniverseGames = (function() {
         };
     }
 
+    // ==========================================
+    // 18. TIMELINE (ORDENA NUESTRA HISTORIA)
+    // ==========================================
+    function startTimeline(container, config) {
+        container.innerHTML = '';
+
+        const milestones = (config.milestones && config.milestones.length >= 2)
+            ? config.milestones
+            : [
+                { label: 'Primer beso', date: '5 de junio' },
+                { label: 'Nos hicimos novios', date: '19 de octubre' }
+            ];
+
+        const correctOrder = milestones.map((m, i) => ({ ...m, correctIndex: i }));
+        let shuffled = shuffleArray([...correctOrder]);
+        let nextExpected = 0;
+        let mistakes = 0;
+
+        const statsDiv = document.createElement('div');
+        statsDiv.className = 'game-stats';
+        statsDiv.innerHTML = `<span>Progreso: <span class="stat-value" id="tl-progress">0</span> / ${milestones.length}</span><span>Errores: <span class="stat-value" id="tl-mistakes">0</span></span>`;
+        container.appendChild(statsDiv);
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:8px 0 16px;font-size:0.95rem;';
+        instructions.textContent = 'Toca los momentos en el orden correcto, del más antiguo al más reciente 👇';
+        container.appendChild(instructions);
+
+        const timelineTrack = document.createElement('div');
+        timelineTrack.style.cssText = 'display:flex;flex-direction:column;gap:8px;width:100%;max-width:420px;margin:0 auto 20px;min-height:' + (milestones.length * 46) + 'px;';
+        container.appendChild(timelineTrack);
+
+        const optionsGrid = document.createElement('div');
+        optionsGrid.style.cssText = 'display:flex;flex-direction:column;gap:10px;width:100%;max-width:420px;margin:0 auto;';
+        container.appendChild(optionsGrid);
+
+        function renderOptions() {
+            optionsGrid.innerHTML = '';
+            shuffled.forEach((item) => {
+                const btn = document.createElement('button');
+                btn.textContent = item.label;
+                btn.style.cssText = 'padding:14px 16px;border-radius:12px;border:1.5px solid var(--primary-soft);background:rgba(0,229,255,0.06);color:var(--text-primary,#e0f7fa);font-size:1rem;cursor:pointer;text-align:left;transition:all 0.2s;';
+                btn.onmouseenter = () => { btn.style.borderColor = 'var(--primary)'; };
+                btn.onmouseleave = () => { btn.style.borderColor = 'var(--primary-soft)'; };
+                btn.onclick = () => handlePick(item, btn);
+                optionsGrid.appendChild(btn);
+            });
+        }
+
+        function handlePick(item, btn) {
+            if (item.correctIndex === nextExpected) {
+                btn.disabled = true;
+                const slot = document.createElement('div');
+                slot.style.cssText = 'padding:12px 16px;border-radius:12px;border:1.5px solid var(--primary);background:var(--primary-soft);color:var(--primary);font-weight:600;display:flex;justify-content:space-between;align-items:center;box-shadow:0 0 15px var(--primary-glow);animation:fadeInSlide 0.4s ease;';
+                slot.innerHTML = `<span>${nextExpected + 1}. ${item.label}</span>${item.date ? `<span style="font-size:0.85rem;color:var(--text-secondary);">${item.date}</span>` : ''}`;
+                timelineTrack.appendChild(slot);
+
+                nextExpected++;
+                document.getElementById('tl-progress').textContent = nextExpected;
+                shuffled = shuffled.filter(s => s !== item);
+                renderOptions();
+
+                if (nextExpected === milestones.length) {
+                    if (window.notifyCarlos) window.notifyCarlos("🎮 Melissa acaba de ganar el juego de Ordena Nuestra Historia.");
+                    optionsGrid.innerHTML = '';
+                    setTimeout(() => celebrate(container, `¡Ordenaste toda nuestra historia con ${mistakes} error${mistakes === 1 ? '' : 'es'}!`), 400);
+                }
+            } else {
+                mistakes++;
+                document.getElementById('tl-mistakes').textContent = mistakes;
+                btn.style.borderColor = 'var(--danger)';
+                btn.style.background = 'rgba(255,82,82,0.12)';
+                btn.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-6px)' },
+                    { transform: 'translateX(6px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 300 });
+                setTimeout(() => {
+                    btn.style.borderColor = 'var(--primary-soft)';
+                    btn.style.background = 'rgba(0,229,255,0.06)';
+                }, 400);
+            }
+        }
+
+        renderOptions();
+
+        // Replay button
+        const replayBtn = document.createElement('button');
+        replayBtn.className = 'game-replay-btn';
+        replayBtn.innerHTML = '🔄 Jugar de nuevo';
+        replayBtn.onclick = () => startTimeline(container, config);
+        container.appendChild(replayBtn);
+
+        return { destroy: () => { container.innerHTML = ''; } };
+    }
+
+    // ==========================================
+    // 19. CAZA CORAZONES (WHACK-A-HEART, REPLAYABLE SCORE LOOP)
+    // ==========================================
+    function startWhackHearts(container, config) {
+        container.innerHTML = '';
+
+        const DURATION = config.duration || 45; // seconds
+        const HOLE_COUNT = config.holeCount || 9;
+        const START_INTERVAL = 1100; // ms a heart stays visible at the start
+        const MIN_INTERVAL = 500;   // ms at max difficulty
+        const emojis = config.emojis || ['💖', '💗', '💕'];
+
+        const HIGH_SCORE_KEY = 'melisa_whack_hearts_highscore';
+        let bestScore = parseInt(localStorage.getItem(HIGH_SCORE_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'position:relative;width:100%;max-width:420px;margin:0 auto;user-select:none;-webkit-user-select:none;touch-action:manipulation;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Puntos: <span class="stat-value" id="wh-score">0</span></span>
+            <span>Tiempo: <span class="stat-value" id="wh-time">${DURATION}</span>s</span>
+            <span>Mejor: <span class="stat-value" id="wh-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const grid = document.createElement('div');
+        const cols = 3;
+        const rows = Math.ceil(HOLE_COUNT / cols);
+        grid.style.cssText = `display:grid;grid-template-columns:repeat(${cols},1fr);gap:10px;margin-top:14px;`;
+        wrapper.appendChild(grid);
+
+        const holes = [];
+        for (let i = 0; i < HOLE_COUNT; i++) {
+            const hole = document.createElement('div');
+            hole.style.cssText = 'aspect-ratio:1;border-radius:50%;border:2px solid var(--primary-soft);background:rgba(0,229,255,0.05);display:flex;align-items:center;justify-content:center;font-size:2rem;cursor:pointer;transition:transform 0.1s;overflow:hidden;';
+            hole.dataset.active = 'false';
+            hole.addEventListener('click', () => hit(i));
+            grid.appendChild(hole);
+            holes.push(hole);
+        }
+
+        // Start overlay
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;z-index:10;text-align:center;padding:20px;';
+        overlay.innerHTML = `
+            <div style="font-size:3rem;">💘</div>
+            <p style="color:var(--text-secondary);max-width:280px;">Toca los corazones antes de que se escondan. ¡Entre más rápido reacciones, más puntos ganas!</p>
+        `;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        wrapper.appendChild(overlay);
+
+        let score = 0;
+        let timeLeft = DURATION;
+        let activeHole = -1;
+        let popTimeout = null;
+        let tickInterval = null;
+        let currentInterval = START_INTERVAL;
+        let running = false;
+
+        function hit(index) {
+            if (!running || index !== activeHole) return;
+            score++;
+            document.getElementById('wh-score').textContent = score;
+            holes[index].style.transform = 'scale(1.15)';
+            setTimeout(() => { holes[index].style.transform = 'scale(1)'; }, 100);
+            clearHole(index);
+            activeHole = -1;
+            scheduleNextPop();
+        }
+
+        function clearHole(index) {
+            holes[index].innerHTML = '';
+            holes[index].dataset.active = 'false';
+            holes[index].style.borderColor = 'var(--primary-soft)';
+            holes[index].style.background = 'rgba(0,229,255,0.05)';
+        }
+
+        function popRandomHeart() {
+            if (activeHole !== -1) clearHole(activeHole);
+            let next = Math.floor(Math.random() * HOLE_COUNT);
+            activeHole = next;
+            const emoji = emojis[Math.floor(Math.random() * emojis.length)];
+            holes[next].innerHTML = emoji;
+            holes[next].dataset.active = 'true';
+            holes[next].style.borderColor = 'var(--primary)';
+            holes[next].style.background = 'var(--primary-soft)';
+
+            // Progressively speed up as time passes
+            const progress = 1 - (timeLeft / DURATION);
+            currentInterval = Math.max(MIN_INTERVAL, START_INTERVAL - progress * (START_INTERVAL - MIN_INTERVAL));
+
+            popTimeout = setTimeout(() => {
+                if (activeHole === next) {
+                    clearHole(next);
+                    activeHole = -1;
+                    if (running) scheduleNextPop();
+                }
+            }, currentInterval);
+        }
+
+        function scheduleNextPop() {
+            if (!running) return;
+            popTimeout = setTimeout(popRandomHeart, 250);
+        }
+
+        function endGame() {
+            running = false;
+            clearTimeout(popTimeout);
+            clearInterval(tickInterval);
+            if (activeHole !== -1) clearHole(activeHole);
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(HIGH_SCORE_KEY, String(bestScore));
+            }
+            document.getElementById('wh-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Caza Corazones y obtuvo ${score} puntos.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${score >= bestScore && score > 0 ? '🏆' : '💗'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡${score} puntos!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startWhackHearts(container, config);
+            overlay.appendChild(again);
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            overlay.style.display = 'none';
+            running = true;
+            score = 0;
+            timeLeft = DURATION;
+            document.getElementById('wh-score').textContent = '0';
+            document.getElementById('wh-time').textContent = String(timeLeft);
+
+            tickInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('wh-time').textContent = String(Math.max(0, timeLeft));
+                if (timeLeft <= 0) endGame();
+            }, 1000);
+
+            popRandomHeart();
+        };
+
+        return {
+            destroy: () => {
+                clearTimeout(popTimeout);
+                clearInterval(tickInterval);
+                running = false;
+                container.innerHTML = '';
+            }
+        };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -4525,7 +4787,8 @@ const UniverseGames = (function() {
         startWorldCupTeams,
         startMusicFestival,
         startArcade,
-        startFlappyLove
+        startFlappyLove,
+        startTimeline,
+        startWhackHearts
     };
 })();
-
