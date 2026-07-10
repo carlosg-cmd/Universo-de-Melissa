@@ -4769,6 +4769,223 @@ const UniverseGames = (function() {
         };
     }
 
+    // ==========================================
+    // 20. SERPIENTE DEL AMOR (SNAKE, REPLAYABLE SCORE LOOP)
+    // ==========================================
+    function startSnakeLove(container, config) {
+        container.innerHTML = '';
+
+        const GRID_SIZE = config.gridSize || 15;
+        const TICK_MS = config.tickMs || 160;
+        const HIGH_SCORE_KEY = 'melisa_snake_highscore';
+        let bestScore = parseInt(localStorage.getItem(HIGH_SCORE_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:400px;margin:0 auto;user-select:none;-webkit-user-select:none;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Puntos: <span class="stat-value" id="sn-score">0</span></span>
+            <span>Mejor: <span class="stat-value" id="sn-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:1;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:hidden;';
+        wrapper.appendChild(canvasWrapper);
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'width:100%;height:100%;display:block;background:#0a1128;';
+        canvasWrapper.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            const size = canvasWrapper.clientWidth;
+            canvas.width = size;
+            canvas.height = size;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;z-index:10;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🐍💗</div><p style="color:var(--text-secondary);max-width:260px;">Guía a la serpiente para comer corazones y crecer. ¡No choques contigo misma ni con el borde!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        canvasWrapper.appendChild(overlay);
+
+        // Touch/click D-pad controls
+        const controls = document.createElement('div');
+        controls.style.cssText = 'display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:6px;justify-content:center;';
+        function makeBtn(label, dir) {
+            const b = document.createElement('button');
+            b.textContent = label;
+            b.style.cssText = 'font-size:1.4rem;border-radius:12px;border:1.5px solid var(--primary-soft);background:rgba(0,229,255,0.06);color:var(--primary);cursor:pointer;';
+            b.onclick = () => setDirection(dir);
+            return b;
+        }
+        const blank1 = document.createElement('div');
+        const upBtn = makeBtn('⬆️', 'up');
+        const blank2 = document.createElement('div');
+        const leftBtn = makeBtn('⬅️', 'left');
+        const downBtn = makeBtn('⬇️', 'down');
+        const rightBtn = makeBtn('➡️', 'right');
+        controls.append(blank1, upBtn, blank2, leftBtn, downBtn, rightBtn);
+        wrapper.appendChild(controls);
+
+        let snake, direction, nextDirection, food, score, loopInterval, running;
+
+        function resetState() {
+            const mid = Math.floor(GRID_SIZE / 2);
+            snake = [{ x: mid - 1, y: mid }, { x: mid - 2, y: mid }, { x: mid - 3, y: mid }];
+            direction = 'right';
+            nextDirection = 'right';
+            score = 0;
+            placeFood();
+            document.getElementById('sn-score').textContent = '0';
+        }
+
+        function placeFood() {
+            let pos;
+            do {
+                pos = { x: Math.floor(Math.random() * GRID_SIZE), y: Math.floor(Math.random() * GRID_SIZE) };
+            } while (snake.some(s => s.x === pos.x && s.y === pos.y));
+            food = pos;
+        }
+
+        function setDirection(dir) {
+            const opposite = { up: 'down', down: 'up', left: 'right', right: 'left' };
+            if (opposite[dir] === direction) return; // can't reverse into self
+            nextDirection = dir;
+        }
+
+        function keyHandler(e) {
+            const map = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+            if (map[e.key]) { e.preventDefault(); setDirection(map[e.key]); }
+        }
+
+        function draw() {
+            const cell = canvas.width / GRID_SIZE;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0a1128';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Food
+            ctx.font = `${cell * 0.9}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💗', food.x * cell + cell / 2, food.y * cell + cell / 2);
+
+            // Snake
+            snake.forEach((seg, i) => {
+                ctx.fillStyle = i === 0 ? '#00e5ff' : 'rgba(0,229,255,0.75)';
+                ctx.shadowColor = 'rgba(0,229,255,0.6)';
+                ctx.shadowBlur = i === 0 ? 8 : 2;
+                const pad = cell * 0.08;
+                ctx.beginPath();
+                ctx.roundRect(seg.x * cell + pad, seg.y * cell + pad, cell - pad * 2, cell - pad * 2, 6);
+                ctx.fill();
+            });
+            ctx.shadowBlur = 0;
+        }
+
+        function tick() {
+            direction = nextDirection;
+            const head = { ...snake[0] };
+            if (direction === 'up') head.y--;
+            else if (direction === 'down') head.y++;
+            else if (direction === 'left') head.x--;
+            else if (direction === 'right') head.x++;
+
+            const outOfBounds = head.x < 0 || head.y < 0 || head.x >= GRID_SIZE || head.y >= GRID_SIZE;
+            const selfHit = snake.some(s => s.x === head.x && s.y === head.y);
+
+            if (outOfBounds || selfHit) {
+                endGame();
+                return;
+            }
+
+            snake.unshift(head);
+
+            if (head.x === food.x && head.y === food.y) {
+                score++;
+                document.getElementById('sn-score').textContent = score;
+                placeFood();
+            } else {
+                snake.pop();
+            }
+
+            draw();
+        }
+
+        function endGame() {
+            running = false;
+            clearInterval(loopInterval);
+            document.removeEventListener('keydown', keyHandler);
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(HIGH_SCORE_KEY, String(bestScore));
+            }
+            document.getElementById('sn-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Serpiente del Amor y obtuvo ${score} puntos.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${score >= bestScore && score > 0 ? '🏆' : '💔'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡${score} corazones!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startSnakeLove(container, config);
+            overlay.appendChild(again);
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            resizeCanvas();
+            resetState();
+            draw();
+            overlay.style.display = 'none';
+            running = true;
+            document.addEventListener('keydown', keyHandler);
+            loopInterval = setInterval(tick, TICK_MS);
+        };
+
+        // Simple swipe support on canvas
+        let touchStartX = 0, touchStartY = 0;
+        canvas.addEventListener('touchstart', (e) => {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }, { passive: true });
+        canvas.addEventListener('touchend', (e) => {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            if (Math.abs(dx) > Math.abs(dy)) {
+                setDirection(dx > 0 ? 'right' : 'left');
+            } else {
+                setDirection(dy > 0 ? 'down' : 'up');
+            }
+        }, { passive: true });
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        return {
+            destroy: () => {
+                running = false;
+                clearInterval(loopInterval);
+                document.removeEventListener('keydown', keyHandler);
+                window.removeEventListener('resize', resizeCanvas);
+                container.innerHTML = '';
+            }
+        };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -4789,7 +5006,8 @@ const UniverseGames = (function() {
         startArcade,
         startFlappyLove,
         startTimeline,
-        startWhackHearts
+        startWhackHearts,
+        startSnakeLove
     };
 })();
 

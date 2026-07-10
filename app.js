@@ -966,6 +966,9 @@
                 case 'whackhearts':
                     titleEl.textContent = '💘 Caza Corazones';
                     return UniverseGames.startWhackHearts(container, gConfig);
+                case 'snakelove':
+                    titleEl.textContent = '🐍 Serpiente del Amor';
+                    return UniverseGames.startSnakeLove(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';

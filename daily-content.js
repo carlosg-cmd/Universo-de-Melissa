@@ -704,10 +704,24 @@ const DailyContent = (function() {
                 emojis: ['💖', '💗', '💕']
             }
         },
-        // Days 16-29 are placeholders for Carlos to customize
-        ...Array.from({length: 14}, (_, i) => ({
-            day: i + 16,
-            title: `Día ${i + 16} - Sorpresa`,
+        {
+            day: 16,
+            title: "Día 16 - Serpiente del Amor 🐍💗",
+            emoji: "🐍",
+            song: "musica/cancion16.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nDía 16, y hoy te traigo otro juego completamente nuevo: una serpiente que va comiendo corazones y creciendo cada vez más, igual que este amor que sentimos el uno por el otro, que entre más pasa el tiempo más grande se vuelve.\n\nGuíala con las flechas o los botones, come todos los corazones que puedas, y ten cuidado de no chocar contigo misma ni con el borde. Juega las veces que quieras, ¡a ver hasta dónde puedes hacerla crecer!\n\nTe amo infinito, mi cómplice de vida. 💖",
+            funPhrase: "¡Que nuestro amor crezca como esta serpiente, sin parar! 🐍💕",
+            recoveryQuote: "Día 16: cada día que pasa, este amor se hace más grande.",
+            gameType: 'snakelove',
+            gameConfig: {
+                gridSize: 15,
+                tickMs: 160
+            }
+        },
+        // Days 17-29 are placeholders for Carlos to customize
+        ...Array.from({length: 13}, (_, i) => ({
+            day: i + 17,
+            title: `Día ${i + 17} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",
