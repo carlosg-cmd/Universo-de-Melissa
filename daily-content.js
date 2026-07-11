@@ -718,10 +718,27 @@ const DailyContent = (function() {
                 tickMs: 160
             }
         },
-        // Days 17-29 are placeholders for Carlos to customize
-        ...Array.from({length: 13}, (_, i) => ({
-            day: i + 17,
-            title: `Día ${i + 17} - Sorpresa`,
+        {
+            day: 17,
+            title: "Día 17 - Sabrás 🧩💛",
+            emoji: "🧩",
+            song: "musica/cancion17.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nHoy quiero que sepas algo: pase lo que pase, en cualquier situación, este corazón siempre te va a querer. No importa si un día amanezco cansado, triste, o hasta viejo, mi forma de amarte no va a cambiar. Vas a saber siempre, sin ninguna duda, que nadie te va a querer como yo.\n\nPor eso hoy te dejo un rompecabezas deslizante: una foto nuestra hecha pedacitos que tienes que ir acomodando, ficha por ficha, hasta que la imagen vuelva a estar completa. Así como esta foto, nuestro amor también se va armando poquito a poco, con paciencia y con ganas.\n\nJuega las veces que quieras, a ver en cuántos movimientos logras armarla. Te amo infinito, mi cómplice de vida. 💖",
+            funPhrase: "Sabrás que, como sea, siempre te voy a amar 💛🧩",
+            recoveryQuote: "Día 17: pieza a pieza, este amor se sigue armando.",
+            gameType: 'slidepuzzle',
+            gameConfig: {
+                gridSize: 3,
+                images: [
+                    'fotos/foto (7).jpeg', 'fotos/foto (31).jpeg', 'fotos/foto (32).jpeg',
+                    'fotos/foto (72).jpeg', 'fotos/foto (146).jpeg', 'fotos/foto_139.jpeg'
+                ]
+            }
+        },
+        // Days 18-29 are placeholders for Carlos to customize
+        ...Array.from({length: 12}, (_, i) => ({
+            day: i + 18,
+            title: `Día ${i + 18} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

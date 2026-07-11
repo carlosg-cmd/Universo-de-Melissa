@@ -4986,6 +4986,128 @@ const UniverseGames = (function() {
         };
     }
 
+    // ==========================================
+    // 21. ROMPECABEZAS DESLIZANTE (SLIDING TILE, REPLAYABLE MOVE-COUNT LOOP)
+    // ==========================================
+    function startSlidePuzzle(container, config) {
+        container.innerHTML = '';
+
+        const size = config.gridSize || 3; // NxN, one blank
+        let imageList = [];
+        if (Array.isArray(config.images)) imageList = config.images;
+        else if (config.image) imageList = [config.image];
+        else imageList = ['fotos/foto_139.jpeg'];
+        const imageUrl = imageList[Math.floor(Math.random() * imageList.length)];
+
+        const BEST_KEY = `melisa_slidepuzzle_best_${size}`;
+        let bestMoves = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:380px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Movimientos: <span class="stat-value" id="sp-moves">0</span></span>
+            <span>Mejor: <span class="stat-value" id="sp-best">${bestMoves > 0 ? bestMoves : '—'}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const gridWrap = document.createElement('div');
+        gridWrap.style.cssText = `position:relative;width:100%;aspect-ratio:1;border-radius:16px;overflow:hidden;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);display:grid;grid-template-columns:repeat(${size},1fr);grid-template-rows:repeat(${size},1fr);gap:2px;background:#0a1128;`;
+        wrapper.appendChild(gridWrap);
+
+        const totalTiles = size * size;
+        let tiles = []; // tiles[position] = tileNumber (0..totalTiles-2 are image pieces, totalTiles-1 is blank)
+        let moves = 0;
+        let solved = false;
+
+        function isSolvable(arr) {
+            const flat = arr.filter(n => n !== totalTiles - 1);
+            let inversions = 0;
+            for (let i = 0; i < flat.length; i++) {
+                for (let j = i + 1; j < flat.length; j++) {
+                    if (flat[i] > flat[j]) inversions++;
+                }
+            }
+            if (size % 2 === 1) return inversions % 2 === 0;
+            const blankRow = Math.floor(arr.indexOf(totalTiles - 1) / size);
+            const blankRowFromBottom = size - blankRow;
+            return (inversions + blankRowFromBottom) % 2 === 0;
+        }
+
+        function shuffleTiles() {
+            let arr;
+            do {
+                arr = shuffleArray([...Array(totalTiles).keys()]);
+            } while (!isSolvable(arr) || isSolved(arr));
+            return arr;
+        }
+
+        function isSolved(arr) {
+            return arr.every((v, i) => v === i);
+        }
+
+        function render() {
+            gridWrap.innerHTML = '';
+            tiles.forEach((tileNum, pos) => {
+                const cell = document.createElement('div');
+                if (tileNum === totalTiles - 1) {
+                    cell.style.cssText = 'background:#0a1128;';
+                } else {
+                    const row = Math.floor(tileNum / size);
+                    const col = tileNum % size;
+                    cell.style.cssText = `
+                        background-image:url('${imageUrl}');
+                        background-size:${size * 100}% ${size * 100}%;
+                        background-position:${(col * 100) / (size - 1)}% ${(row * 100) / (size - 1)}%;
+                        cursor:pointer;
+                        transition:transform 0.1s;
+                    `;
+                    cell.onclick = () => tryMove(pos);
+                }
+                gridWrap.appendChild(cell);
+            });
+        }
+
+        function tryMove(pos) {
+            if (solved) return;
+            const blankPos = tiles.indexOf(totalTiles - 1);
+            const row = Math.floor(pos / size), col = pos % size;
+            const brow = Math.floor(blankPos / size), bcol = blankPos % size;
+            const adjacent = (Math.abs(row - brow) + Math.abs(col - bcol)) === 1;
+            if (!adjacent) return;
+
+            [tiles[pos], tiles[blankPos]] = [tiles[blankPos], tiles[pos]];
+            moves++;
+            document.getElementById('sp-moves').textContent = moves;
+            render();
+
+            if (isSolved(tiles)) {
+                solved = true;
+                if (bestMoves === 0 || moves < bestMoves) {
+                    bestMoves = moves;
+                    localStorage.setItem(BEST_KEY, String(bestMoves));
+                }
+                document.getElementById('sp-best').textContent = bestMoves;
+                if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa completó el rompecabezas deslizante en ${moves} movimientos.`);
+                setTimeout(() => celebrate(container, `¡Lo resolviste en ${moves} movimientos!`), 300);
+            }
+        }
+
+        tiles = shuffleTiles();
+        render();
+
+        const replayBtn = document.createElement('button');
+        replayBtn.className = 'game-replay-btn';
+        replayBtn.textContent = '🔄 Jugar de nuevo';
+        replayBtn.onclick = () => startSlidePuzzle(container, config);
+        wrapper.appendChild(replayBtn);
+
+        return { destroy: () => { container.innerHTML = ''; } };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -5007,7 +5129,8 @@ const UniverseGames = (function() {
         startFlappyLove,
         startTimeline,
         startWhackHearts,
-        startSnakeLove
+        startSnakeLove,
+        startSlidePuzzle
     };
 })();
 
