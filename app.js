@@ -972,6 +972,21 @@
                 case 'slidepuzzle':
                     titleEl.textContent = '🧩 Rompecabezas Deslizante';
                     return UniverseGames.startSlidePuzzle(container, gConfig);
+                case 'basketlove':
+                    titleEl.textContent = '🏀 Encesta el Amor';
+                    return UniverseGames.startBasketLove(container, gConfig);
+                case 'brickreveal':
+                    titleEl.textContent = '🧱 Descubre Detrás del Muro';
+                    return UniverseGames.startBrickReveal(container, gConfig);
+                case 'finddifferences':
+                    titleEl.textContent = '🔍 Encuentra las Diferencias';
+                    return UniverseGames.startFindDifferences(container, gConfig);
+                case 'mastermind':
+                    titleEl.textContent = '🔐 Descifra el Código del Amor';
+                    return UniverseGames.startMastermind(container, gConfig);
+                case 'letterorder':
+                    titleEl.textContent = '🔤 Ordena las Letras';
+                    return UniverseGames.startLetterOrder(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';

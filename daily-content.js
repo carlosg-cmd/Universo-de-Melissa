@@ -735,10 +735,82 @@ const DailyContent = (function() {
                 ]
             }
         },
-        // Days 18-29 are placeholders for Carlos to customize
-        ...Array.from({length: 12}, (_, i) => ({
-            day: i + 18,
-            title: `Día ${i + 18} - Sorpresa`,
+        {
+            day: 18,
+            title: "Día 18 - Qué Bendición 🙏💗",
+            emoji: "🙏",
+            song: "musica/cancion18.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nHoy quiero darle gracias a Dios por la oportunidad de tenerte a mi lado, mi ángel. Qué bendición más grande es poder amarte, cuidarte y compartir mi vida contigo. No hay palabras suficientes para agradecer todo lo que eres para mí.\n\nEres un regalo del cielo, y aunque estés lejos recuperándote, mi forma de amarte y cuidarte no cambia ni un poquito. Verte cada mañana, aunque sea en una foto o una videollamada, es el premio más valioso que tengo.\n\nHoy te traigo un juego para encestar corazones: toca la pantalla para lanzarlos hacia la canasta, que se mueve de un lado a otro. Entre más rápido apuntes, más corazones puedes encestar. Juega las veces que quieras.\n\nTe amo infinito, mi bendición, mi cómplice de vida. 💖",
+            funPhrase: "Qué bendición más grande es tenerte, mi ángel 🙏💕",
+            recoveryQuote: "Día 18: agradeciendo a Dios por tenerte en mi vida.",
+            gameType: 'basketlove',
+            gameConfig: {
+                attempts: 10
+            }
+        },
+        {
+            day: 19,
+            title: "Día 19 - Bendita Mujercita 🙏💗",
+            emoji: "🙏",
+            song: "musica/cancion19.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nBendita seas tú, bendita tu sonrisa. Eres un regalo del cielo, y cuando el día se acaba, siempre terminas en mis pensamientos. Quisiera darte mi vida entera, un día a la vez, y ser tu refugio cuando el mundo pese demasiado.\n\nLe pido a Dios que nos cuide y nos acompañe, que nunca falte la ternura entre nosotros, pase lo que pase. Y aunque a veces la vida se ponga difícil, sé que vamos a volver a mirarnos, a abrazarnos fuerte, cuantas veces haga falta.\n\nHoy te dejo un juego distinto: detrás de estos ladrillos hay una foto nuestra escondida. Mueve la paleta, rebota la pelotita y rómpelos todos para descubrirla completa.\n\nTe amo infinito, mi bendita mujercita, mi cómplice de vida. 💖",
+            funPhrase: "Bendita tú, bendita tu sonrisa, bendito este amor 🙏💕",
+            recoveryQuote: "Día 19: pidiendo al cielo que cuide siempre este amor.",
+            gameType: 'brickreveal',
+            gameConfig: {
+                rows: 5,
+                cols: 6,
+                lives: 3,
+                images: ['fotos/foto (76).jpeg', 'fotos/foto (129).jpeg', 'fotos/foto (130).jpeg']
+            }
+        },
+        {
+            day: 20,
+            title: "Día 20 - Esa Muchachita 🌹💗",
+            emoji: "🌹",
+            song: "musica/cancion20.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nEsa muchachita linda que me ama, con la frescura de una rosa recién abierta y un ángel que se refleja en su mirada, esa eres tú. La que siempre me acompaña, la que me llena de calma, la que llevo en el alma sin importar la distancia.\n\nMe encanta cuando bailas, cuando cantas, cuando me regalas un abrazo y te vas caminando, para después volver con esa sonrisita que me deja sin palabras. Eres el amor que a mí me llama, hoy y siempre.\n\nHoy te dejo un juego de observación: dos fotos nuestras que parecen iguales, pero una esconde corazones invisibles. Encuéntralos todos antes de que se acabe el tiempo, ¡y trata de superar tu propio récord!\n\nTe amo infinito, esa muchachita mía, mi cómplice de vida. 💖",
+            funPhrase: "Esa muchachita, como nadie, es la que llevo en el alma 🌹💕",
+            recoveryQuote: "Día 20: dos tercios del camino, ¡vas increíble, mi amor!",
+            gameType: 'finddifferences',
+            gameConfig: {
+                differenceCount: 5,
+                images: ['fotos/foto (31).jpeg', 'fotos/foto (32).jpeg', 'fotos/foto (72).jpeg']
+            }
+        },
+        {
+            day: 21,
+            title: "Día 21 - La Maravilla 💛🎶",
+            emoji: "💛",
+            song: "musica/cancion21.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nEn esta canción, el que canta describe a una mujer sencilla, trabajadora, que valora a la gente por encima del dinero, y que es igual de amable con cualquiera. Y pensé en ti, porque así eres tú: mi orientadora escolar, la que cuida y guía a tantos estudiantes con el mismo cariño con el que me cuidas a mí, sin importarte nada más que hacer el bien.\n\nEres la dueña de mis amores, la reina de corazones que todos quieren, y para mí, sin duda, eres la maravilla. No importa que ahora mismo estés lejos, en Medellín, recuperándote de la cirugía. Lo único que de verdad cuenta es que seas tú, mi persona favorita en este mundo, y que pronto vamos a estar juntos otra vez.\n\nCada día que pasa te extraño un poquito más y cuento las horas para volver a verte, para que sigas recuperándote tranquila sabiendo que aquí sigo, esperándote con todo mi corazón.\n\nHoy te dejo un juego distinto, uno de pura lógica: hay un código secreto hecho de corazones de colores, y tienes que ir descifrándolo con pistas después de cada intento. A ver cuántos intentos necesitas para descubrirlo.\n\nTe amo infinito, mi maravilla, mi profesora favorita, mi cómplice de vida. 💖",
+            funPhrase: "Para mí, sin duda, tú eres la maravilla 💛🎶",
+            recoveryQuote: "Día 21: cada día pienso más en volver a verte.",
+            gameType: 'mastermind',
+            gameConfig: {
+                codeLength: 4,
+                maxAttempts: 8,
+                colors: ['💗', '💛', '💙', '💚', '🧡']
+            }
+        },
+        {
+            day: 22,
+            title: "Día 22 - Matilde 🌾💛",
+            emoji: "🌾",
+            song: "musica/cancion22.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nUn mediodía estuve pensando en ti, en la mujer que me hace soñar despierto. Cuando tú caminas, hasta el lugar más gris se llena de luz, así como en esta canción hasta la sabana sonríe cuando Matilde pasa. Eres elegante, admirada, y para mí, la más popular de todas, mi Matilde.\n\nEste sentimiento se hace cada día más grande, palpita fuerte mi corazón solo de pensarte. No importa la distancia ni que estés en Medellín recuperándote; mi cariño y mis ganas de cuidarte no cambian ni un poquito.\n\nHoy te dejo un juego nuevo para armar palabras de nuestra historia: te van a aparecer las letras revueltas, y tienes que tocarlas en el orden correcto para formar la palabra completa. Arma cuantas puedas antes de que se acabe el tiempo, ¡y trata de superar tu propio récord!\n\nTe amo infinito, mi Matilde, mi cómplice de vida. 💖",
+            funPhrase: "Cuando tú caminas, hasta mi mundo entero sonríe 🌾💕",
+            recoveryQuote: "Día 22: cada día este sentimiento se hace más grande.",
+            gameType: 'letterorder',
+            gameConfig: {
+                duration: 60,
+                words: ['AMOR', 'BESO', 'MOTO', 'MILO', 'FLORES', 'TARAZA', 'MEDELLIN', 'MELISSA', 'CARLOS', 'REINA']
+            }
+        },
+        // Days 23-29 are placeholders for Carlos to customize
+        ...Array.from({length: 7}, (_, i) => ({
+            day: i + 23,
+            title: `Día ${i + 23} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

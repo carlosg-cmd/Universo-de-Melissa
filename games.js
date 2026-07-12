@@ -5108,6 +5108,932 @@ const UniverseGames = (function() {
         return { destroy: () => { container.innerHTML = ''; } };
     }
 
+    // ==========================================
+    // 22. ENCESTA EL AMOR (PROJECTILE AIM GAME, REPLAYABLE SCORE LOOP)
+    // ==========================================
+    function startBasketLove(container, config) {
+        container.innerHTML = '';
+
+        const TOTAL_ATTEMPTS = config.attempts || 10;
+        const GRAVITY = 0.35;
+        const LAUNCH_SPEED = 13;
+        const BEST_KEY = 'melisa_basketlove_best';
+        let bestScore = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:380px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Aciertos: <span class="stat-value" id="bl-score">0</span></span>
+            <span>Intentos: <span class="stat-value" id="bl-attempts">${TOTAL_ATTEMPTS}</span></span>
+            <span>Mejor: <span class="stat-value" id="bl-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:3/4;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:hidden;';
+        wrapper.appendChild(canvasWrapper);
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'width:100%;height:100%;display:block;background:linear-gradient(#0a1128,#131c3a);';
+        canvasWrapper.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvasWrapper.clientWidth;
+            canvas.height = canvasWrapper.clientHeight;
+        }
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:0;font-size:0.9rem;';
+        instructions.textContent = 'Toca la pantalla para lanzar el corazón hacia la canasta 🏀';
+        wrapper.appendChild(instructions);
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;z-index:10;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🏀💕</div><p style="color:var(--text-secondary);max-width:260px;">Toca donde quieras apuntar y el corazón saldrá volando hacia allá. ¡Encesta todos los que puedas!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        canvasWrapper.appendChild(overlay);
+
+        let heart, basket, basketDir, basketSpeed, attemptsLeft, score, flying, rafId;
+
+        function resetHeart() {
+            heart = { x: canvas.width / 2, y: canvas.height - 30, vx: 0, vy: 0 };
+            flying = false;
+        }
+
+        function resetBasket() {
+            const w = Math.max(50, canvas.width * 0.18);
+            basket = { x: canvas.width / 2 - w / 2, y: canvas.height * 0.12, w, h: 14 };
+            basketDir = Math.random() < 0.5 ? -1 : 1;
+        }
+
+        function resetState() {
+            attemptsLeft = TOTAL_ATTEMPTS;
+            score = 0;
+            basketSpeed = 1.4;
+            document.getElementById('bl-score').textContent = '0';
+            document.getElementById('bl-attempts').textContent = attemptsLeft;
+            resetBasket();
+            resetHeart();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0a1128';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Basket
+            ctx.strokeStyle = '#00e5ff';
+            ctx.lineWidth = 3;
+            ctx.shadowColor = 'rgba(0,229,255,0.6)';
+            ctx.shadowBlur = 10;
+            ctx.strokeRect(basket.x, basket.y, basket.w, basket.h);
+            ctx.shadowBlur = 0;
+
+            // Heart
+            ctx.font = '28px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💗', heart.x, heart.y);
+        }
+
+        function moveBasket() {
+            basket.x += basketDir * basketSpeed;
+            if (basket.x <= 0 || basket.x + basket.w >= canvas.width) basketDir *= -1;
+        }
+
+        function loop() {
+            moveBasket();
+
+            if (flying) {
+                heart.vy += GRAVITY;
+                heart.x += heart.vx;
+                heart.y += heart.vy;
+
+                // Check basket collision while descending
+                if (heart.vy > 0 &&
+                    heart.y >= basket.y && heart.y <= basket.y + basket.h &&
+                    heart.x >= basket.x && heart.x <= basket.x + basket.w) {
+                    score++;
+                    document.getElementById('bl-score').textContent = score;
+                    basketSpeed = Math.min(4, basketSpeed + 0.25);
+                    finishAttempt();
+                } else if (heart.y > canvas.height + 20 || heart.x < -20 || heart.x > canvas.width + 20) {
+                    finishAttempt();
+                }
+            }
+
+            draw();
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function finishAttempt() {
+            flying = false;
+            attemptsLeft--;
+            document.getElementById('bl-attempts').textContent = Math.max(0, attemptsLeft);
+            resetBasket();
+            resetHeart();
+            if (attemptsLeft <= 0) endGame();
+        }
+
+        function launchTo(targetX, targetY) {
+            if (flying || attemptsLeft <= 0) return;
+            const dx = targetX - heart.x;
+            const dy = targetY - heart.y;
+            const dist = Math.max(1, Math.hypot(dx, dy));
+            heart.vx = (dx / dist) * LAUNCH_SPEED * 0.6;
+            heart.vy = (dy / dist) * LAUNCH_SPEED - 6; // add upward bias for arc
+            flying = true;
+        }
+
+        function handleTap(e) {
+            const rect = canvas.getBoundingClientRect();
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.touches[0].clientY : e.clientY;
+            const x = (clientX - rect.left) * (canvas.width / rect.width);
+            const y = (clientY - rect.top) * (canvas.height / rect.height);
+            launchTo(x, y);
+        }
+        canvas.addEventListener('click', handleTap);
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); handleTap(e); }, { passive: false });
+
+        function endGame() {
+            cancelAnimationFrame(rafId);
+            canvas.removeEventListener('click', handleTap);
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(BEST_KEY, String(bestScore));
+            }
+            document.getElementById('bl-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Encesta el Amor y encestó ${score} de ${TOTAL_ATTEMPTS}.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${score >= bestScore && score > 0 ? '🏆' : '🏀'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡${score} de ${TOTAL_ATTEMPTS} encestados!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startBasketLove(container, config);
+            overlay.appendChild(again);
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            resizeCanvas();
+            resetState();
+            draw();
+            overlay.style.display = 'none';
+            rafId = requestAnimationFrame(loop);
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        resetBasket();
+        resetHeart();
+        draw();
+
+        return {
+            destroy: () => {
+                cancelAnimationFrame(rafId);
+                canvas.removeEventListener('click', handleTap);
+                window.removeEventListener('resize', resizeCanvas);
+                container.innerHTML = '';
+            }
+        };
+    }
+
+    // ==========================================
+    // 23. DESCUBRE DETRÁS DEL MURO (BREAKOUT, REVEALS PHOTO, REPLAYABLE)
+    // ==========================================
+    function startBrickReveal(container, config) {
+        container.innerHTML = '';
+
+        const ROWS = config.rows || 5;
+        const COLS = config.cols || 6;
+        const LIVES_START = config.lives || 3;
+        let imageList = [];
+        if (Array.isArray(config.images)) imageList = config.images;
+        else if (config.image) imageList = [config.image];
+        else imageList = ['fotos/foto_139.jpeg'];
+        const imageUrl = imageList[Math.floor(Math.random() * imageList.length)];
+
+        const BEST_KEY = 'melisa_brickreveal_best';
+        let bestScore = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:380px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Ladrillos: <span class="stat-value" id="br-score">0</span></span>
+            <span>Vidas: <span class="stat-value" id="br-lives">${LIVES_START}</span></span>
+            <span>Mejor: <span class="stat-value" id="br-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:3/4;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:hidden;touch-action:none;';
+        wrapper.appendChild(canvasWrapper);
+
+        const bgImg = document.createElement('img');
+        bgImg.src = imageUrl;
+        bgImg.style.cssText = 'position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:1;';
+        canvasWrapper.appendChild(bgImg);
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'position:relative;width:100%;height:100%;display:block;z-index:2;';
+        canvasWrapper.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvasWrapper.clientWidth;
+            canvas.height = canvasWrapper.clientHeight;
+        }
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:0;font-size:0.9rem;';
+        instructions.textContent = 'Desliza el dedo para mover la paleta y romper los ladrillos 🧱';
+        wrapper.appendChild(instructions);
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;z-index:10;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🧱💗</div><p style="color:var(--text-secondary);max-width:260px;">Detrás de estos ladrillos hay una foto nuestra escondida. ¡Rómpelos todos para descubrirla!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        canvasWrapper.appendChild(overlay);
+
+        let bricks, paddle, ball, lives, score, running, rafId;
+        const paddleColors = ['rgba(0,229,255,0.9)'];
+
+        function buildBricks() {
+            bricks = [];
+            const brickW = canvas.width / COLS;
+            const brickH = canvas.height * 0.06;
+            const topOffset = canvas.height * 0.08;
+            for (let r = 0; r < ROWS; r++) {
+                for (let c = 0; c < COLS; c++) {
+                    bricks.push({
+                        x: c * brickW, y: topOffset + r * (brickH + 4),
+                        w: brickW - 4, h: brickH, alive: true
+                    });
+                }
+            }
+        }
+
+        function resetBallAndPaddle() {
+            const pw = canvas.width * 0.22;
+            paddle = { x: canvas.width / 2 - pw / 2, y: canvas.height - 24, w: pw, h: 12 };
+            ball = { x: canvas.width / 2, y: canvas.height - 40, r: 7, vx: 3.4, vy: -4.2 };
+        }
+
+        function resetState() {
+            lives = LIVES_START;
+            score = 0;
+            document.getElementById('br-score').textContent = '0';
+            document.getElementById('br-lives').textContent = lives;
+            buildBricks();
+            resetBallAndPaddle();
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // Bricks act as opaque covers hiding the photo beneath (photo is behind canvas via bgImg)
+            bricks.forEach(b => {
+                if (!b.alive) return;
+                ctx.fillStyle = '#0a1128';
+                ctx.strokeStyle = 'rgba(0,229,255,0.5)';
+                ctx.lineWidth = 1;
+                ctx.fillRect(b.x, b.y, b.w, b.h);
+                ctx.strokeRect(b.x, b.y, b.w, b.h);
+            });
+
+            // Paddle
+            ctx.fillStyle = '#00e5ff';
+            ctx.shadowColor = 'rgba(0,229,255,0.7)';
+            ctx.shadowBlur = 8;
+            ctx.beginPath();
+            ctx.roundRect(paddle.x, paddle.y, paddle.w, paddle.h, 6);
+            ctx.fill();
+            ctx.shadowBlur = 0;
+
+            // Ball
+            ctx.font = `${ball.r * 2.4}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💗', ball.x, ball.y);
+        }
+
+        function loop() {
+            ball.x += ball.vx;
+            ball.y += ball.vy;
+
+            if (ball.x <= ball.r || ball.x >= canvas.width - ball.r) ball.vx *= -1;
+            if (ball.y <= ball.r) ball.vy *= -1;
+
+            // Paddle collision
+            if (ball.y + ball.r >= paddle.y && ball.y + ball.r <= paddle.y + paddle.h &&
+                ball.x >= paddle.x && ball.x <= paddle.x + paddle.w && ball.vy > 0) {
+                const hitPos = (ball.x - (paddle.x + paddle.w / 2)) / (paddle.w / 2);
+                ball.vx = hitPos * 5;
+                ball.vy = -Math.abs(ball.vy);
+            }
+
+            // Brick collision
+            for (const b of bricks) {
+                if (!b.alive) continue;
+                if (ball.x + ball.r > b.x && ball.x - ball.r < b.x + b.w &&
+                    ball.y + ball.r > b.y && ball.y - ball.r < b.y + b.h) {
+                    b.alive = false;
+                    ball.vy *= -1;
+                    score++;
+                    document.getElementById('br-score').textContent = score;
+                    break;
+                }
+            }
+
+            // Ball falls below paddle
+            if (ball.y > canvas.height + ball.r) {
+                lives--;
+                document.getElementById('br-lives').textContent = Math.max(0, lives);
+                if (lives <= 0) { endGame(false); return; }
+                resetBallAndPaddle();
+            }
+
+            // All bricks cleared
+            if (bricks.every(b => !b.alive)) { endGame(true); return; }
+
+            draw();
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function movePaddleTo(clientX) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (clientX - rect.left) * (canvas.width / rect.width);
+            paddle.x = Math.min(canvas.width - paddle.w, Math.max(0, x - paddle.w / 2));
+        }
+        function onMove(e) {
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            movePaddleTo(clientX);
+        }
+        canvas.addEventListener('mousemove', onMove);
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); onMove(e); }, { passive: false });
+
+        function endGame(won) {
+            running = false;
+            cancelAnimationFrame(rafId);
+            canvas.removeEventListener('mousemove', onMove);
+            canvas.removeEventListener('touchmove', onMove);
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(BEST_KEY, String(bestScore));
+            }
+            document.getElementById('br-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Descubre Detrás del Muro y rompió ${score} ladrillos${won ? ' (¡foto completa!)' : ''}.`);
+
+            if (won) {
+                setTimeout(() => celebrate(container, `¡Descubriste toda la foto rompiendo ${score} ladrillos!`), 300);
+            } else {
+                overlay.innerHTML = `
+                    <div style="font-size:3rem;">🧱</div>
+                    <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡${score} ladrillos rotos!</p>
+                    <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+                `;
+                const again = document.createElement('button');
+                again.className = 'game-replay-btn';
+                again.textContent = '🔄 Jugar de nuevo';
+                again.onclick = () => startBrickReveal(container, config);
+                overlay.appendChild(again);
+                overlay.style.display = 'flex';
+            }
+        }
+
+        startBtn.onclick = () => {
+            resizeCanvas();
+            resetState();
+            draw();
+            overlay.style.display = 'none';
+            running = true;
+            rafId = requestAnimationFrame(loop);
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+        buildBricks();
+        resetBallAndPaddle();
+        draw();
+
+        return {
+            destroy: () => {
+                running = false;
+                cancelAnimationFrame(rafId);
+                canvas.removeEventListener('mousemove', onMove);
+                canvas.removeEventListener('touchmove', onMove);
+                window.removeEventListener('resize', resizeCanvas);
+                container.innerHTML = '';
+            }
+        };
+    }
+
+    // ==========================================
+    // 24. ENCUENTRA LAS DIFERENCIAS (SPOT-THE-DIFFERENCE, REPLAYABLE TIMED LOOP)
+    // ==========================================
+    function startFindDifferences(container, config) {
+        container.innerHTML = '';
+
+        let imageList = [];
+        if (Array.isArray(config.images)) imageList = config.images;
+        else if (config.image) imageList = [config.image];
+        else imageList = ['fotos/foto_139.jpeg'];
+        const imageUrl = imageList[Math.floor(Math.random() * imageList.length)];
+        const DIFF_COUNT = config.differenceCount || 5;
+
+        const BEST_KEY = 'melisa_finddiff_besttime';
+        let bestTime = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:420px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Encontrados: <span class="stat-value" id="fd-found">0</span>/${DIFF_COUNT}</span>
+            <span>Tiempo: <span class="stat-value" id="fd-time">0</span>s</span>
+            <span>Mejor: <span class="stat-value" id="fd-best">${bestTime > 0 ? bestTime + 's' : '—'}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:0;font-size:0.9rem;';
+        instructions.textContent = 'La foto de la derecha esconde corazones invisibles. ¡Tócalos todos! 💗';
+        wrapper.appendChild(instructions);
+
+        const panels = document.createElement('div');
+        panels.style.cssText = 'display:flex;gap:8px;width:100%;';
+        wrapper.appendChild(panels);
+
+        function makePanel() {
+            const panel = document.createElement('div');
+            panel.style.cssText = 'position:relative;flex:1;aspect-ratio:1;border-radius:12px;overflow:hidden;border:2px solid var(--primary-soft);';
+            const img = document.createElement('img');
+            img.src = imageUrl;
+            img.style.cssText = 'width:100%;height:100%;object-fit:cover;display:block;pointer-events:none;';
+            panel.appendChild(img);
+            return panel;
+        }
+
+        const leftPanel = makePanel();
+        const rightPanel = makePanel();
+        rightPanel.style.cursor = 'pointer';
+        panels.appendChild(leftPanel);
+        panels.appendChild(rightPanel);
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:relative;width:100%;background:rgba(5,15,30,0.94);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px 20px;margin-top:-1px;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🔍💗</div><p style="color:var(--text-secondary);max-width:260px;">Hay ${DIFF_COUNT} corazones invisibles escondidos en la foto de la derecha. ¡Encuéntralos todos!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        wrapper.appendChild(overlay);
+
+        let points = [];
+        let found = 0;
+        let mistakes = 0;
+        let seconds = 0;
+        let tickInterval = null;
+        let running = false;
+
+        function generatePoints() {
+            points = [];
+            let attempts = 0;
+            while (points.length < DIFF_COUNT && attempts < 500) {
+                attempts++;
+                const p = { x: 10 + Math.random() * 80, y: 10 + Math.random() * 80, foundFlag: false };
+                const tooClose = points.some(q => Math.hypot(q.x - p.x, q.y - p.y) < 16);
+                if (!tooClose) points.push(p);
+            }
+        }
+
+        function renderMarks() {
+            rightPanel.querySelectorAll('.fd-mark').forEach(el => el.remove());
+            points.forEach((p, i) => {
+                const mark = document.createElement('div');
+                mark.className = 'fd-mark';
+                mark.dataset.index = i;
+                mark.style.cssText = `position:absolute;left:${p.x}%;top:${p.y}%;width:12%;height:12%;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;font-size:0;`;
+                if (p.foundFlag) {
+                    mark.style.fontSize = '1.3rem';
+                    mark.textContent = '💗';
+                    mark.style.filter = 'drop-shadow(0 0 4px rgba(0,229,255,0.9))';
+                }
+                rightPanel.appendChild(mark);
+            });
+        }
+
+        function handleTap(e) {
+            if (!running) return;
+            const rect = rightPanel.getBoundingClientRect();
+            const clientX = e.touches ? e.changedTouches[0].clientX : e.clientX;
+            const clientY = e.touches ? e.changedTouches[0].clientY : e.clientY;
+            const xPct = ((clientX - rect.left) / rect.width) * 100;
+            const yPct = ((clientY - rect.top) / rect.height) * 100;
+
+            let hit = false;
+            for (const p of points) {
+                if (p.foundFlag) continue;
+                if (Math.hypot(p.x - xPct, p.y - yPct) < 9) {
+                    p.foundFlag = true;
+                    found++;
+                    hit = true;
+                    document.getElementById('fd-found').textContent = found;
+                    renderMarks();
+                    break;
+                }
+            }
+            if (!hit) {
+                mistakes++;
+                rightPanel.style.borderColor = 'var(--danger)';
+                setTimeout(() => { rightPanel.style.borderColor = 'var(--primary-soft)'; }, 250);
+            }
+            if (found === DIFF_COUNT) endGame();
+        }
+        rightPanel.addEventListener('click', handleTap);
+        rightPanel.addEventListener('touchend', (e) => { e.preventDefault(); handleTap(e); }, { passive: false });
+
+        function endGame() {
+            running = false;
+            clearInterval(tickInterval);
+
+            if (bestTime === 0 || seconds < bestTime) {
+                bestTime = seconds;
+                localStorage.setItem(BEST_KEY, String(bestTime));
+            }
+            document.getElementById('fd-best').textContent = bestTime + 's';
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa encontró todas las diferencias en ${seconds}s.`);
+
+            setTimeout(() => celebrate(container, `¡Encontraste todo en ${seconds} segundos!`), 300);
+        }
+
+        startBtn.onclick = () => {
+            generatePoints();
+            found = 0;
+            mistakes = 0;
+            seconds = 0;
+            document.getElementById('fd-found').textContent = '0';
+            document.getElementById('fd-time').textContent = '0';
+            renderMarks();
+            overlay.remove();
+            running = true;
+            tickInterval = setInterval(() => {
+                seconds++;
+                document.getElementById('fd-time').textContent = seconds;
+            }, 1000);
+        };
+
+        return {
+            destroy: () => {
+                running = false;
+                clearInterval(tickInterval);
+                rightPanel.removeEventListener('click', handleTap);
+                container.innerHTML = '';
+            }
+        };
+    }
+
+    // ==========================================
+    // 25. DESCIFRA EL CÓDIGO DEL AMOR (MASTERMIND, REPLAYABLE ATTEMPT-COUNT LOOP)
+    // ==========================================
+    function startMastermind(container, config) {
+        container.innerHTML = '';
+
+        const COLORS = config.colors || ['💗', '💛', '💙', '💚', '🧡'];
+        const CODE_LENGTH = config.codeLength || 4;
+        const MAX_ATTEMPTS = config.maxAttempts || 8;
+
+        const BEST_KEY = 'melisa_mastermind_best';
+        let bestAttempts = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:380px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Intento: <span class="stat-value" id="mm-attempt">1</span>/${MAX_ATTEMPTS}</span>
+            <span>Mejor: <span class="stat-value" id="mm-best">${bestAttempts > 0 ? bestAttempts : '—'}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:0;font-size:0.85rem;max-width:320px;';
+        instructions.textContent = `Adivina la combinación secreta de ${CODE_LENGTH} corazones. Toca cada casilla para cambiar el color. 🎯 = color y lugar correctos · ⚪ = color correcto, lugar equivocado.`;
+        wrapper.appendChild(instructions);
+
+        const history = document.createElement('div');
+        history.style.cssText = 'display:flex;flex-direction:column-reverse;gap:6px;width:100%;max-height:260px;overflow-y:auto;';
+        wrapper.appendChild(history);
+
+        const guessRow = document.createElement('div');
+        guessRow.style.cssText = 'display:flex;gap:8px;';
+        wrapper.appendChild(guessRow);
+
+        const submitBtn = document.createElement('button');
+        submitBtn.className = 'game-replay-btn';
+        submitBtn.textContent = '✅ Probar combinación';
+        wrapper.appendChild(submitBtn);
+
+        let secret = [];
+        let currentGuess = [];
+        let attempt = 1;
+        let over = false;
+
+        function randomSecret() {
+            return Array.from({ length: CODE_LENGTH }, () => COLORS[Math.floor(Math.random() * COLORS.length)]);
+        }
+
+        function renderGuessRow() {
+            guessRow.innerHTML = '';
+            currentGuess.forEach((val, i) => {
+                const slot = document.createElement('button');
+                slot.textContent = val;
+                slot.style.cssText = 'width:52px;height:52px;font-size:1.6rem;border-radius:12px;border:2px solid var(--primary-soft);background:rgba(0,229,255,0.06);cursor:pointer;';
+                slot.onclick = () => {
+                    if (over) return;
+                    const idx = COLORS.indexOf(currentGuess[i]);
+                    currentGuess[i] = COLORS[(idx + 1) % COLORS.length];
+                    renderGuessRow();
+                };
+                guessRow.appendChild(slot);
+            });
+        }
+
+        function computeFeedback(guess) {
+            let blackPegs = 0, whitePegs = 0;
+            const secretCopy = [...secret];
+            const guessCopy = [...guess];
+            for (let i = 0; i < CODE_LENGTH; i++) {
+                if (guessCopy[i] === secretCopy[i]) {
+                    blackPegs++;
+                    secretCopy[i] = null;
+                    guessCopy[i] = undefined;
+                }
+            }
+            for (let i = 0; i < CODE_LENGTH; i++) {
+                if (guessCopy[i] === undefined) continue;
+                const idx = secretCopy.indexOf(guessCopy[i]);
+                if (idx !== -1) {
+                    whitePegs++;
+                    secretCopy[idx] = null;
+                }
+            }
+            return { blackPegs, whitePegs };
+        }
+
+        function addHistoryRow(guess, feedback) {
+            const row = document.createElement('div');
+            row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:8px 10px;border-radius:10px;background:rgba(0,229,255,0.05);border:1px solid var(--primary-soft);font-size:1.2rem;';
+            row.innerHTML = `
+                <span style="color:var(--text-secondary);font-size:0.8rem;min-width:18px;">#${attempt}</span>
+                <span>${guess.join(' ')}</span>
+                <span style="margin-left:auto;font-size:0.95rem;">${'🎯'.repeat(feedback.blackPegs)}${'⚪'.repeat(feedback.whitePegs)}</span>
+            `;
+            history.appendChild(row);
+        }
+
+        function endGame(won) {
+            over = true;
+            submitBtn.disabled = true;
+
+            if (won && (bestAttempts === 0 || attempt < bestAttempts)) {
+                bestAttempts = attempt;
+                localStorage.setItem(BEST_KEY, String(bestAttempts));
+            }
+            document.getElementById('mm-best').textContent = bestAttempts > 0 ? bestAttempts : '—';
+
+            if (window.notifyCarlos) window.notifyCarlos(won ? `🎮 Melissa descifró el código del amor en ${attempt} intentos.` : `🎮 Melissa jugó Descifra el Código del Amor y no logró adivinarlo esta vez.`);
+
+            if (won) {
+                setTimeout(() => celebrate(container, `¡Descifraste el código en ${attempt} intento${attempt === 1 ? '' : 's'}!`), 300);
+            } else {
+                const msg = document.createElement('div');
+                msg.style.cssText = 'text-align:center;color:var(--text-secondary);margin-top:8px;';
+                msg.innerHTML = `El código secreto era: <span style="font-size:1.3rem;">${secret.join(' ')}</span>`;
+                wrapper.appendChild(msg);
+                const again = document.createElement('button');
+                again.className = 'game-replay-btn';
+                again.textContent = '🔄 Jugar de nuevo';
+                again.onclick = () => startMastermind(container, config);
+                wrapper.appendChild(again);
+            }
+        }
+
+        submitBtn.onclick = () => {
+            if (over) return;
+            const feedback = computeFeedback(currentGuess);
+            addHistoryRow(currentGuess, feedback);
+
+            if (feedback.blackPegs === CODE_LENGTH) {
+                endGame(true);
+                return;
+            }
+            attempt++;
+            document.getElementById('mm-attempt').textContent = attempt;
+            if (attempt > MAX_ATTEMPTS) {
+                endGame(false);
+            }
+        };
+
+        secret = randomSecret();
+        currentGuess = Array(CODE_LENGTH).fill(COLORS[0]);
+        renderGuessRow();
+
+        return { destroy: () => { container.innerHTML = ''; } };
+    }
+
+    // ==========================================
+    // 26. ORDENA LAS LETRAS (WORD UNSCRAMBLE, REPLAYABLE TIMED LOOP)
+    // ==========================================
+    function startLetterOrder(container, config) {
+        container.innerHTML = '';
+
+        const WORDS = (config.words && config.words.length > 0) ? config.words.map(w => w.toUpperCase()) : ['AMOR', 'BESO', 'MOTO', 'MILO'];
+        const DURATION = config.duration || 60;
+
+        const BEST_KEY = 'melisa_letterorder_best';
+        let bestScore = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:380px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Palabras: <span class="stat-value" id="lo-score">0</span></span>
+            <span>Tiempo: <span class="stat-value" id="lo-time">${DURATION}</span>s</span>
+            <span>Mejor: <span class="stat-value" id="lo-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const targetDisplay = document.createElement('div');
+        targetDisplay.style.cssText = 'display:flex;gap:6px;justify-content:center;flex-wrap:wrap;min-height:44px;';
+        wrapper.appendChild(targetDisplay);
+
+        const lettersRow = document.createElement('div');
+        lettersRow.style.cssText = 'display:flex;gap:8px;justify-content:center;flex-wrap:wrap;';
+        wrapper.appendChild(lettersRow);
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'width:100%;background:rgba(5,15,30,0.94);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px 20px;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🔤💕</div><p style="color:var(--text-secondary);max-width:260px;">Toca las letras en el orden correcto para armar cada palabra. ¡Arma cuantas puedas antes de que se acabe el tiempo!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        wrapper.appendChild(overlay);
+
+        let queue = [];
+        let currentWord = '';
+        let progress = 0;
+        let score = 0;
+        let timeLeft = DURATION;
+        let tickInterval = null;
+        let running = false;
+
+        function refillQueue() {
+            queue = shuffleArray([...WORDS]);
+        }
+
+        function scramble(word) {
+            let letters;
+            do {
+                letters = shuffleArray(word.split(''));
+            } while (letters.join('') === word && word.length > 1);
+            return letters;
+        }
+
+        function nextWord() {
+            if (queue.length === 0) refillQueue();
+            currentWord = queue.pop();
+            progress = 0;
+            renderTarget();
+            renderLetters();
+        }
+
+        function renderTarget() {
+            targetDisplay.innerHTML = '';
+            currentWord.split('').forEach((ch, i) => {
+                const box = document.createElement('div');
+                box.style.cssText = `width:36px;height:40px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;font-weight:700;border:2px solid ${i < progress ? 'var(--primary)' : 'var(--primary-soft)'};background:${i < progress ? 'var(--primary-soft)' : 'rgba(0,229,255,0.04)'};color:var(--primary);`;
+                box.textContent = i < progress ? ch : '';
+                targetDisplay.appendChild(box);
+            });
+        }
+
+        function renderLetters() {
+            lettersRow.innerHTML = '';
+            const scrambled = scramble(currentWord);
+            scrambled.forEach((ch) => {
+                const btn = document.createElement('button');
+                btn.textContent = ch;
+                btn.style.cssText = 'width:44px;height:44px;font-size:1.3rem;font-weight:700;border-radius:10px;border:1.5px solid var(--primary-soft);background:rgba(0,229,255,0.06);color:var(--text-primary,#e0f7fa);cursor:pointer;';
+                btn.onclick = () => handleLetterTap(ch, btn);
+                lettersRow.appendChild(btn);
+            });
+        }
+
+        function handleLetterTap(ch, btn) {
+            if (!running) return;
+            if (ch === currentWord[progress]) {
+                btn.disabled = true;
+                btn.style.opacity = '0.3';
+                progress++;
+                renderTarget();
+                if (progress === currentWord.length) {
+                    score++;
+                    document.getElementById('lo-score').textContent = score;
+                    setTimeout(nextWord, 350);
+                }
+            } else {
+                btn.style.borderColor = 'var(--danger)';
+                btn.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 250 });
+                setTimeout(() => { btn.style.borderColor = 'var(--primary-soft)'; }, 300);
+            }
+        }
+
+        function endGame() {
+            running = false;
+            clearInterval(tickInterval);
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(BEST_KEY, String(bestScore));
+            }
+            document.getElementById('lo-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Ordena las Letras y armó ${score} palabras.`);
+
+            targetDisplay.innerHTML = '';
+            lettersRow.innerHTML = '';
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${score >= bestScore && score > 0 ? '🏆' : '🔤'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡${score} palabras armadas!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startLetterOrder(container, config);
+            overlay.appendChild(again);
+            wrapper.appendChild(overlay);
+        }
+
+        startBtn.onclick = () => {
+            overlay.remove();
+            running = true;
+            score = 0;
+            timeLeft = DURATION;
+            document.getElementById('lo-score').textContent = '0';
+            document.getElementById('lo-time').textContent = timeLeft;
+            refillQueue();
+            nextWord();
+
+            tickInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('lo-time').textContent = Math.max(0, timeLeft);
+                if (timeLeft <= 0) endGame();
+            }, 1000);
+        };
+
+        return { destroy: () => { running = false; clearInterval(tickInterval); container.innerHTML = ''; } };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -5130,7 +6056,12 @@ const UniverseGames = (function() {
         startTimeline,
         startWhackHearts,
         startSnakeLove,
-        startSlidePuzzle
+        startSlidePuzzle,
+        startBasketLove,
+        startBrickReveal,
+        startFindDifferences,
+        startMastermind,
+        startLetterOrder
     };
 })();
 
