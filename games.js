@@ -6350,6 +6350,22 @@ const UniverseGames = (function() {
             });
         }
 
+        function reshuffleRemaining() {
+            const untappedIndices = [];
+            const untappedContents = [];
+            cellsData.forEach((cell, i) => {
+                if (!cell.tapped) {
+                    untappedIndices.push(i);
+                    untappedContents.push({ isRose: cell.isRose, emoji: cell.emoji });
+                }
+            });
+            const shuffledContents = shuffleArray(untappedContents);
+            untappedIndices.forEach((idx, k) => {
+                cellsData[idx].isRose = shuffledContents[k].isRose;
+                cellsData[idx].emoji = shuffledContents[k].emoji;
+            });
+        }
+
         function handleTap(index, btn) {
             if (!running) return;
             const cell = cellsData[index];
@@ -6361,7 +6377,12 @@ const UniverseGames = (function() {
                 document.getElementById('rh-found').textContent = found;
                 btn.textContent = '✅';
                 btn.style.opacity = '0.35';
-                if (found === TARGET) endGame(true);
+                if (found === TARGET) {
+                    endGame(true);
+                } else {
+                    reshuffleRemaining();
+                    renderGrid();
+                }
             } else {
                 mistakes++;
                 btn.style.borderColor = 'var(--danger)';
