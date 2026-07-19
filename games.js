@@ -6034,6 +6034,397 @@ const UniverseGames = (function() {
         return { destroy: () => { running = false; clearInterval(tickInterval); container.innerHTML = ''; } };
     }
 
+    // ==========================================
+    // 27. LABERINTO DEL AMOR (MAZE NAVIGATION, REPLAYABLE TIMED LOOP)
+    // ==========================================
+    function startLoveMaze(container, config) {
+        container.innerHTML = '';
+
+        const SIZE = config.gridSize || 8;
+        const BEST_KEY = `melisa_lovemaze_best_${SIZE}`;
+        let bestTime = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:380px;margin:0 auto;user-select:none;-webkit-user-select:none;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Tiempo: <span class="stat-value" id="lm-time">0</span>s</span>
+            <span>Mejor: <span class="stat-value" id="lm-best">${bestTime > 0 ? bestTime + 's' : '—'}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:1;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:hidden;';
+        wrapper.appendChild(canvasWrapper);
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'width:100%;height:100%;display:block;background:#0a1128;';
+        canvasWrapper.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            const size = canvasWrapper.clientWidth;
+            canvas.width = size;
+            canvas.height = size;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;z-index:10;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🌀💗</div><p style="color:var(--text-secondary);max-width:260px;">Guía el corazón desde la entrada hasta la salida. ¡Usa las flechas o desliza el dedo!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        canvasWrapper.appendChild(overlay);
+
+        const controls = document.createElement('div');
+        controls.style.cssText = 'display:grid;grid-template-columns:repeat(3,52px);grid-template-rows:repeat(2,52px);gap:6px;justify-content:center;';
+        function makeBtn(label, dir) {
+            const b = document.createElement('button');
+            b.textContent = label;
+            b.style.cssText = 'font-size:1.4rem;border-radius:12px;border:1.5px solid var(--primary-soft);background:rgba(0,229,255,0.06);color:var(--primary);cursor:pointer;';
+            b.onclick = () => tryMove(dir);
+            return b;
+        }
+        const blank1 = document.createElement('div');
+        const upBtn = makeBtn('⬆️', 'up');
+        const blank2 = document.createElement('div');
+        const leftBtn = makeBtn('⬅️', 'left');
+        const downBtn = makeBtn('⬇️', 'down');
+        const rightBtn = makeBtn('➡️', 'right');
+        controls.append(blank1, upBtn, blank2, leftBtn, downBtn, rightBtn);
+        wrapper.appendChild(controls);
+
+        let cells, player, goal, seconds, tickInterval, running;
+
+        function generateMaze() {
+            cells = [];
+            for (let y = 0; y < SIZE; y++) {
+                const row = [];
+                for (let x = 0; x < SIZE; x++) {
+                    row.push({ x, y, visited: false, walls: { top: true, right: true, bottom: true, left: true } });
+                }
+                cells.push(row);
+            }
+            const stack = [];
+            let current = cells[0][0];
+            current.visited = true;
+            stack.push(current);
+
+            function neighbors(cell) {
+                const dirs = [
+                    { dx: 0, dy: -1, self: 'top', opp: 'bottom' },
+                    { dx: 1, dy: 0, self: 'right', opp: 'left' },
+                    { dx: 0, dy: 1, self: 'bottom', opp: 'top' },
+                    { dx: -1, dy: 0, self: 'left', opp: 'right' }
+                ];
+                return dirs
+                    .map(d => ({ nx: cell.x + d.dx, ny: cell.y + d.dy, self: d.self, opp: d.opp }))
+                    .filter(d => d.nx >= 0 && d.nx < SIZE && d.ny >= 0 && d.ny < SIZE && !cells[d.ny][d.nx].visited);
+            }
+
+            while (stack.length > 0) {
+                current = stack[stack.length - 1];
+                const options = neighbors(current);
+                if (options.length === 0) {
+                    stack.pop();
+                    continue;
+                }
+                const choice = options[Math.floor(Math.random() * options.length)];
+                const next = cells[choice.ny][choice.nx];
+                current.walls[choice.self] = false;
+                next.walls[choice.opp] = false;
+                next.visited = true;
+                stack.push(next);
+            }
+        }
+
+        function draw() {
+            const cellSize = canvas.width / SIZE;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0a1128';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.strokeStyle = '#00e5ff';
+            ctx.lineWidth = 2;
+            ctx.lineCap = 'round';
+            for (let y = 0; y < SIZE; y++) {
+                for (let x = 0; x < SIZE; x++) {
+                    const c = cells[y][x];
+                    const px = x * cellSize, py = y * cellSize;
+                    ctx.beginPath();
+                    if (c.walls.top) { ctx.moveTo(px, py); ctx.lineTo(px + cellSize, py); }
+                    if (c.walls.right) { ctx.moveTo(px + cellSize, py); ctx.lineTo(px + cellSize, py + cellSize); }
+                    if (c.walls.bottom) { ctx.moveTo(px, py + cellSize); ctx.lineTo(px + cellSize, py + cellSize); }
+                    if (c.walls.left) { ctx.moveTo(px, py); ctx.lineTo(px, py + cellSize); }
+                    ctx.stroke();
+                }
+            }
+
+            // Goal
+            ctx.font = `${cellSize * 0.7}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('🏁', goal.x * cellSize + cellSize / 2, goal.y * cellSize + cellSize / 2);
+
+            // Player
+            ctx.font = `${cellSize * 0.7}px sans-serif`;
+            ctx.fillText('💗', player.x * cellSize + cellSize / 2, player.y * cellSize + cellSize / 2);
+        }
+
+        function tryMove(dir) {
+            if (!running) return;
+            const c = cells[player.y][player.x];
+            let nx = player.x, ny = player.y;
+            if (dir === 'up' && !c.walls.top) ny--;
+            else if (dir === 'down' && !c.walls.bottom) ny++;
+            else if (dir === 'left' && !c.walls.left) nx--;
+            else if (dir === 'right' && !c.walls.right) nx++;
+            else return;
+
+            player.x = nx;
+            player.y = ny;
+            draw();
+
+            if (player.x === goal.x && player.y === goal.y) endGame();
+        }
+
+        function keyHandler(e) {
+            const map = { ArrowUp: 'up', ArrowDown: 'down', ArrowLeft: 'left', ArrowRight: 'right' };
+            if (map[e.key]) { e.preventDefault(); tryMove(map[e.key]); }
+        }
+
+        let touchStartX = 0, touchStartY = 0;
+        function onTouchStart(e) {
+            touchStartX = e.touches[0].clientX;
+            touchStartY = e.touches[0].clientY;
+        }
+        function onTouchEnd(e) {
+            const dx = e.changedTouches[0].clientX - touchStartX;
+            const dy = e.changedTouches[0].clientY - touchStartY;
+            if (Math.max(Math.abs(dx), Math.abs(dy)) < 20) return;
+            if (Math.abs(dx) > Math.abs(dy)) tryMove(dx > 0 ? 'right' : 'left');
+            else tryMove(dy > 0 ? 'down' : 'up');
+        }
+        canvas.addEventListener('touchstart', onTouchStart, { passive: true });
+        canvas.addEventListener('touchend', onTouchEnd, { passive: true });
+
+        function endGame() {
+            running = false;
+            clearInterval(tickInterval);
+            document.removeEventListener('keydown', keyHandler);
+
+            if (bestTime === 0 || seconds < bestTime) {
+                bestTime = seconds;
+                localStorage.setItem(BEST_KEY, String(bestTime));
+            }
+            document.getElementById('lm-best').textContent = bestTime + 's';
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa completó el Laberinto del Amor en ${seconds}s.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${seconds <= bestTime ? '🏆' : '🌀'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡Llegaste en ${seconds} segundos!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor tiempo: ${bestTime}s</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startLoveMaze(container, config);
+            overlay.appendChild(again);
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            resizeCanvas();
+            generateMaze();
+            player = { x: 0, y: 0 };
+            goal = { x: SIZE - 1, y: SIZE - 1 };
+            seconds = 0;
+            document.getElementById('lm-time').textContent = '0';
+            draw();
+            overlay.style.display = 'none';
+            running = true;
+            document.addEventListener('keydown', keyHandler);
+            tickInterval = setInterval(() => {
+                seconds++;
+                document.getElementById('lm-time').textContent = seconds;
+            }, 1000);
+        };
+
+        window.addEventListener('resize', () => { resizeCanvas(); if (cells) draw(); });
+        resizeCanvas();
+        generateMaze();
+        player = { x: 0, y: 0 };
+        goal = { x: SIZE - 1, y: SIZE - 1 };
+        draw();
+
+        return {
+            destroy: () => {
+                running = false;
+                clearInterval(tickInterval);
+                document.removeEventListener('keydown', keyHandler);
+                canvas.removeEventListener('touchstart', onTouchStart);
+                canvas.removeEventListener('touchend', onTouchEnd);
+                container.innerHTML = '';
+            }
+        };
+    }
+
+    // ==========================================
+    // 28. ENCUENTRA LAS ROSAS (SELECTIVE ID GRID, REPLAYABLE TIMED LOOP)
+    // ==========================================
+    function startRoseHunt(container, config) {
+        container.innerHTML = '';
+
+        const COLS = config.cols || 8;
+        const ROWS = config.rows || 8;
+        const TOTAL_CELLS = COLS * ROWS;
+        const TARGET = Math.min(config.targetCount || 25, TOTAL_CELLS - 5);
+        const DURATION = config.duration || 45;
+        const DECOYS = config.decoys || ['🌼', '🌻', '🌷', '🌺', '💐'];
+
+        const BEST_KEY = 'melisa_rosehunt_besttime';
+        let bestTime = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:400px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Rosas: <span class="stat-value" id="rh-found">0</span>/${TARGET}</span>
+            <span>Tiempo: <span class="stat-value" id="rh-time">${DURATION}</span>s</span>
+            <span>Mejor: <span class="stat-value" id="rh-best">${bestTime > 0 ? bestTime + 's' : '—'}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:0;font-size:0.85rem;';
+        instructions.textContent = `Toca solo las rosas 🌹 y evita las demás flores. ¡Encuentra las ${TARGET} antes de que se acabe el tiempo!`;
+        wrapper.appendChild(instructions);
+
+        const grid = document.createElement('div');
+        grid.style.cssText = `display:grid;grid-template-columns:repeat(${COLS},1fr);gap:4px;width:100%;`;
+        wrapper.appendChild(grid);
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'width:100%;background:rgba(5,15,30,0.94);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px 20px;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🌹💐</div><p style="color:var(--text-secondary);max-width:260px;">Hay ${TARGET} rosas escondidas entre otras flores. ¡Encuéntralas todas antes de que se acabe el tiempo!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        wrapper.appendChild(overlay);
+
+        let cellsData = [];
+        let found = 0;
+        let mistakes = 0;
+        let timeLeft = DURATION;
+        let tickInterval = null;
+        let running = false;
+
+        function buildGrid() {
+            cellsData = Array.from({ length: TOTAL_CELLS }, (_, i) => ({
+                isRose: i < TARGET,
+                emoji: i < TARGET ? '🌹' : DECOYS[Math.floor(Math.random() * DECOYS.length)],
+                tapped: false
+            }));
+            cellsData = shuffleArray(cellsData);
+        }
+
+        function renderGrid() {
+            grid.innerHTML = '';
+            cellsData.forEach((cell, i) => {
+                const btn = document.createElement('button');
+                btn.style.cssText = `aspect-ratio:1;font-size:1.4rem;border-radius:8px;border:1.5px solid var(--primary-soft);background:${cell.tapped ? 'rgba(0,229,255,0.15)' : 'rgba(0,229,255,0.04)'};cursor:pointer;opacity:${cell.tapped && cell.isRose ? '0.35' : '1'};`;
+                btn.textContent = cell.tapped ? (cell.isRose ? '✅' : cell.emoji) : cell.emoji;
+                if (!cell.tapped) {
+                    btn.onclick = () => handleTap(i, btn);
+                }
+                grid.appendChild(btn);
+            });
+        }
+
+        function handleTap(index, btn) {
+            if (!running) return;
+            const cell = cellsData[index];
+            if (cell.tapped) return;
+            cell.tapped = true;
+
+            if (cell.isRose) {
+                found++;
+                document.getElementById('rh-found').textContent = found;
+                btn.textContent = '✅';
+                btn.style.opacity = '0.35';
+                if (found === TARGET) endGame(true);
+            } else {
+                mistakes++;
+                btn.style.borderColor = 'var(--danger)';
+                btn.animate([
+                    { transform: 'scale(1)' },
+                    { transform: 'scale(0.9)' },
+                    { transform: 'scale(1)' }
+                ], { duration: 200 });
+                setTimeout(() => { btn.style.borderColor = 'var(--primary-soft)'; }, 300);
+            }
+        }
+
+        function endGame(won) {
+            running = false;
+            clearInterval(tickInterval);
+
+            if (won && (bestTime === 0 || (DURATION - timeLeft) < bestTime)) {
+                bestTime = DURATION - timeLeft;
+                localStorage.setItem(BEST_KEY, String(bestTime));
+            }
+            document.getElementById('rh-best').textContent = bestTime > 0 ? bestTime + 's' : '—';
+
+            if (window.notifyCarlos) window.notifyCarlos(won ? `🎮 Melissa encontró las ${TARGET} rosas en ${DURATION - timeLeft}s.` : `🎮 Melissa jugó Encuentra las Rosas y encontró ${found}/${TARGET}.`);
+
+            if (won) {
+                setTimeout(() => celebrate(container, `¡Encontraste las ${TARGET} rosas en ${DURATION - timeLeft} segundos!`), 300);
+            } else {
+                grid.innerHTML = '';
+                overlay.innerHTML = `
+                    <div style="font-size:3rem;">🌹</div>
+                    <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡Encontraste ${found} de ${TARGET}!</p>
+                    <p style="color:var(--text-secondary);margin:0;">Mejor tiempo: ${bestTime > 0 ? bestTime + 's' : '—'}</p>
+                `;
+                const again = document.createElement('button');
+                again.className = 'game-replay-btn';
+                again.textContent = '🔄 Jugar de nuevo';
+                again.onclick = () => startRoseHunt(container, config);
+                overlay.appendChild(again);
+                wrapper.appendChild(overlay);
+            }
+        }
+
+        startBtn.onclick = () => {
+            overlay.remove();
+            running = true;
+            found = 0;
+            mistakes = 0;
+            timeLeft = DURATION;
+            document.getElementById('rh-found').textContent = '0';
+            document.getElementById('rh-time').textContent = timeLeft;
+            buildGrid();
+            renderGrid();
+
+            tickInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('rh-time').textContent = Math.max(0, timeLeft);
+                if (timeLeft <= 0) endGame(false);
+            }, 1000);
+        };
+
+        return { destroy: () => { running = false; clearInterval(tickInterval); container.innerHTML = ''; } };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -6061,7 +6452,9 @@ const UniverseGames = (function() {
         startBrickReveal,
         startFindDifferences,
         startMastermind,
-        startLetterOrder
+        startLetterOrder,
+        startLoveMaze,
+        startRoseHunt
     };
 })();
 

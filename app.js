@@ -987,6 +987,12 @@
                 case 'letterorder':
                     titleEl.textContent = '🔤 Ordena las Letras';
                     return UniverseGames.startLetterOrder(container, gConfig);
+                case 'lovemaze':
+                    titleEl.textContent = '🌀 Laberinto del Amor';
+                    return UniverseGames.startLoveMaze(container, gConfig);
+                case 'rosehunt':
+                    titleEl.textContent = '🌹 Encuentra las Rosas';
+                    return UniverseGames.startRoseHunt(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
