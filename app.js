@@ -993,6 +993,9 @@
                 case 'rosehunt':
                     titleEl.textContent = '🌹 Encuentra las Rosas';
                     return UniverseGames.startRoseHunt(container, gConfig);
+                case 'fishing':
+                    titleEl.textContent = '🎣 Pesca de Corazones';
+                    return UniverseGames.startFishing(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';

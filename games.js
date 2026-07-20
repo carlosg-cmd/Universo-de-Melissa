@@ -6446,6 +6446,169 @@ const UniverseGames = (function() {
         return { destroy: () => { running = false; clearInterval(tickInterval); container.innerHTML = ''; } };
     }
 
+    // ==========================================
+    // 29. PESCA DE CORAZONES (TIMING GAME, REPLAYABLE TIMED LOOP)
+    // ==========================================
+    function startFishing(container, config) {
+        container.innerHTML = '';
+
+        const COLUMNS = config.columns || 6;
+        const DURATION = config.duration || 45;
+        const BEST_KEY = 'melisa_fishing_best';
+        let bestScore = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:400px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Pescados: <span class="stat-value" id="fs-score">0</span></span>
+            <span>Tiempo: <span class="stat-value" id="fs-time">${DURATION}</span>s</span>
+            <span>Mejor: <span class="stat-value" id="fs-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:0;font-size:0.85rem;';
+        instructions.textContent = 'Presiona "¡Pesca!" justo cuando la caña 🎣 esté sobre el corazón 💗';
+        wrapper.appendChild(instructions);
+
+        const river = document.createElement('div');
+        river.style.cssText = 'position:relative;width:100%;height:120px;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);background:linear-gradient(#0d1a3a,#0a1128);overflow:hidden;';
+        wrapper.appendChild(river);
+
+        const indicator = document.createElement('div');
+        indicator.style.cssText = 'position:absolute;top:6px;width:' + (100 / COLUMNS) + '%;text-align:center;font-size:1.6rem;transition:left 0.05s linear;';
+        indicator.textContent = '🎣';
+        river.appendChild(indicator);
+
+        const columnsRow = document.createElement('div');
+        columnsRow.style.cssText = `position:absolute;bottom:8px;left:0;width:100%;display:grid;grid-template-columns:repeat(${COLUMNS},1fr);`;
+        river.appendChild(columnsRow);
+
+        const colEls = [];
+        for (let i = 0; i < COLUMNS; i++) {
+            const col = document.createElement('div');
+            col.style.cssText = 'text-align:center;font-size:1.5rem;height:32px;';
+            columnsRow.appendChild(col);
+            colEls.push(col);
+        }
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'width:100%;background:rgba(5,15,30,0.94);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px 20px;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🎣💗</div><p style="color:var(--text-secondary);max-width:260px;">La caña se mueve sola de un lado a otro. ¡Presiona "Pesca" justo cuando esté sobre el corazón!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        wrapper.appendChild(overlay);
+
+        const fishBtn = document.createElement('button');
+        fishBtn.className = 'game-replay-btn';
+        fishBtn.textContent = '🎣 ¡Pesca!';
+        fishBtn.style.display = 'none';
+        wrapper.appendChild(fishBtn);
+
+        let score = 0;
+        let timeLeft = DURATION;
+        let fishCol = 0;
+        let position = 0; // 0..COLUMNS-1 float
+        let direction = 1;
+        let speed = 0.06; // columns per frame
+        let rafId = null;
+        let tickInterval = null;
+        let running = false;
+
+        function placeFish() {
+            let newCol;
+            do { newCol = Math.floor(Math.random() * COLUMNS); } while (newCol === fishCol);
+            fishCol = newCol;
+            colEls.forEach((c, i) => { c.textContent = i === fishCol ? '💗' : ''; });
+        }
+
+        function animate() {
+            position += direction * speed;
+            if (position >= COLUMNS - 1) { position = COLUMNS - 1; direction = -1; }
+            if (position <= 0) { position = 0; direction = 1; }
+            indicator.style.left = (position / COLUMNS) * 100 + '%';
+            rafId = requestAnimationFrame(animate);
+        }
+
+        fishBtn.onclick = () => {
+            if (!running) return;
+            const col = Math.round(position);
+            if (col === fishCol) {
+                score++;
+                document.getElementById('fs-score').textContent = score;
+                speed = Math.min(0.14, speed + 0.006);
+                placeFish();
+                river.style.borderColor = 'var(--primary)';
+            } else {
+                river.style.borderColor = 'var(--danger)';
+                setTimeout(() => { river.style.borderColor = 'var(--primary)'; }, 200);
+            }
+        };
+
+        function endGame() {
+            running = false;
+            cancelAnimationFrame(rafId);
+            clearInterval(tickInterval);
+            fishBtn.style.display = 'none';
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(BEST_KEY, String(bestScore));
+            }
+            document.getElementById('fs-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Pesca de Corazones y atrapó ${score}.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${score >= bestScore && score > 0 ? '🏆' : '🎣'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡Pescaste ${score} corazones!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startFishing(container, config);
+            overlay.appendChild(again);
+            wrapper.appendChild(overlay);
+        }
+
+        startBtn.onclick = () => {
+            overlay.remove();
+            fishBtn.style.display = 'block';
+            running = true;
+            score = 0;
+            timeLeft = DURATION;
+            speed = 0.06;
+            position = 0;
+            direction = 1;
+            document.getElementById('fs-score').textContent = '0';
+            document.getElementById('fs-time').textContent = timeLeft;
+            placeFish();
+            animate();
+
+            tickInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('fs-time').textContent = Math.max(0, timeLeft);
+                if (timeLeft <= 0) endGame();
+            }, 1000);
+        };
+
+        return {
+            destroy: () => {
+                running = false;
+                cancelAnimationFrame(rafId);
+                clearInterval(tickInterval);
+                container.innerHTML = '';
+            }
+        };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -6475,7 +6638,8 @@ const UniverseGames = (function() {
         startMastermind,
         startLetterOrder,
         startLoveMaze,
-        startRoseHunt
+        startRoseHunt,
+        startFishing
     };
 })();
 
