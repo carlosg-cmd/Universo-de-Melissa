@@ -6609,6 +6609,193 @@ const UniverseGames = (function() {
         };
     }
 
+    // ==========================================
+    // 30. SALTO DEL AMOR (ENDLESS RUNNER JUMP, REPLAYABLE SCORE LOOP)
+    // ==========================================
+    function startRunnerJump(container, config) {
+        container.innerHTML = '';
+
+        const BEST_KEY = 'melisa_runnerjump_best';
+        let bestScore = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:420px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Puntos: <span class="stat-value" id="rj-score">0</span></span>
+            <span>Mejor: <span class="stat-value" id="rj-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:hidden;';
+        wrapper.appendChild(canvasWrapper);
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'width:100%;height:100%;display:block;background:linear-gradient(#0a1128,#131c3a);';
+        canvasWrapper.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvasWrapper.clientWidth;
+            canvas.height = canvasWrapper.clientHeight;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;z-index:10;';
+        overlay.innerHTML = `<div style="font-size:3rem;">🏃💗</div><p style="color:var(--text-secondary);max-width:260px;">Toca la pantalla para saltar los obstáculos. ¡Entre más lejos llegues, más rápido se pone!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        canvasWrapper.appendChild(overlay);
+
+        let groundY, player, obstacles, gameSpeed, score, running, rafId, spawnTimer;
+        const GRAVITY = 0.9;
+        const JUMP_VELOCITY = -14;
+
+        function resetState() {
+            groundY = canvas.height * 0.8;
+            player = { x: canvas.width * 0.15, y: groundY, vy: 0, size: canvas.height * 0.12, onGround: true };
+            obstacles = [];
+            gameSpeed = canvas.width * 0.006;
+            score = 0;
+            spawnTimer = 0;
+            document.getElementById('rj-score').textContent = '0';
+        }
+
+        function jump() {
+            if (!running) return;
+            if (player.onGround) {
+                player.vy = JUMP_VELOCITY;
+                player.onGround = false;
+            }
+        }
+        canvasWrapper.addEventListener('click', jump);
+        canvasWrapper.addEventListener('touchstart', (e) => { e.preventDefault(); jump(); }, { passive: false });
+        function keyHandler(e) { if (e.code === 'Space') { e.preventDefault(); jump(); } }
+
+        function spawnObstacle() {
+            const h = canvas.height * (0.08 + Math.random() * 0.06);
+            obstacles.push({ x: canvas.width + 10, y: groundY, w: h * 0.7, h: h });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0a1128';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Ground line
+            ctx.strokeStyle = 'rgba(0,229,255,0.4)';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+            ctx.moveTo(0, groundY);
+            ctx.lineTo(canvas.width, groundY);
+            ctx.stroke();
+
+            // Player
+            ctx.font = `${player.size}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'alphabetic';
+            ctx.fillText('💗', player.x, player.y);
+
+            // Obstacles
+            ctx.font = `${canvas.height * 0.1}px sans-serif`;
+            obstacles.forEach(o => ctx.fillText('🥀', o.x, o.y));
+        }
+
+        function loop() {
+            spawnTimer++;
+            const spawnInterval = Math.max(45, 90 - Math.floor(score / 5));
+            if (spawnTimer >= spawnInterval) {
+                spawnObstacle();
+                spawnTimer = 0;
+            }
+
+            player.vy += GRAVITY;
+            player.y += player.vy;
+            if (player.y >= groundY) {
+                player.y = groundY;
+                player.vy = 0;
+                player.onGround = true;
+            }
+
+            gameSpeed = canvas.width * 0.006 + score * 0.0015;
+            obstacles.forEach(o => o.x -= gameSpeed * 10);
+            obstacles = obstacles.filter(o => o.x > -30);
+
+            // Collision (approximate box around emoji)
+            const pBox = { x: player.x - player.size * 0.3, y: player.y - player.size * 0.9, w: player.size * 0.6, h: player.size * 0.9 };
+            for (const o of obstacles) {
+                const oBox = { x: o.x - o.w * 0.3, y: o.y - o.h * 0.8, w: o.w * 0.5, h: o.h * 0.8 };
+                if (pBox.x < oBox.x + oBox.w && pBox.x + pBox.w > oBox.x &&
+                    pBox.y < oBox.y + oBox.h && pBox.y + pBox.h > oBox.y) {
+                    endGame();
+                    return;
+                }
+            }
+
+            score++;
+            document.getElementById('rj-score').textContent = Math.floor(score / 5);
+
+            draw();
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function endGame() {
+            running = false;
+            cancelAnimationFrame(rafId);
+            document.removeEventListener('keydown', keyHandler);
+            const finalScore = Math.floor(score / 5);
+
+            if (finalScore > bestScore) {
+                bestScore = finalScore;
+                localStorage.setItem(BEST_KEY, String(bestScore));
+            }
+            document.getElementById('rj-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Salto del Amor y obtuvo ${finalScore} puntos.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${finalScore >= bestScore && finalScore > 0 ? '🏆' : '💔'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡${finalScore} puntos!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startRunnerJump(container, config);
+            overlay.appendChild(again);
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            resizeCanvas();
+            resetState();
+            draw();
+            overlay.style.display = 'none';
+            running = true;
+            document.addEventListener('keydown', keyHandler);
+            rafId = requestAnimationFrame(loop);
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        return {
+            destroy: () => {
+                running = false;
+                cancelAnimationFrame(rafId);
+                document.removeEventListener('keydown', keyHandler);
+                window.removeEventListener('resize', resizeCanvas);
+                container.innerHTML = '';
+            }
+        };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -6639,7 +6826,8 @@ const UniverseGames = (function() {
         startLetterOrder,
         startLoveMaze,
         startRoseHunt,
-        startFishing
+        startFishing,
+        startRunnerJump
     };
 })();
 

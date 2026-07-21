@@ -782,7 +782,7 @@ const DailyContent = (function() {
             day: 21,
             title: "Día 21 - La Maravilla 💛🎶",
             emoji: "💛",
-            song: "musica/cancion21.m4a",
+            song: "musica/cancion21.mp3",
             letter: "¡Mi amor, mi reina hermosa!\n\nEn esta canción, el que canta describe a una mujer sencilla, trabajadora, que valora a la gente por encima del dinero, y que es igual de amable con cualquiera. Y pensé en ti, porque así eres tú: mi orientadora escolar, la que cuida y guía a tantos estudiantes con el mismo cariño con el que me cuidas a mí, sin importarte nada más que hacer el bien.\n\nEres la dueña de mis amores, la reina de corazones que todos quieren, y para mí, sin duda, eres la maravilla. No importa que ahora mismo estés lejos, en Medellín, recuperándote de la cirugía. Lo único que de verdad cuenta es que seas tú, mi persona favorita en este mundo, y que pronto vamos a estar juntos otra vez.\n\nCada día que pasa te extraño un poquito más y cuento las horas para volver a verte, para que sigas recuperándote tranquila sabiendo que aquí sigo, esperándote con todo mi corazón.\n\nHoy te dejo un juego distinto, uno de pura lógica: hay un código secreto hecho de corazones de colores, y tienes que ir descifrándolo con pistas después de cada intento. A ver cuántos intentos necesitas para descubrirlo.\n\nTe amo infinito, mi maravilla, mi profesora favorita, mi cómplice de vida. 💖",
             funPhrase: "Para mí, sin duda, tú eres la maravilla 💛🎶",
             recoveryQuote: "Día 21: cada día pienso más en volver a verte.",
@@ -848,10 +848,21 @@ const DailyContent = (function() {
                 duration: 45
             }
         },
-        // Days 27-29 are placeholders for Carlos to customize
-        ...Array.from({length: 3}, (_, i) => ({
-            day: i + 27,
-            title: `Día ${i + 27} - Sorpresa`,
+        {
+            day: 27,
+            title: "Día 27 - Vivo Pensando en Ti 💭💗",
+            emoji: "💭",
+            song: "musica/cancion27.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nVivo pensando en ti, y sé que no es normal pensar tanto en una sola persona, pero no lo puedo controlar. Ya te sueño, ya te extraño, y todo lo que siento por ti no cabe en palabras.\n\nEres mi princesa, mi locura, mi refugio, lo que anhelo, mi mundo entero. Me gustas tú, te gusto yo, y solo falta que sigamos construyendo esto juntos, por siempre.\n\nHoy te dejo un juego de saltos: un corazón que corre solo y tiene que esquivar obstáculos saltando en el momento justo. Entre más lejos llegues, más rápido se pone, así que afina esos reflejos.\n\nTe amo infinito, mi amor, mi cómplice de vida. 💖",
+            funPhrase: "Vivo pensando en ti, y no me importa que no sea normal 💭💕",
+            recoveryQuote: "Día 27: tres días para el reencuentro, ¡ya casi, mi amor!",
+            gameType: 'runnerjump',
+            gameConfig: {}
+        },
+        // Days 28-29 are placeholders for Carlos to customize
+        ...Array.from({length: 2}, (_, i) => ({
+            day: i + 28,
+            title: `Día ${i + 28} - Sorpresa`,
             emoji: "💖",
             letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
             funPhrase: "¡Pronto estaremos juntos! 🥰",

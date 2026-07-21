@@ -996,6 +996,9 @@
                 case 'fishing':
                     titleEl.textContent = '🎣 Pesca de Corazones';
                     return UniverseGames.startFishing(container, gConfig);
+                case 'runnerjump':
+                    titleEl.textContent = '🏃 Salto del Amor';
+                    return UniverseGames.startRunnerJump(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
