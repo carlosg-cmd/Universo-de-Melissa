@@ -6631,7 +6631,7 @@ const UniverseGames = (function() {
         wrapper.appendChild(scoreboard);
 
         const canvasWrapper = document.createElement('div');
-        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:16/9;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:hidden;';
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:4/3;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:visible;';
         wrapper.appendChild(canvasWrapper);
 
         const canvas = document.createElement('canvas');
@@ -6645,8 +6645,8 @@ const UniverseGames = (function() {
         }
 
         const overlay = document.createElement('div');
-        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:20px;z-index:10;';
-        overlay.innerHTML = `<div style="font-size:3rem;">🏃💗</div><p style="color:var(--text-secondary);max-width:260px;">Toca la pantalla para saltar los obstáculos. ¡Entre más lejos llegues, más rápido se pone!</p>`;
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px;z-index:10;overflow-y:auto;';
+        overlay.innerHTML = `<div style="font-size:2.4rem;">🏃💗</div><p style="color:var(--text-secondary);max-width:260px;font-size:0.9rem;margin:0;">Toca la pantalla para saltar los obstáculos. ¡Entre más lejos llegues, más rápido se pone!</p>`;
         const startBtn = document.createElement('button');
         startBtn.className = 'game-replay-btn';
         startBtn.textContent = '💖 Empezar';
