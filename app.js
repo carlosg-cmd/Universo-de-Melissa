@@ -999,6 +999,9 @@
                 case 'runnerjump':
                     titleEl.textContent = '🏃 Salto del Amor';
                     return UniverseGames.startRunnerJump(container, gConfig);
+                case 'dodgebullets':
+                    titleEl.textContent = '💘 Esquiva las Balas del Amor';
+                    return UniverseGames.startDodgeBullets(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';

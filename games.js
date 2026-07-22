@@ -6796,6 +6796,179 @@ const UniverseGames = (function() {
         };
     }
 
+    // ==========================================
+    // 31. ESQUIVA LAS BALAS DEL AMOR (SURVIVAL DODGE, REPLAYABLE SCORE LOOP)
+    // ==========================================
+    function startDodgeBullets(container, config) {
+        container.innerHTML = '';
+
+        const BEST_KEY = 'melisa_dodgebullets_besttime';
+        let bestTime = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:400px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Tiempo: <span class="stat-value" id="db-time">0</span>s</span>
+            <span>Mejor: <span class="stat-value" id="db-best">${bestTime > 0 ? bestTime + 's' : '—'}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:3/4;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:visible;touch-action:none;';
+        wrapper.appendChild(canvasWrapper);
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'width:100%;height:100%;display:block;background:linear-gradient(#0a1128,#131c3a);border-radius:16px;';
+        canvasWrapper.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvasWrapper.clientWidth;
+            canvas.height = canvasWrapper.clientHeight;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px;z-index:10;overflow-y:auto;';
+        overlay.innerHTML = `<div style="font-size:2.4rem;">💘</div><p style="color:var(--text-secondary);max-width:260px;font-size:0.9rem;margin:0;">Desliza para mover tu corazón y esquiva las balas perdidas de este amor. ¡Sobrevive el mayor tiempo posible!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        canvasWrapper.appendChild(overlay);
+
+        let player, bullets, seconds, spawnTimer, running, rafId, tickInterval;
+
+        function resetState() {
+            player = { x: canvas.width / 2, y: canvas.height - 30, size: canvas.height * 0.06 };
+            bullets = [];
+            seconds = 0;
+            spawnTimer = 0;
+            document.getElementById('db-time').textContent = '0';
+        }
+
+        function movePlayerTo(clientX) {
+            const rect = canvas.getBoundingClientRect();
+            const x = (clientX - rect.left) * (canvas.width / rect.width);
+            player.x = Math.min(canvas.width - player.size, Math.max(player.size, x));
+        }
+        function onMove(e) {
+            if (!running) return;
+            const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+            movePlayerTo(clientX);
+        }
+        canvas.addEventListener('mousemove', onMove);
+        canvas.addEventListener('touchmove', (e) => { e.preventDefault(); onMove(e); }, { passive: false });
+        canvas.addEventListener('touchstart', (e) => { e.preventDefault(); onMove(e); }, { passive: false });
+
+        function spawnBullet() {
+            const speed = 2 + Math.min(4, seconds * 0.05);
+            bullets.push({
+                x: Math.random() * canvas.width,
+                y: -20,
+                vy: speed,
+                size: canvas.height * 0.045
+            });
+        }
+
+        function draw() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0a1128';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            ctx.font = `${player.size * 2}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            ctx.fillText('💗', player.x, player.y);
+
+            bullets.forEach(b => {
+                ctx.font = `${b.size * 2}px sans-serif`;
+                ctx.fillText('💘', b.x, b.y);
+            });
+        }
+
+        function loop() {
+            spawnTimer++;
+            const spawnInterval = Math.max(18, 40 - Math.floor(seconds));
+            if (spawnTimer >= spawnInterval) {
+                spawnBullet();
+                spawnTimer = 0;
+            }
+
+            bullets.forEach(b => b.y += b.vy);
+            bullets = bullets.filter(b => b.y < canvas.height + 30);
+
+            const pRadius = player.size * 0.75;
+            for (const b of bullets) {
+                const dist = Math.hypot(b.x - player.x, b.y - player.y);
+                if (dist < pRadius + b.size * 0.6) {
+                    endGame();
+                    return;
+                }
+            }
+
+            draw();
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function endGame() {
+            running = false;
+            cancelAnimationFrame(rafId);
+            clearInterval(tickInterval);
+            canvas.removeEventListener('mousemove', onMove);
+
+            if (seconds > bestTime) {
+                bestTime = seconds;
+                localStorage.setItem(BEST_KEY, String(bestTime));
+            }
+            document.getElementById('db-best').textContent = bestTime + 's';
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Esquiva las Balas del Amor y sobrevivió ${seconds}s.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:2.4rem;">${seconds >= bestTime && seconds > 0 ? '🏆' : '💔'}</div>
+                <p style="color:var(--primary);font-size:1.2rem;font-weight:700;margin:0;">¡Sobreviviste ${seconds} segundos!</p>
+                <p style="color:var(--text-secondary);margin:0;font-size:0.9rem;">Mejor tiempo: ${bestTime}s</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startDodgeBullets(container, config);
+            overlay.appendChild(again);
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            resizeCanvas();
+            resetState();
+            draw();
+            overlay.style.display = 'none';
+            running = true;
+            rafId = requestAnimationFrame(loop);
+            tickInterval = setInterval(() => {
+                seconds++;
+                document.getElementById('db-time').textContent = seconds;
+            }, 1000);
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        return {
+            destroy: () => {
+                running = false;
+                cancelAnimationFrame(rafId);
+                clearInterval(tickInterval);
+                canvas.removeEventListener('mousemove', onMove);
+                window.removeEventListener('resize', resizeCanvas);
+                container.innerHTML = '';
+            }
+        };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -6827,7 +7000,8 @@ const UniverseGames = (function() {
         startLoveMaze,
         startRoseHunt,
         startFishing,
-        startRunnerJump
+        startRunnerJump,
+        startDodgeBullets
     };
 })();
 

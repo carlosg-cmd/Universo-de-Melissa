@@ -859,8 +859,8 @@ const DailyContent = (function() {
             gameType: 'runnerjump',
             gameConfig: {}
         },
-        // Days 28-29 are placeholders for Carlos to customize
-        ...Array.from({length: 2}, (_, i) => ({
+        // Day 28 is a placeholder for Carlos to customize
+        ...Array.from({length: 1}, (_, i) => ({
             day: i + 28,
             title: `Día ${i + 28} - Sorpresa`,
             emoji: "💖",
@@ -870,6 +870,17 @@ const DailyContent = (function() {
             gameType: ['memory', 'wordsearch', 'trivia', 'puzzle', 'riddle'][Math.floor(Math.random() * 5)],
             gameConfig: {} // Default configs will be handled by games.js
         })),
+        {
+            day: 29,
+            title: "Día 29 - Balas Perdidas 💘",
+            emoji: "💘",
+            song: "musica/cancion29.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nDicen que uno nunca ve venir una bala perdida, que llega sin avisar y ya no hay cómo escapar de ella. Así me pasó contigo: no la vi venir, y desde entonces no hay forma de sacarte de mi cuerpo, de mi mente, de mi vida entera.\n\nY qué bueno que así fue, porque prefiero mil veces quedar herido de este amor que nunca haberte conocido. Que sigan llegando esas balas perdidas, mi amor, que yo no pienso esquivarlas.\n\nMañana es el último día de este universo que armé para ti, y aunque este capítulo se termine, lo nuestro apenas está comenzando. Hoy te dejo un juego de esquivar: un corazón que tienes que mover para sobrevivir el mayor tiempo posible entre las balas que van cayendo. Entre más tiempo aguantes, más rápido se ponen.\n\nTe amo infinito, mi amor, mi cómplice de vida. 💖",
+            funPhrase: "No pienso esquivar esta bala perdida llamada amor 💘",
+            recoveryQuote: "Día 29: un día más para volver a abrazarte, ¡ya casi!",
+            gameType: 'dodgebullets',
+            gameConfig: {}
+        },
         {
             day: 30,
             title: "Día 30 - ¡Lo lograste!",
