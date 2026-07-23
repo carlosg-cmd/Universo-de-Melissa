@@ -859,23 +859,25 @@ const DailyContent = (function() {
             gameType: 'runnerjump',
             gameConfig: {}
         },
-        // Day 29 is a placeholder for Carlos to customize
-        ...Array.from({length: 1}, (_, i) => ({
-            day: i + 29,
-            title: `Día ${i + 29} - Sorpresa`,
-            emoji: "💖",
-            letter: "Mi amor,\n\nSigue recuperándote y descansando. Te extraño mucho y te amo con todo mi corazón.\n\n¡Disfruta el juego de hoy!",
-            funPhrase: "¡Pronto estaremos juntos! 🥰",
-            recoveryQuote: "Un día menos para abrazarnos.",
-            gameType: ['memory', 'wordsearch', 'trivia', 'puzzle', 'riddle'][Math.floor(Math.random() * 5)],
-            gameConfig: {} // Default configs will be handled by games.js
-        })),
+        {
+            day: 29,
+            title: "Día 29 - Vida de Rico 🏖️💝",
+            emoji: "🏖️",
+            song: "musica/cancion29.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nNo te puedo ofrecer una vida llena de lujos, ni discotecas, ni carros del año, ni viajes a Europa. Pero lo que sí te puedo dar es un amor real, del bueno, del que no se acaba. No será vida de rico, pero contigo se pasa bien rico.\n\nSi en la casa no alcanza para el aire, ahí te pongo un abanico. No tengo para darte ni un peso, pero sí puedo darte mis besos. No tengo para abrirte champaña, pero sí una cervecita en la playa. Y aunque es poco lo que te ofrezco, con orgullo, todo lo que tengo es tuyo.\n\nHoy te dejo un juego rápido: van a aparecer parejas de opciones, una de lujo y otra sencilla, y tienes que tocar siempre la sencilla, la del amor de verdad, lo más rápido que puedas.\n\nTe amo infinito, mi amor, mi cómplice de vida. 💖",
+            funPhrase: "No es vida de rico, pero se pasa bien rico 🏖️💕",
+            recoveryQuote: "Día 29: un día más para volver a abrazarte, ¡ya casi!",
+            gameType: 'simplerico',
+            gameConfig: {
+                duration: 30
+            }
+        },
         {
             day: 28,
             title: "Día 28 - Balas Perdidas 💘",
             emoji: "💘",
             song: "musica/cancion28.mp3",
-            letter: "¡Mi amor, mi reina hermosa!\n\nDicen que uno nunca ve venir una bala perdida, que llega sin avisar y ya no hay cómo escapar de ella. Así me pasó contigo: no la vi venir, y desde entonces no hay forma de sacarte de mi cuerpo, de mi mente, de mi vida entera.\n\nY qué bueno que así fue, porque prefiero mil veces quedar herido de este amor que nunca haberte conocido. Que sigan llegando esas balas perdidas, mi amor, que yo no pienso esquivarlas.\n\nMañana es el último día de este universo que armé para ti, y aunque este capítulo se termine, lo nuestro apenas está comenzando. Hoy te dejo un juego de esquivar: un corazón que tienes que mover para sobrevivir el mayor tiempo posible entre las balas que van cayendo. Entre más tiempo aguantes, más rápido se ponen.\n\nTe amo infinito, mi amor, mi cómplice de vida. 💖",
+            letter: "¡Mi amor, mi reina hermosa!\n\nDicen que uno nunca ve venir una bala perdida, que llega sin avisar y ya no hay cómo escapar de ella. Así me pasó contigo: no la vi venir, y desde entonces no hay forma de sacarte de mi cuerpo, de mi mente, de mi vida entera.\n\nY qué bueno que así fue, porque prefiero mil veces quedar herido de este amor que nunca haberte conocido. Que sigan llegando esas balas perdidas, mi amor, que yo no pienso esquivarlas.\n\nHoy te dejo un juego de esquivar: un corazón que tienes que mover para sobrevivir el mayor tiempo posible entre las balas que van cayendo. Entre más tiempo aguantes, más rápido se ponen.\n\nTe amo infinito, mi amor, mi cómplice de vida. 💖",
             funPhrase: "No pienso esquivar esta bala perdida llamada amor 💘",
             recoveryQuote: "Día 28: Seguimos en este camino mi amor,pero mas cerca a la meta, ¡ya casi!",
             gameType: 'dodgebullets',

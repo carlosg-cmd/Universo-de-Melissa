@@ -6969,6 +6969,151 @@ const UniverseGames = (function() {
         };
     }
 
+    // ==========================================
+    // 32. SIMPLE PERO RICO (RAPID BINARY CHOICE, REPLAYABLE TIMED LOOP)
+    // ==========================================
+    function startSimpleRico(container, config) {
+        container.innerHTML = '';
+
+        const DURATION = config.duration || 30;
+        const PAIRS = (config.pairs && config.pairs.length > 0) ? config.pairs : [
+            { luxury: '🍾 Champaña', simple: '🍺 Cervecita en la playa' },
+            { luxury: '❄️ Aire acondicionado', simple: '🪭 Abanico' },
+            { luxury: '💎 Diamantes', simple: '💋 Un beso' },
+            { luxury: '🚗 Carro lujoso', simple: '💃 Bailar pegaditos' },
+            { luxury: '✈️ Viaje a Europa', simple: '🌅 Sol cayendo en el balcón' },
+            { luxury: '🏛️ Discoteca exclusiva', simple: '🏖️ Playa con cervecita' }
+        ];
+
+        const BEST_KEY = 'melisa_simplerico_best';
+        let bestScore = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:400px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Puntos: <span class="stat-value" id="sr-score">0</span></span>
+            <span>Tiempo: <span class="stat-value" id="sr-time">${DURATION}</span>s</span>
+            <span>Mejor: <span class="stat-value" id="sr-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const instructions = document.createElement('p');
+        instructions.style.cssText = 'text-align:center;color:var(--text-secondary);margin:0;font-size:0.85rem;';
+        instructions.textContent = 'No es vida de rico, pero se pasa bien rico. ¡Toca siempre la opción sencilla, no la de lujo!';
+        wrapper.appendChild(instructions);
+
+        const cardsRow = document.createElement('div');
+        cardsRow.style.cssText = 'display:flex;gap:10px;width:100%;';
+        wrapper.appendChild(cardsRow);
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'width:100%;background:rgba(5,15,30,0.94);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;text-align:center;padding:24px 20px;';
+        overlay.innerHTML = `<div style="font-size:3rem;">💝</div><p style="color:var(--text-secondary);max-width:260px;">Van a aparecer parejas de opciones. Toca siempre la sencilla — la del amor de verdad, no la de lujo — ¡lo más rápido que puedas!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        wrapper.appendChild(overlay);
+
+        let queue = [];
+        let score = 0;
+        let timeLeft = DURATION;
+        let tickInterval = null;
+        let running = false;
+
+        function refillQueue() {
+            queue = shuffleArray([...PAIRS]);
+        }
+
+        function nextRound() {
+            if (queue.length === 0) refillQueue();
+            const pair = queue.pop();
+            const simpleFirst = Math.random() < 0.5;
+            renderCards(pair, simpleFirst);
+        }
+
+        function renderCards(pair, simpleFirst) {
+            cardsRow.innerHTML = '';
+            const options = simpleFirst ? [pair.simple, pair.luxury] : [pair.luxury, pair.simple];
+            options.forEach((text) => {
+                const isSimple = text === pair.simple;
+                const card = document.createElement('button');
+                card.textContent = text;
+                card.style.cssText = 'flex:1;padding:20px 10px;border-radius:14px;border:1.5px solid var(--primary-soft);background:rgba(0,229,255,0.06);color:var(--text-primary,#e0f7fa);font-size:0.95rem;font-weight:600;cursor:pointer;';
+                card.onclick = () => handlePick(isSimple, card);
+                cardsRow.appendChild(card);
+            });
+        }
+
+        function handlePick(isSimple, card) {
+            if (!running) return;
+            if (isSimple) {
+                score++;
+                document.getElementById('sr-score').textContent = score;
+                card.style.borderColor = 'var(--primary)';
+                card.style.background = 'var(--primary-soft)';
+            } else {
+                card.style.borderColor = 'var(--danger)';
+                card.animate([
+                    { transform: 'translateX(0)' },
+                    { transform: 'translateX(-5px)' },
+                    { transform: 'translateX(5px)' },
+                    { transform: 'translateX(0)' }
+                ], { duration: 200 });
+            }
+            setTimeout(nextRound, 250);
+        }
+
+        function endGame() {
+            running = false;
+            clearInterval(tickInterval);
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(BEST_KEY, String(bestScore));
+            }
+            document.getElementById('sr-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Simple pero Rico y obtuvo ${score} puntos.`);
+
+            cardsRow.innerHTML = '';
+            overlay.innerHTML = `
+                <div style="font-size:3rem;">${score >= bestScore && score > 0 ? '🏆' : '💝'}</div>
+                <p style="color:var(--primary);font-size:1.3rem;font-weight:700;margin:0;">¡${score} puntos!</p>
+                <p style="color:var(--text-secondary);margin:0;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startSimpleRico(container, config);
+            overlay.appendChild(again);
+            wrapper.appendChild(overlay);
+        }
+
+        startBtn.onclick = () => {
+            overlay.remove();
+            running = true;
+            score = 0;
+            timeLeft = DURATION;
+            document.getElementById('sr-score').textContent = '0';
+            document.getElementById('sr-time').textContent = timeLeft;
+            refillQueue();
+            nextRound();
+
+            tickInterval = setInterval(() => {
+                timeLeft--;
+                document.getElementById('sr-time').textContent = Math.max(0, timeLeft);
+                if (timeLeft <= 0) endGame();
+            }, 1000);
+        };
+
+        return { destroy: () => { running = false; clearInterval(tickInterval); container.innerHTML = ''; } };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -7001,7 +7146,8 @@ const UniverseGames = (function() {
         startRoseHunt,
         startFishing,
         startRunnerJump,
-        startDodgeBullets
+        startDodgeBullets,
+        startSimpleRico
     };
 })();
 

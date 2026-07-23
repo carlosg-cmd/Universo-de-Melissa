@@ -1002,6 +1002,9 @@
                 case 'dodgebullets':
                     titleEl.textContent = '💘 Esquiva las Balas del Amor';
                     return UniverseGames.startDodgeBullets(container, gConfig);
+                case 'simplerico':
+                    titleEl.textContent = '💝 Simple pero Rico';
+                    return UniverseGames.startSimpleRico(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';
