@@ -7114,6 +7114,233 @@ const UniverseGames = (function() {
         return { destroy: () => { running = false; clearInterval(tickInterval); container.innerHTML = ''; } };
     }
 
+    // ==========================================
+    // 33. CERTIFICADO Y CELEBRACIÓN DEL MES (ALWAYS-FRESH CELEBRATION)
+    // ==========================================
+    function startMonthCelebration(container, config) {
+        container.innerHTML = '';
+
+        const name = config.name || 'Melissa';
+        const message = config.message || `Un mes completo de fuerza, paciencia y amor. Lo más difícil ya pasó, y cada día que pasa estamos más cerca de volver a abrazarnos.`;
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:16px;width:100%;max-width:400px;margin:0 auto;text-align:center;';
+        container.appendChild(wrapper);
+
+        const stage = document.createElement('div');
+        stage.style.cssText = 'position:relative;width:100%;min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;';
+        wrapper.appendChild(stage);
+
+        function renderCakeStage() {
+            stage.innerHTML = '';
+
+            const instructions = document.createElement('p');
+            instructions.style.cssText = 'color:var(--text-secondary);font-size:0.95rem;max-width:280px;';
+            instructions.textContent = 'Mantén presionado sobre la velita para soplarla 🕯️';
+            stage.appendChild(instructions);
+
+            const cakeBox = document.createElement('div');
+            cakeBox.style.cssText = 'position:relative;font-size:5rem;line-height:1;cursor:pointer;user-select:none;-webkit-user-select:none;touch-action:none;';
+            cakeBox.innerHTML = '🎂';
+            stage.appendChild(cakeBox);
+
+            const flame = document.createElement('div');
+            flame.style.cssText = 'position:absolute;top:-28px;left:50%;transform:translateX(-50%);font-size:1.6rem;transition:opacity 0.2s, transform 0.2s;';
+            flame.textContent = '🔥';
+            cakeBox.appendChild(flame);
+
+            const progressRing = document.createElement('div');
+            progressRing.style.cssText = 'width:70%;height:8px;border-radius:4px;background:rgba(0,229,255,0.1);overflow:hidden;margin-top:8px;';
+            const progressFill = document.createElement('div');
+            progressFill.style.cssText = 'height:100%;width:0%;background:var(--primary);transition:width 0.05s linear;';
+            progressRing.appendChild(progressFill);
+            stage.appendChild(progressRing);
+
+            const HOLD_MS = 1400;
+            let holdStart = null;
+            let holdRaf = null;
+
+            function updateProgress() {
+                const elapsed = Date.now() - holdStart;
+                const pct = Math.min(100, (elapsed / HOLD_MS) * 100);
+                progressFill.style.width = pct + '%';
+                flame.style.transform = `translateX(-50%) scale(${1 - pct / 130})`;
+                flame.style.opacity = String(1 - pct / 120);
+
+                if (pct >= 100) {
+                    cancelAnimationFrame(holdRaf);
+                    blowOutCandle();
+                } else {
+                    holdRaf = requestAnimationFrame(updateProgress);
+                }
+            }
+
+            function startHold() {
+                holdStart = Date.now();
+                holdRaf = requestAnimationFrame(updateProgress);
+            }
+            function cancelHold() {
+                cancelAnimationFrame(holdRaf);
+                holdStart = null;
+                progressFill.style.width = '0%';
+                flame.style.transform = 'translateX(-50%) scale(1)';
+                flame.style.opacity = '1';
+            }
+
+            cakeBox.addEventListener('mousedown', startHold);
+            cakeBox.addEventListener('touchstart', (e) => { e.preventDefault(); startHold(); }, { passive: false });
+            cakeBox.addEventListener('mouseup', cancelHold);
+            cakeBox.addEventListener('mouseleave', cancelHold);
+            cakeBox.addEventListener('touchend', cancelHold);
+
+            function blowOutCandle() {
+                cakeBox.removeEventListener('mousedown', startHold);
+                cakeBox.removeEventListener('touchstart', startHold);
+                flame.textContent = '💨';
+                setTimeout(renderCertificate, 500);
+            }
+        }
+
+        function renderCertificate() {
+            stage.innerHTML = '';
+
+            const cert = document.createElement('div');
+            cert.style.cssText = 'width:100%;padding:24px 20px;border-radius:18px;border:3px solid var(--primary);background:linear-gradient(180deg,rgba(0,229,255,0.08),rgba(0,229,255,0.02));box-shadow:0 0 25px var(--primary-glow);display:flex;flex-direction:column;align-items:center;gap:10px;';
+            cert.innerHTML = `
+                <div style="font-size:2.4rem;">🎖️</div>
+                <div style="font-size:0.8rem;letter-spacing:2px;color:var(--text-secondary);text-transform:uppercase;">Certificado de Guerrera</div>
+                <div style="font-size:1.5rem;font-weight:700;color:var(--primary);margin:4px 0;">${name}</div>
+                <div style="font-size:0.95rem;color:var(--text-secondary);line-height:1.5;">${message}</div>
+                <div style="font-size:1.1rem;font-weight:700;color:var(--primary);margin-top:6px;">🎉 1 MES 🎉</div>
+            `;
+            stage.appendChild(cert);
+
+            const replayBtn = document.createElement('button');
+            replayBtn.className = 'game-replay-btn';
+            replayBtn.textContent = '🎂 Volver a celebrar';
+            replayBtn.onclick = renderCakeStage;
+            stage.appendChild(replayBtn);
+
+            if (window.notifyCarlos) window.notifyCarlos('🎉 Melissa vio su certificado de 1 mes de recuperación.');
+            celebrate(container, '¡Un mes completo, mi guerrera! 🎉');
+        }
+
+        renderCakeStage();
+
+        return { destroy: () => { container.innerHTML = ''; } };
+    }
+
+    // ==========================================
+    // 34. MI TOP 10 DEL UNIVERSO (MANUAL ENTRY OF HER OWN PICKS)
+    // ==========================================
+    function startTop10Phrases(container, config) {
+        container.innerHTML = '';
+
+        const SAVE_KEY = 'melisa_top10_phrases';
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:14px;width:100%;max-width:420px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const stage = document.createElement('div');
+        stage.style.cssText = 'width:100%;';
+        wrapper.appendChild(stage);
+
+        function loadSaved() {
+            try {
+                const raw = localStorage.getItem(SAVE_KEY);
+                return raw ? JSON.parse(raw) : null;
+            } catch { return null; }
+        }
+        function save(list) {
+            localStorage.setItem(SAVE_KEY, JSON.stringify(list));
+        }
+
+        function renderForm(prefill) {
+            stage.innerHTML = '';
+
+            const instructions = document.createElement('p');
+            instructions.style.cssText = 'text-align:center;color:var(--text-secondary);font-size:0.9rem;margin:0 0 14px;line-height:1.4;';
+            instructions.innerHTML = 'Ve al <strong>universo principal</strong> y busca las frases que flotan alrededor de la foto. Escribe aquí tus 10 favoritas, en el orden que tú quieras — la #1 es tu preferida.';
+            stage.appendChild(instructions);
+
+            const list = document.createElement('div');
+            list.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
+            stage.appendChild(list);
+
+            const inputs = [];
+            for (let i = 0; i < 10; i++) {
+                const row = document.createElement('div');
+                row.style.cssText = 'display:flex;align-items:center;gap:8px;';
+
+                const num = document.createElement('span');
+                num.textContent = `${i + 1}.`;
+                num.style.cssText = 'font-weight:700;color:var(--primary);min-width:22px;';
+                row.appendChild(num);
+
+                const input = document.createElement('input');
+                input.type = 'text';
+                input.placeholder = 'Escribe la frase aquí...';
+                input.value = (prefill && prefill[i]) || '';
+                input.style.cssText = 'flex:1;padding:10px 12px;border-radius:10px;border:1.5px solid var(--primary-soft);background:rgba(0,229,255,0.04);color:var(--text-primary,#e0f7fa);font-size:0.9rem;';
+                inputs.push(input);
+                row.appendChild(input);
+                list.appendChild(row);
+            }
+
+            const saveBtn = document.createElement('button');
+            saveBtn.className = 'game-replay-btn';
+            saveBtn.textContent = '💾 Guardar mi Top 10';
+            saveBtn.style.marginTop = '16px';
+            saveBtn.onclick = () => {
+                const values = inputs.map(inp => inp.value.trim());
+                if (values.some(v => v.length === 0)) {
+                    alert('Completa las 10 frases antes de guardar 💗');
+                    return;
+                }
+                save(values);
+                if (window.notifyCarlos) window.notifyCarlos('🏆 Melissa guardó su Top 10 de frases del universo.');
+                renderFinal(values);
+            };
+            stage.appendChild(saveBtn);
+        }
+
+        function renderFinal(items) {
+            stage.innerHTML = '';
+
+            const title = document.createElement('p');
+            title.style.cssText = 'text-align:center;color:var(--primary);font-weight:700;font-size:1.1rem;margin:0 0 12px;';
+            title.textContent = '🏆 Mi Top 10 del Universo 🏆';
+            stage.appendChild(title);
+
+            const list = document.createElement('div');
+            list.style.cssText = 'display:flex;flex-direction:column;gap:8px;';
+            items.forEach((phrase, i) => {
+                const row = document.createElement('div');
+                row.style.cssText = 'display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:12px;border:1.5px solid var(--primary);background:var(--primary-soft);';
+                row.innerHTML = `<span style="font-weight:700;color:var(--primary);min-width:26px;">#${i + 1}</span><span style="flex:1;font-size:0.9rem;line-height:1.3;">${phrase}</span>`;
+                list.appendChild(row);
+            });
+            stage.appendChild(list);
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'game-replay-btn';
+            editBtn.textContent = '✏️ Editar mi Top 10';
+            editBtn.style.marginTop = '14px';
+            editBtn.onclick = () => renderForm(items);
+            stage.appendChild(editBtn);
+        }
+
+        const saved = loadSaved();
+        if (saved && Array.isArray(saved) && saved.length === 10) {
+            renderFinal(saved);
+        } else {
+            renderForm(null);
+        }
+
+        return { destroy: () => { container.innerHTML = ''; } };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -7147,7 +7374,9 @@ const UniverseGames = (function() {
         startFishing,
         startRunnerJump,
         startDodgeBullets,
-        startSimpleRico
+        startSimpleRico,
+        startMonthCelebration,
+        startTop10Phrases
     };
 })();
 

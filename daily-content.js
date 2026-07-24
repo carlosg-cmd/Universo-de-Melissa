@@ -885,16 +885,29 @@ const DailyContent = (function() {
         },
         {
             day: 30,
-            title: "Día 30 - ¡Lo lograste!",
+            title: "Día 30 - ¡Un Mes Juntos en Esto! 🎖️",
             emoji: "🎉",
-            letter: "¡MI AMOR HERMOSA!\n\nLlegamos al día 30. ¡Lo lograste! Ha sido un mes lleno de retos, pero demostraste lo fuerte y valiente que eres. No sabes lo orgulloso que estoy de ti.\n\nEste universo fue solo una pequeña forma de decirte que estoy aquí para ti, siempre. Ya casi podemos volver a abrazarnos, salir y disfrutar juntos.\n\nTe amo hoy, mañana y siempre. Eres mi todo.",
-            funPhrase: "¡Graduada de la recuperación! 🎓",
-            recoveryQuote: "El final de este capítulo, el inicio de miles más juntos.",
-            gameType: 'memory',
-            gameConfig: {
-                pairs: 8,
-                emojiFallback: ['💕','💗','💖','💝','💘','💞','🌹','⭐']
-            }
+            song: "musica/cancion30.mp3",
+            letter: "¡MI AMOR HERMOSA!\n\nAntes de ti, mi mundo era como una foto en blanco y negro. Y llegaste tú, y le pintaste color a todo, borraste mis decepciones, y hasta me sacaste del abismo con solo una mirada. Hoy se cumple un mes exacto desde que empezamos este camino de recuperación. Un mes que no ha sido nada fácil, mi guerrera, pero que demostró lo fuerte y valiente que eres.\n\nYa pasamos lo más difícil: salir de la cirugía, los primeros días de dolor e incertidumbre, esos momentos donde todo pesaba más. Y aun así, aquí estás, cada día un poco mejor, cada día más cerca de volver a estar bien del todo.\n\nTodavía seguimos en recuperación, lo sé, pero ya podemos decir con el corazón tranquilo que estamos cerca de llegar a la meta. Este primer mes se cierra, pero esto apenas está comenzando: faltan muchos más capítulos que vamos a escribir juntos, a todo color.\n\nHoy quise dejarte algo distinto: un certificado especial para ti, y un reto para que armes tu propio Top 10 con las frases que más te gustaron de todo este universo.\n\nTe amo hoy, mañana y siempre. Eres mi todo, mi guerrera, mi cómplice de vida. 💖",
+            funPhrase: "¡Un mes completo, mi guerrera! 🎖️",
+            recoveryQuote: "Lo más difícil ya pasó. Ahora solo falta llegar a la meta, juntos.",
+            games: [
+                {
+                    name: 'Certificado de Guerrera 🎖️',
+                    emoji: '🎖️',
+                    type: 'monthcelebration',
+                    config: {
+                        name: 'Melissa',
+                        message: 'Un mes completo de fuerza, paciencia y amor. Superaste la cirugía, los días más duros ya pasaron, y cada día que pasa estamos más cerca de volver a abrazarnos.'
+                    }
+                },
+                {
+                    name: 'Mi Top 10 del Universo 🏆',
+                    emoji: '🏆',
+                    type: 'top10phrases',
+                    config: {}
+                }
+            ]
         }
     ];
 
