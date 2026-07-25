@@ -6,7 +6,7 @@
 const DailyContent = (function() {
     // Configuration
     const START_DATE = '2026-06-25'; // YYYY-MM-DD
-    const TOTAL_DAYS = 30;
+    const TOTAL_DAYS = 60;
 
     // Helper to calculate current day
     function calculateCurrentDay() {
@@ -908,6 +908,19 @@ const DailyContent = (function() {
                     config: {}
                 }
             ]
+        },
+        {
+            day: 31,
+            title: "Día 31 - Andar Conmigo 🚶‍♀️💕",
+            emoji: "🚶‍♀️",
+            song: "musica/cancion31.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nArrancamos el segundo mes de este camino, y quiero preguntarte algo: ¿tú quisieras seguir andando conmigo? Sé que ya llevamos un buen tramo recorrido, pero esta es apenas una historia sin final, y tengo tantas ganas de seguir descubriendo cosas nuevas contigo, de contarte todo lo que aún no te he contado, y de escuchar todo lo tuyo también.\n\nHay tantos caminos por andar todavía, mi amor: viajes, risas, noches de películas, y por supuesto, más días como estos, llenos de cartas y juegos. Lo más difícil ya quedó atrás, y ahora lo que viene es simplemente seguir construyendo esto, un paso a la vez, juntos.\n\nHoy te dejo un juego de ritmo: corazones que caen por carriles y tienes que tocar el botón justo a tiempo para atraparlos. Entre mejor sea tu ritmo, más alto el puntaje.\n\nTe amo infinito, mi amor, mi cómplice de vida, mi compañera de camino. 💖",
+            funPhrase: "Dime si tú quisieras seguir andando conmigo 🚶‍♀️💕",
+            recoveryQuote: "Día 31: empezamos el segundo mes de este hermoso camino juntos.",
+            gameType: 'rhythmlove',
+            gameConfig: {
+                duration: 45
+            }
         }
     ];
 

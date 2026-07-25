@@ -1011,6 +1011,9 @@
                 case 'top10phrases':
                     titleEl.textContent = '🏆 Mi Top 10 del Universo';
                     return UniverseGames.startTop10Phrases(container, gConfig);
+                case 'rhythmlove':
+                    titleEl.textContent = '🎵 Ritmo del Amor';
+                    return UniverseGames.startRhythmLove(container, gConfig);
                 default:
                     titleEl.textContent = '🎮 Juego del Día';
                     container.innerHTML = '<p style="text-align:center;color:var(--text-secondary);padding:40px;">¡Juego no encontrado!</p>';

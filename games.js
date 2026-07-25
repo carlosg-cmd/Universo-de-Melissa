@@ -7341,6 +7341,224 @@ const UniverseGames = (function() {
         return { destroy: () => { container.innerHTML = ''; } };
     }
 
+    // ==========================================
+    // 35. RITMO DEL AMOR (MULTI-LANE RHYTHM TIMING, REPLAYABLE SCORE LOOP)
+    // ==========================================
+    function startRhythmLove(container, config) {
+        container.innerHTML = '';
+
+        const LANES = 4;
+        const DURATION = config.duration || 45;
+        const BEST_KEY = 'melisa_rhythmlove_best';
+        let bestScore = parseInt(localStorage.getItem(BEST_KEY) || '0');
+
+        const wrapper = document.createElement('div');
+        wrapper.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:12px;width:100%;max-width:400px;margin:0 auto;';
+        container.appendChild(wrapper);
+
+        const scoreboard = document.createElement('div');
+        scoreboard.className = 'game-stats';
+        scoreboard.innerHTML = `
+            <span>Puntos: <span class="stat-value" id="rl-score">0</span></span>
+            <span>Combo: <span class="stat-value" id="rl-combo">0</span></span>
+            <span>Mejor: <span class="stat-value" id="rl-best">${bestScore}</span></span>
+        `;
+        wrapper.appendChild(scoreboard);
+
+        const canvasWrapper = document.createElement('div');
+        canvasWrapper.style.cssText = 'position:relative;width:100%;aspect-ratio:3/4;border-radius:16px;border:2px solid var(--primary);box-shadow:0 0 20px var(--primary-glow);overflow:visible;';
+        wrapper.appendChild(canvasWrapper);
+
+        const canvas = document.createElement('canvas');
+        canvas.style.cssText = 'width:100%;height:100%;display:block;background:linear-gradient(#0a1128,#131c3a);border-radius:16px;';
+        canvasWrapper.appendChild(canvas);
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = canvasWrapper.clientWidth;
+            canvas.height = canvasWrapper.clientHeight;
+        }
+
+        const overlay = document.createElement('div');
+        overlay.style.cssText = 'position:absolute;inset:0;background:rgba(5,15,30,0.92);border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:16px;z-index:10;overflow-y:auto;';
+        overlay.innerHTML = `<div style="font-size:2.4rem;">🎵💗</div><p style="color:var(--text-secondary);max-width:260px;font-size:0.9rem;margin:0;">Toca el botón del carril justo cuando el corazón llegue a la línea. ¡No pierdas el ritmo!</p>`;
+        const startBtn = document.createElement('button');
+        startBtn.className = 'game-replay-btn';
+        startBtn.textContent = '💖 Empezar';
+        overlay.appendChild(startBtn);
+        canvasWrapper.appendChild(overlay);
+
+        const buttonsRow = document.createElement('div');
+        buttonsRow.style.cssText = `display:grid;grid-template-columns:repeat(${LANES},1fr);gap:8px;width:100%;`;
+        wrapper.appendChild(buttonsRow);
+
+        const laneButtons = [];
+        for (let i = 0; i < LANES; i++) {
+            const btn = document.createElement('button');
+            btn.textContent = '💗';
+            btn.style.cssText = 'font-size:1.5rem;padding:14px 0;border-radius:12px;border:1.5px solid var(--primary-soft);background:rgba(0,229,255,0.06);cursor:pointer;';
+            btn.onclick = () => hitLane(i, btn);
+            buttonsRow.appendChild(btn);
+            laneButtons.push(btn);
+        }
+
+        let notes, score, combo, timeLeft, spawnTimer, tickInterval, rafId, running;
+        const HIT_WINDOW = 26; // px tolerance
+
+        function resetState() {
+            notes = [];
+            score = 0;
+            combo = 0;
+            timeLeft = DURATION;
+            spawnTimer = 0;
+            document.getElementById('rl-score').textContent = '0';
+            document.getElementById('rl-combo').textContent = '0';
+        }
+
+        function hitLineY() { return canvas.height * 0.85; }
+
+        function spawnNote() {
+            const lane = Math.floor(Math.random() * LANES);
+            notes.push({ lane, y: -20, hit: false });
+        }
+
+        function draw() {
+            const laneW = canvas.width / LANES;
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = '#0a1128';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            // Lane dividers
+            ctx.strokeStyle = 'rgba(0,229,255,0.15)';
+            for (let i = 1; i < LANES; i++) {
+                ctx.beginPath();
+                ctx.moveTo(i * laneW, 0);
+                ctx.lineTo(i * laneW, canvas.height);
+                ctx.stroke();
+            }
+
+            // Hit line
+            ctx.strokeStyle = 'var(--primary)';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            ctx.moveTo(0, hitLineY());
+            ctx.lineTo(canvas.width, hitLineY());
+            ctx.stroke();
+
+            // Notes
+            ctx.font = `${laneW * 0.5}px sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'middle';
+            notes.forEach(n => {
+                if (n.hit) return;
+                const x = n.lane * laneW + laneW / 2;
+                ctx.fillText('💗', x, n.y);
+            });
+        }
+
+        function loop() {
+            const speed = 2.2 + Math.min(2.5, (DURATION - timeLeft) * 0.04);
+            spawnTimer++;
+            const spawnInterval = Math.max(35, 60 - Math.floor((DURATION - timeLeft) * 0.6));
+            if (spawnTimer >= spawnInterval) { spawnNote(); spawnTimer = 0; }
+
+            notes.forEach(n => { if (!n.hit) n.y += speed; });
+
+            // Missed notes (passed hit line beyond window)
+            notes.forEach(n => {
+                if (!n.hit && n.y > hitLineY() + HIT_WINDOW) {
+                    n.hit = true; // remove/ignore
+                    combo = 0;
+                    document.getElementById('rl-combo').textContent = '0';
+                }
+            });
+            notes = notes.filter(n => n.y < canvas.height + 30);
+
+            draw();
+            rafId = requestAnimationFrame(loop);
+        }
+
+        function hitLane(lane, btn) {
+            if (!running) return;
+            let best = null;
+            let bestDist = Infinity;
+            for (const n of notes) {
+                if (n.hit || n.lane !== lane) continue;
+                const dist = Math.abs(n.y - hitLineY());
+                if (dist < HIT_WINDOW && dist < bestDist) { best = n; bestDist = dist; }
+            }
+            if (best) {
+                best.hit = true;
+                score++;
+                combo++;
+                document.getElementById('rl-score').textContent = score;
+                document.getElementById('rl-combo').textContent = combo;
+                btn.style.borderColor = 'var(--primary)';
+                btn.style.background = 'var(--primary-soft)';
+            } else {
+                combo = 0;
+                document.getElementById('rl-combo').textContent = '0';
+                btn.style.borderColor = 'var(--danger)';
+            }
+            setTimeout(() => {
+                btn.style.borderColor = 'var(--primary-soft)';
+                btn.style.background = 'rgba(0,229,255,0.06)';
+            }, 150);
+        }
+
+        function endGame() {
+            running = false;
+            cancelAnimationFrame(rafId);
+            clearInterval(tickInterval);
+
+            if (score > bestScore) {
+                bestScore = score;
+                localStorage.setItem(BEST_KEY, String(bestScore));
+            }
+            document.getElementById('rl-best').textContent = bestScore;
+
+            if (window.notifyCarlos) window.notifyCarlos(`🎮 Melissa jugó Ritmo del Amor y obtuvo ${score} puntos.`);
+
+            overlay.innerHTML = `
+                <div style="font-size:2.4rem;">${score >= bestScore && score > 0 ? '🏆' : '🎵'}</div>
+                <p style="color:var(--primary);font-size:1.2rem;font-weight:700;margin:0;">¡${score} puntos!</p>
+                <p style="color:var(--text-secondary);margin:0;font-size:0.9rem;">Mejor puntaje: ${bestScore}</p>
+            `;
+            const again = document.createElement('button');
+            again.className = 'game-replay-btn';
+            again.textContent = '🔄 Jugar de nuevo';
+            again.onclick = () => startRhythmLove(container, config);
+            overlay.appendChild(again);
+            overlay.style.display = 'flex';
+        }
+
+        startBtn.onclick = () => {
+            resizeCanvas();
+            resetState();
+            draw();
+            overlay.style.display = 'none';
+            running = true;
+            rafId = requestAnimationFrame(loop);
+            tickInterval = setInterval(() => {
+                timeLeft--;
+                if (timeLeft <= 0) endGame();
+            }, 1000);
+        };
+
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        return {
+            destroy: () => {
+                running = false;
+                cancelAnimationFrame(rafId);
+                clearInterval(tickInterval);
+                window.removeEventListener('resize', resizeCanvas);
+                container.innerHTML = '';
+            }
+        };
+    }
+
     return {
         startMemory,
         startWordSearch,
@@ -7376,7 +7594,8 @@ const UniverseGames = (function() {
         startDodgeBullets,
         startSimpleRico,
         startMonthCelebration,
-        startTop10Phrases
+        startTop10Phrases,
+        startRhythmLove
     };
 })();
 
