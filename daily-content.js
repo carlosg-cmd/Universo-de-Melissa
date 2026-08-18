@@ -8,6 +8,14 @@ const DailyContent = (function() {
     const START_DATE = '2026-06-25'; // YYYY-MM-DD
     const TOTAL_DAYS = 60;
 
+    // The project paused in real life after Día 31. Instead of showing a big
+    // gap (jumping straight to whatever day the raw date math would give),
+    // we freeze at Día 31 through the pause, then resume the sequence at
+    // Día 32 starting from SEGMENT2_START_DATE (today), so it feels continuous.
+    const SEGMENT1_LAST_DAY = 31;
+    const SEGMENT2_START_DATE = '2026-08-18'; // YYYY-MM-DD - the day we resume
+    const SEGMENT2_START_DAY = 32;
+
     // Helper to calculate current day
     function calculateCurrentDay() {
         // --- MODO DE PRUEBA (SOLO PARA TI) ---
@@ -34,10 +42,26 @@ const DailyContent = (function() {
         
         // If before start date, return 0 (coming soon)
         if (diffDays < 1) return 0;
+
+        // Within the first segment (Día 1-31), use normal date math
+        if (diffDays <= SEGMENT1_LAST_DAY) {
+            return diffDays;
+        }
+
+        // Past Día 31's real date: check against the segment 2 resume date
+        const seg2Start = new Date(SEGMENT2_START_DATE + 'T00:00:00');
+        if (d2.getTime() < seg2Start.getTime()) {
+            // Still within the real-world pause: stay frozen at Día 31
+            return SEGMENT1_LAST_DAY;
+        }
+
+        const diffSeg2 = Math.floor((d2.getTime() - seg2Start.getTime()) / (1000 * 60 * 60 * 24));
+        let day = SEGMENT2_START_DAY + diffSeg2;
+
         // Cap at TOTAL_DAYS
-        if (diffDays > TOTAL_DAYS) return TOTAL_DAYS;
-        
-        return diffDays;
+        if (day > TOTAL_DAYS) day = TOTAL_DAYS;
+
+        return day;
     }
 
     // Days Database
@@ -921,6 +945,997 @@ const DailyContent = (function() {
             gameConfig: {
                 duration: 45
             }
+        },
+        {
+            day: 32,
+            title: "Día 32 - ¡La Feria del Amor! 🎪",
+            emoji: "🎪",
+            song: "musica/cancion55.mp3",
+            letter: "¡Mi amor, mi reina hermosa!\n\nHace un tiempo te había avisado que íbamos a tomar un pequeño receso en nuestro universo, ¿te acuerdas? Ese descanso que no habíamos tenido desde que empezamos este camino. Pues bien, hoy volvemos, y lo hacemos con una metodología diferente.\n\nMe alegra tanto ver que para esta fecha tu recuperación ha avanzado bastante bien y sin interrupciones. Cada día te veo más fuerte, más tú, más cerca de estar completamente recuperada. Eso merece una celebración distinta.\n\nPor eso hoy no te dejo una carta con un solo juego, sino una feria completa: aquí están todos los juegos que has jugado hasta ahora, reunidos en un solo lugar, para que juegues el que quieras, las veces que quieras. Porque al final, como dice la canción, el plan perfecto nunca fue un lugar ni una actividad específica, siempre fuiste tú, estar contigo, sin necesitar nada más que eso.\n\nBienvenida de vuelta a nuestro universo, mi amor. Que sigan muchos días más como estos.\n\nTe amo infinito, mi cómplice de vida. 💖",
+            funPhrase: "El plan perfecto nunca fue un lugar, siempre fuiste tú 🎪💕",
+            recoveryQuote: "Día 32: tu recuperación avanza increíble, ¡bienvenida de vuelta a la feria!",
+            games: [
+                      {
+                                "name": "Juego de Memoria 🧠",
+                                "emoji": "🧠",
+                                "type": "memory",
+                                "config": {
+                                          "pairs": 6,
+                                          "emojiFallback": [
+                                                    "💕",
+                                                    "💗",
+                                                    "💖",
+                                                    "💝",
+                                                    "💘",
+                                                    "💞"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Sopa de Letras 🔤",
+                                "emoji": "🔤",
+                                "type": "wordsearch",
+                                "config": {
+                                          "words": [
+                                                    "Melissa",
+                                                    "Carlos",
+                                                    "octubre",
+                                                    "julio",
+                                                    "mar",
+                                                    "Tarazá",
+                                                    "Medellín",
+                                                    "Montería",
+                                                    "colegio",
+                                                    "sena",
+                                                    "cumpleaños",
+                                                    "Luffy",
+                                                    "Mario galaxi",
+                                                    "pizza",
+                                                    "Santelmo",
+                                                    "parque",
+                                                    "rumba aerobica",
+                                                    "la perra",
+                                                    "la cauchera",
+                                                    "hamburguesa",
+                                                    "Michael Jackson",
+                                                    "Home Center",
+                                                    "Lupin",
+                                                    "Bridgerton",
+                                                    "Canadadry",
+                                                    "Cola y Pola",
+                                                    "Navidad",
+                                                    "helado",
+                                                    "chocoram",
+                                                    "piedra",
+                                                    "limonada",
+                                                    "alcaldía",
+                                                    "flores amarilla",
+                                                    "girasoles",
+                                                    "claveles",
+                                                    "bus",
+                                                    "viajes",
+                                                    "rosas",
+                                                    "velitas",
+                                                    "alumbrados",
+                                                    "masajes",
+                                                    "desayunos",
+                                                    "almuerzos",
+                                                    "arroz chino",
+                                                    "fresas con crema",
+                                                    "arroz con leche",
+                                                    "trabajo",
+                                                    "rojo cine",
+                                                    "éxito",
+                                                    "moto",
+                                                    "besos",
+                                                    "amor",
+                                                    "cariño",
+                                                    "abrazos",
+                                                    "sonrisas",
+                                                    "caricias",
+                                                    "confianza",
+                                                    "paciencia",
+                                                    "lealtad",
+                                                    "destino",
+                                                    "magia",
+                                                    "promesa",
+                                                    "juntos",
+                                                    "siempre",
+                                                    "te amo",
+                                                    "mi vida",
+                                                    "mi reina",
+                                                    "ternura",
+                                                    "pasion",
+                                                    "detalles",
+                                                    "felicidad"
+                                          ],
+                                          "gridSize": 16
+                                }
+                      },
+                      {
+                                "name": "Trivia del Amor ❓",
+                                "emoji": "❓",
+                                "type": "trivia",
+                                "config": {
+                                          "questions": [
+                                                    {
+                                                              "q": "¿Qué mes empezamos a hablar?",
+                                                              "options": [
+                                                                        "enero",
+                                                                        "febrero",
+                                                                        "marzo",
+                                                                        "abril"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Exacto, empezamos en febrero."
+                                                    },
+                                                    {
+                                                              "q": "¿Qué día nos dimos nuestro primer beso?",
+                                                              "options": [
+                                                                        "5 de junio",
+                                                                        "10 de mayo",
+                                                                        "15 de julio",
+                                                                        "20 de agosto"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Inolvidable 5 de junio."
+                                                    },
+                                                    {
+                                                              "q": "¿A dónde fuimos en nuestra primera cita?",
+                                                              "options": [
+                                                                        "cine",
+                                                                        "restaurante",
+                                                                        "parque",
+                                                                        "heladería"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¡Al cine!"
+                                                    },
+                                                    {
+                                                              "q": "¿A dónde fuimos en nuestro primer viaje?",
+                                                              "options": [
+                                                                        "montaña",
+                                                                        "río",
+                                                                        "mar",
+                                                                        "nevado"
+                                                              ],
+                                                              "correct": 2,
+                                                              "explanation": "Fuimos al mar."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuántos viajes hemos hecho juntos?",
+                                                              "options": [
+                                                                        "1",
+                                                                        "3",
+                                                                        "más de 5",
+                                                                        "2"
+                                                              ],
+                                                              "correct": 2,
+                                                              "explanation": "¡Han sido más de 5!"
+                                                    },
+                                                    {
+                                                              "q": "¿Qué tomábamos con más frecuencia en la etapa de conocernos?",
+                                                              "options": [
+                                                                        "café",
+                                                                        "cerveza",
+                                                                        "gaseosa",
+                                                                        "limonada"
+                                                              ],
+                                                              "correct": 3,
+                                                              "explanation": "Limonada, ¡clásico!"
+                                                    },
+                                                    {
+                                                              "q": "¿Qué comimos cuando fuimos a 911?",
+                                                              "options": [
+                                                                        "pizza",
+                                                                        "hamburguesa",
+                                                                        "jugos y empanada",
+                                                                        "salchipapa"
+                                                              ],
+                                                              "correct": 2,
+                                                              "explanation": "Ricos jugos y empanada."
+                                                    },
+                                                    {
+                                                              "q": "¿Nombre de la hamburguesa que nos gusta a ambos?",
+                                                              "options": [
+                                                                        "clásica",
+                                                                        "septiembre",
+                                                                        "tocineta",
+                                                                        "corral"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "La septiembre, nuestra favorita."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "Elvis",
+                                                                        "Bohemian Rhapsody",
+                                                                        "Rocketman",
+                                                                        "Michael Jackson"
+                                                              ],
+                                                              "correct": 3,
+                                                              "explanation": "¡La de Michael Jackson!"
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "El diablo viste la moda 2",
+                                                                        "Chicas Pesadas",
+                                                                        "Barbie",
+                                                                        "Crepúsculo"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "El diablo viste la moda 2."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "Fórmula 1",
+                                                                        "Rápidos y Furiosos",
+                                                                        "Need for Speed",
+                                                                        "Rush"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Fórmula 1."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "El teléfono negro 2",
+                                                                        "El conjuro",
+                                                                        "Annabelle",
+                                                                        "La monja"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "El teléfono negro 2."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "¿Qué pasó ayer? 1",
+                                                                        "Son como niños",
+                                                                        "Proyecto X",
+                                                                        "Supercool"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¿Qué pasó ayer? 1."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "¿Qué pasó ayer? 2",
+                                                                        "Ted",
+                                                                        "American Pie",
+                                                                        "Scary Movie"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¿Qué pasó ayer? 2."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "¿Qué pasó ayer? 3",
+                                                                        "Guerra de papás",
+                                                                        "Nosotros los Nobles",
+                                                                        "¿Qué culpa tiene el niño?"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¿Qué pasó ayer? 3."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál de estas películas nos hemos visto?",
+                                                              "options": [
+                                                                        "Mario Galaxy",
+                                                                        "Sonic",
+                                                                        "Zelda",
+                                                                        "Minecraft"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Mario Galaxy."
+                                                    },
+                                                    {
+                                                              "q": "¿Cuál es mi jugo favorito?",
+                                                              "options": [
+                                                                        "Fresa",
+                                                                        "Mora",
+                                                                        "Milo",
+                                                                        "Lulo"
+                                                              ],
+                                                              "correct": 2,
+                                                              "explanation": "El Milo, ¡obvio!"
+                                                    },
+                                                    {
+                                                              "q": "Canción que te dediqué junto con el ramo de rosas:",
+                                                              "options": [
+                                                                        "Flores Amarillas",
+                                                                        "25 rosas",
+                                                                        "Perfecta",
+                                                                        "Mi Universo"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "25 rosas para ti."
+                                                    },
+                                                    {
+                                                              "q": "¿Qué día nos hicimos novios?",
+                                                              "options": [
+                                                                        "5 de junio",
+                                                                        "25 de diciembre",
+                                                                        "14 de febrero",
+                                                                        "19 de octubre"
+                                                              ],
+                                                              "correct": 3,
+                                                              "explanation": "El 19 de octubre."
+                                                    },
+                                                    {
+                                                              "q": "Yo siempre te he dicho que eres mi...",
+                                                              "options": [
+                                                                        "Reina",
+                                                                        "2025",
+                                                                        "Princesa",
+                                                                        "Vida"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Eres mi 2025."
+                                                    },
+                                                    {
+                                                              "q": "¿Qué serie nos hemos visto?",
+                                                              "options": [
+                                                                        "The Crown",
+                                                                        "Bridgerton",
+                                                                        "Elite",
+                                                                        "Stranger Things"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Bridgerton."
+                                                    },
+                                                    {
+                                                              "q": "¿Qué serie nos hemos visto?",
+                                                              "options": [
+                                                                        "Lupin",
+                                                                        "La Casa de Papel",
+                                                                        "Dark",
+                                                                        "Peaky Blinders"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Lupin."
+                                                    },
+                                                    {
+                                                              "q": "¿En dónde estaba escrita la nota que te dejé en tu oficina?",
+                                                              "options": [
+                                                                        "En un post-it",
+                                                                        "En una hoja de cuaderno",
+                                                                        "En tu mano",
+                                                                        "En una servilleta"
+                                                              ],
+                                                              "correct": 3,
+                                                              "explanation": "Fue en una servilleta."
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de estos lugares hemos ido?",
+                                                              "options": [
+                                                                        "Santelmo",
+                                                                        "París",
+                                                                        "Roma",
+                                                                        "Miami"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¡A Santelmo!"
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de estos lugares hemos ido?",
+                                                              "options": [
+                                                                        "Tarazá",
+                                                                        "Bogotá",
+                                                                        "Cartagena",
+                                                                        "San Andrés"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¡A Tarazá!"
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de estos lugares hemos ido?",
+                                                              "options": [
+                                                                        "Cali",
+                                                                        "Medellín",
+                                                                        "Barranquilla",
+                                                                        "Santa Marta"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "¡A Medellín!"
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de estos lugares hemos ido?",
+                                                              "options": [
+                                                                        "Bucaramanga",
+                                                                        "Cúcuta",
+                                                                        "Montería",
+                                                                        "Pereira"
+                                                              ],
+                                                              "correct": 2,
+                                                              "explanation": "¡A Montería!"
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de estos lugares hemos ido?",
+                                                              "options": [
+                                                                        "La Perra",
+                                                                        "El Gato",
+                                                                        "El Pájaro",
+                                                                        "El Perro"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "A La Perra."
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de estos lugares hemos ido?",
+                                                              "options": [
+                                                                        "Montaña",
+                                                                        "Piedra",
+                                                                        "Roca",
+                                                                        "Colina"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "A Piedra."
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de estos lugares hemos ido?",
+                                                              "options": [
+                                                                        "La Cauchera",
+                                                                        "La Resortera",
+                                                                        "La Honda",
+                                                                        "El Tirachinas"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "A La Cauchera."
+                                                    },
+                                                    {
+                                                              "q": "Yo tomé la iniciativa del primer beso.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¡Totalmente cierto!"
+                                                    },
+                                                    {
+                                                              "q": "Tus jugos favoritos son los cítricos.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "¡Así es!"
+                                                    },
+                                                    {
+                                                              "q": "Yo dije primero te amo.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Fui yo el primero."
+                                                    },
+                                                    {
+                                                              "q": "Me puedo dar el lujo de decir que te llevé a playa.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Y fue un viaje hermoso."
+                                                    },
+                                                    {
+                                                              "q": "Son más de 3 cm.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Es la verdad."
+                                                    },
+                                                    {
+                                                              "q": "La primera cita no demoró mucho.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Así fue."
+                                                    },
+                                                    {
+                                                              "q": "El arroz con leche del día de la mujer no tenía quéreme.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "¡Cierto!"
+                                                    },
+                                                    {
+                                                              "q": "Eres una niña consentida y mimosa.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Y me encanta que lo seas."
+                                                    },
+                                                    {
+                                                              "q": "Yo soy tu macho.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "¡Claro que sí!"
+                                                    },
+                                                    {
+                                                              "q": "A veces cuando nos vamos a ver eres muy puntual.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Sueles llegar tarde a veces jeje."
+                                                    },
+                                                    {
+                                                              "q": "La manillita que me diste me la diste en el éxito.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Falso, no fue ahí."
+                                                    },
+                                                    {
+                                                              "q": "Alquilé una sala de cine solo para los dos.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "¡Lo hice por ti!"
+                                                    },
+                                                    {
+                                                              "q": "Por eso las operan.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Nuestra frase."
+                                                    },
+                                                    {
+                                                              "q": "Morat es de nuestros cantantes favoritos.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Nos encantan."
+                                                    },
+                                                    {
+                                                              "q": "El primer ramo de flores que te di eran rojas.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Fueron amarillas."
+                                                    },
+                                                    {
+                                                              "q": "¿En qué parque nos tomamos las fotos de los alumbrados navideños?",
+                                                              "options": [
+                                                                        "Parque Bolívar",
+                                                                        "El Palmar",
+                                                                        "Parque de la Vida",
+                                                                        "Parque Central"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "¡En El Palmar!"
+                                                    },
+                                                    {
+                                                              "q": "Mi lady me estaba enseñando a bailar.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Así es jaja."
+                                                    },
+                                                    {
+                                                              "q": "Hemos desayunado juntos.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "Sí, deliciosos desayunos."
+                                                    },
+                                                    {
+                                                              "q": "Nos hemos bañado juntos.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Sí lo hemos hecho."
+                                                    },
+                                                    {
+                                                              "q": "Hemos dormido juntos.",
+                                                              "options": [
+                                                                        "Verdadero",
+                                                                        "Falso"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "De los mejores momentos."
+                                                    },
+                                                    {
+                                                              "q": "Ambos tenemos pasaporte.",
+                                                              "options": [
+                                                                        "Falso",
+                                                                        "Verdadero"
+                                                              ],
+                                                              "correct": 1,
+                                                              "explanation": "Listos para viajar."
+                                                    },
+                                                    {
+                                                              "q": "Lugar donde te entregué tu manillita.",
+                                                              "options": [
+                                                                        "En el parque",
+                                                                        "En tu casa",
+                                                                        "Heladería",
+                                                                        "Restaurante"
+                                                              ],
+                                                              "correct": 2,
+                                                              "explanation": "Fue en la heladería."
+                                                    },
+                                                    {
+                                                              "q": "Lugar donde nos comimos una ensalada de frutas.",
+                                                              "options": [
+                                                                        "Yireth",
+                                                                        "Cosechas",
+                                                                        "Frutera del Centro",
+                                                                        "Plaza"
+                                                              ],
+                                                              "correct": 0,
+                                                              "explanation": "En Yireth."
+                                                    },
+                                                    {
+                                                              "q": "¿A cuál de mis hermanas conociste primero?",
+                                                              "options": [
+                                                                        "Ana",
+                                                                        "María",
+                                                                        "Isabel",
+                                                                        "Laura"
+                                                              ],
+                                                              "correct": 2,
+                                                              "explanation": "Fue a Isabel."
+                                                    }
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Rompecabezas 🧩",
+                                "emoji": "🧩",
+                                "type": "puzzle",
+                                "config": {
+                                          "images": [
+                                                    "fotos/foto (7).jpeg",
+                                                    "fotos/foto (31).jpeg",
+                                                    "fotos/foto (32).jpeg",
+                                                    "fotos/foto (33).jpeg",
+                                                    "fotos/foto (34).jpeg",
+                                                    "fotos/foto (35).jpeg",
+                                                    "fotos/foto (36).jpeg",
+                                                    "fotos/foto (49).jpeg",
+                                                    "fotos/foto (76).jpeg",
+                                                    "fotos/foto (129).jpeg",
+                                                    "fotos/foto (130).jpeg",
+                                                    "fotos/foto (131).jpeg",
+                                                    "fotos/foto (132).jpeg",
+                                                    "fotos/foto (27).jpeg",
+                                                    "fotos/foto (162).jpeg",
+                                                    "fotos/foto (72).jpeg",
+                                                    "fotos/foto (2).jpeg",
+                                                    "fotos/foto (143).jpeg",
+                                                    "fotos/foto (61).jpeg",
+                                                    "fotos/foto (145).jpeg",
+                                                    "fotos/foto (98).jpeg",
+                                                    "fotos/foto (79).jpeg",
+                                                    "fotos/foto (118).jpeg",
+                                                    "fotos/foto (71).jpeg",
+                                                    "fotos/foto (128).jpeg",
+                                                    "fotos/foto (53).jpeg",
+                                                    "fotos/foto (122).jpeg",
+                                                    "fotos/foto (63).jpeg",
+                                                    "fotos/foto (58).jpeg",
+                                                    "fotos/foto (110).jpeg",
+                                                    "fotos/foto (91).jpeg",
+                                                    "fotos/foto (46).jpeg",
+                                                    "fotos/foto (65).jpeg",
+                                                    "fotos/foto (51).jpeg",
+                                                    "fotos/foto (109).jpeg",
+                                                    "fotos/foto (112).jpeg",
+                                                    "fotos/foto (125).jpeg",
+                                                    "fotos/foto (59).jpeg",
+                                                    "fotos/foto (78).jpeg",
+                                                    "fotos/foto (184).jpeg",
+                                                    "fotos/foto (195).jpeg",
+                                                    "fotos/foto (183).jpeg",
+                                                    "fotos/foto (174).jpeg",
+                                                    "fotos/foto (19).jpeg",
+                                                    "fotos/foto (85).jpeg",
+                                                    "fotos/foto (156).jpeg",
+                                                    "fotos/foto (185).jpeg",
+                                                    "fotos/foto (30).jpeg",
+                                                    "fotos/foto (89).jpeg",
+                                                    "fotos/foto (138).jpeg",
+                                                    "fotos/foto (191).jpeg",
+                                                    "fotos/foto (24).jpeg",
+                                                    "fotos/foto (116).jpeg",
+                                                    "fotos/foto (38).jpeg",
+                                                    "fotos/foto (55).jpeg",
+                                                    "fotos/foto (41).jpeg",
+                                                    "fotos/foto (166).jpeg",
+                                                    "fotos/foto (179).jpeg",
+                                                    "fotos/foto (165).jpeg",
+                                                    "fotos/foto (103).jpeg",
+                                                    "fotos/foto (67).jpeg"
+                                          ],
+                                          "gridSize": 3,
+                                          "fallbackEmoji": "💕"
+                                }
+                      },
+                      {
+                                "name": "Descubre la Frase 🌸",
+                                "emoji": "🌸",
+                                "type": "hangman",
+                                "config": {
+                                          "phrases": [
+                                                    "NUESTRO PRIMER BESO CINCO DE JUNIO",
+                                                    "VIAJANDO EN MOTO A TARAZA UN FIN DE SEMANA JUNTOS",
+                                                    "NUESTRA PRIMERA NAVIDAD JUNTOS",
+                                                    "MARATON DE LA SERIE LUPIN",
+                                                    "VIENDO ONE PIECE PERO DICES QUE SON MUCHOS CAPITULOS",
+                                                    "VISTE YO TE DIJE POR ESO LAS OPERAN",
+                                                    "CARLOS Y MELISSA VEINTE VEINTICINCO",
+                                                    "VIAJANDO A MEDELLIN POR LA VIA VIEJA",
+                                                    "VIAJANDO A MEDELLIN POR LA VIA NUEVA",
+                                                    "VIAJANDO A PLAYA HASTA QUE TE CONQUISTE",
+                                                    "VIENDO LA SAGA DE QUE PASO AYER",
+                                                    "COCINANDO JUNTOS O BUENO YO COCINANDOTE A TI",
+                                                    "ERES MUY BUENA ENFERMERA ME RECUPERE RAPIDO",
+                                                    "PROMETEME TU Y YO POR UN LARGO RATO"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Ruleta de Premios 🎡",
+                                "emoji": "🎡",
+                                "type": "roulette",
+                                "config": {}
+                      },
+                      {
+                                "name": "Atrapa mi Corazón 💖",
+                                "emoji": "💖",
+                                "type": "catchhearts",
+                                "config": {}
+                      },
+                      {
+                                "name": "Simón Dice del Amor 🧠",
+                                "emoji": "🧠",
+                                "type": "simonsays",
+                                "config": {}
+                      },
+                      {
+                                "name": "Cajitas Mágicas de Carlos 🎁",
+                                "emoji": "🎁",
+                                "type": "magicboxes",
+                                "config": {}
+                      },
+                      {
+                                "name": "Tragamonedas del Amor 🎰",
+                                "emoji": "🎰",
+                                "type": "slots",
+                                "config": {}
+                      },
+                      {
+                                "name": "Tanda de Penales del Amor ⚽",
+                                "emoji": "⚽",
+                                "type": "penalties",
+                                "config": {}
+                      },
+                      {
+                                "name": "Álbum Panini del Amor 📖",
+                                "emoji": "📖",
+                                "type": "album",
+                                "config": {}
+                      },
+                      {
+                                "name": "Selecciones del Mundial 2026 🌍",
+                                "emoji": "🌍",
+                                "type": "worldcupteams",
+                                "config": {}
+                      },
+                      {
+                                "name": "Festival Musical del Amor 🎶",
+                                "emoji": "🎶",
+                                "type": "musicfestival",
+                                "config": {}
+                      },
+                      {
+                                "name": "Arcade Retro: Maquinitas del Amor 🕹️",
+                                "emoji": "🕹️",
+                                "type": "arcade",
+                                "config": {}
+                      },
+                      {
+                                "name": "Flappy Love 🕊️",
+                                "emoji": "🕊️",
+                                "type": "flappylove",
+                                "config": {}
+                      },
+                      {
+                                "name": "Caza Corazones 💘",
+                                "emoji": "💘",
+                                "type": "whackhearts",
+                                "config": {
+                                          "duration": 45,
+                                          "holeCount": 9,
+                                          "emojis": [
+                                                    "💖",
+                                                    "💗",
+                                                    "💕"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Serpiente del Amor 🐍",
+                                "emoji": "🐍",
+                                "type": "snakelove",
+                                "config": {
+                                          "gridSize": 15,
+                                          "tickMs": 160
+                                }
+                      },
+                      {
+                                "name": "Rompecabezas Deslizante 🧩",
+                                "emoji": "🧩",
+                                "type": "slidepuzzle",
+                                "config": {
+                                          "gridSize": 3,
+                                          "images": [
+                                                    "fotos/foto (7).jpeg",
+                                                    "fotos/foto (31).jpeg",
+                                                    "fotos/foto (32).jpeg",
+                                                    "fotos/foto (72).jpeg",
+                                                    "fotos/foto (146).jpeg",
+                                                    "fotos/foto_139.jpeg"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Encesta el Amor 🏀",
+                                "emoji": "🏀",
+                                "type": "basketlove",
+                                "config": {
+                                          "attempts": 10
+                                }
+                      },
+                      {
+                                "name": "Descubre Detrás del Muro 🧱",
+                                "emoji": "🧱",
+                                "type": "brickreveal",
+                                "config": {
+                                          "rows": 5,
+                                          "cols": 6,
+                                          "lives": 3,
+                                          "images": [
+                                                    "fotos/foto (76).jpeg",
+                                                    "fotos/foto (129).jpeg",
+                                                    "fotos/foto (130).jpeg"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Encuentra las Diferencias 🔍",
+                                "emoji": "🔍",
+                                "type": "finddifferences",
+                                "config": {
+                                          "differenceCount": 5,
+                                          "images": [
+                                                    "fotos/foto (31).jpeg",
+                                                    "fotos/foto (32).jpeg",
+                                                    "fotos/foto (72).jpeg"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Descifra el Código del Amor 🔐",
+                                "emoji": "🔐",
+                                "type": "mastermind",
+                                "config": {
+                                          "codeLength": 4,
+                                          "maxAttempts": 8,
+                                          "colors": [
+                                                    "💗",
+                                                    "💛",
+                                                    "💙",
+                                                    "💚",
+                                                    "🧡"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Ordena las Letras 🔤",
+                                "emoji": "🔤",
+                                "type": "letterorder",
+                                "config": {
+                                          "duration": 60,
+                                          "words": [
+                                                    "AMOR",
+                                                    "BESO",
+                                                    "MOTO",
+                                                    "MILO",
+                                                    "FLORES",
+                                                    "TARAZA",
+                                                    "MEDELLIN",
+                                                    "MELISSA",
+                                                    "CARLOS",
+                                                    "REINA"
+                                          ]
+                                }
+                      },
+                      {
+                                "name": "Encuentra las Rosas 🌹",
+                                "emoji": "🌹",
+                                "type": "rosehunt",
+                                "config": {
+                                          "cols": 8,
+                                          "rows": 8,
+                                          "targetCount": 25,
+                                          "duration": 45
+                                }
+                      },
+                      {
+                                "name": "Pesca de Corazones 🎣",
+                                "emoji": "🎣",
+                                "type": "fishing",
+                                "config": {
+                                          "columns": 6,
+                                          "duration": 45
+                                }
+                      },
+                      {
+                                "name": "Salto del Amor 🏃",
+                                "emoji": "🏃",
+                                "type": "runnerjump",
+                                "config": {}
+                      },
+                      {
+                                "name": "Esquiva las Balas del Amor 💘",
+                                "emoji": "💘",
+                                "type": "dodgebullets",
+                                "config": {}
+                      },
+                      {
+                                "name": "Simple pero Rico 💝",
+                                "emoji": "💝",
+                                "type": "simplerico",
+                                "config": {
+                                          "duration": 30
+                                }
+                      },
+                      {
+                                "name": "Ritmo del Amor 🎵",
+                                "emoji": "🎵",
+                                "type": "rhythmlove",
+                                "config": {
+                                          "duration": 45
+                                }
+                      }
+            ]
         }
     ];
 
@@ -928,7 +1943,7 @@ const DailyContent = (function() {
         startDate: START_DATE,
         totalDays: TOTAL_DAYS,
         getDay: function(dayNumber) {
-            return days.find(d => d.day === dayNumber) || days[0];
+            return days.find(d => d.day === dayNumber);
         },
         getCurrentDay: calculateCurrentDay,
         days: days
