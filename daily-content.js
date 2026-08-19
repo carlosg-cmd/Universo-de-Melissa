@@ -1936,6 +1936,19 @@ const DailyContent = (function() {
                                 }
                       }
             ]
+        },
+        {
+            day: 33,
+            title: "Día 33 - Serenata de Amor 🌹💕",
+            emoji: "🌹",
+            song: "musica/cancion33.mp3",
+            letter: "¡Hola, cómo estás mi bella rosa! Cada día luces más hermosa.\n\nHay tantas cosas que quiero decirte, mi amor, pero empiezo por esta: siento que floto cuando te veo sonreír. Eres tan original, tan especial, que a veces pienso que Dios pensaba en mí cuando te hizo a ti.\n\nGracias por aguantarme con mis manías, por quererme cada día un poquito más de lo que ya me querías, por felicitarme cuando hago las cosas bien y corregirme cuando las hago mal. Yo te amo, y hoy te traigo esta pequeña serenata de amor.\n\nHoy te dejo un juego distinto: un laberinto que tienes que recorrer guiando un corazón desde la entrada hasta la salida, contra el reloj. A ver en cuánto tiempo logras llegar.\n\nTe amo infinito, mi bella rosa, mi cómplice de vida. 💖",
+            funPhrase: "Hoy le traigo a mi estrella, serenata de amor 🌹💕",
+            recoveryQuote: "Día 33: cada día luces más hermosa, mi amor.",
+            gameType: 'lovemaze',
+            gameConfig: {
+                gridSize: 8
+            }
         }
     ];
 
