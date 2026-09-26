@@ -891,7 +891,7 @@
             emojiEl.textContent = today.emoji || '🎁';
             titleEl.textContent = today.title || `Sorpresa del Día ${dayNumber}`;
             funEl.textContent = today.funPhrase || '¡Hoy es un día especial! 💕';
-            //recoveryEl.textContent = today.recover';//
+            recoveryEl.textContent = today.recoveryQuote || 'Cada día más fuerte 💪';
         } else {
             emojiEl.textContent = '🎁';
             titleEl.textContent = 'Sorpresa del Día';
