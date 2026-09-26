@@ -315,8 +315,8 @@
 
     const BIRTHDAY_CONTENT = {
         title: "🎂 Feliz Cumpleaños, Mi Amor 🌻",
-        badge: "🌻 Un día distinto, para alguien distinta 🌻",
-        dailyMsg: "Hoy celebramos que naciste, mi amor 🎉🌻",
+        badge: "💛 Hoy celebramos lo increíble que eres😍",
+        dailyMsg: "🫶 ¿Lista para volver a encontrarnos?",
         song: "musica/cumpleanos.mp3",
         letter: "¡Feliz cumpleaños, mi amor! 🎂🌻\n\nHoy es un día que quiero celebrar contigo con todo mi corazón: cumples un año más de vida, y no hay nada que me haga más feliz que verte crecer, brillar y seguir siendo tan maravillosa como eres.\n\nQuiero confesarte algo: mi forma de amarte cambió. Ya no me muevo por lo que dicta la costumbre o lo que \"toca hacer\" en cierta fecha, sino por lo que de verdad siento. Por eso, aunque quizás esperabas este tipo de detalle en otro momento, quise que fuera justo hoy, en tu cumpleaños, cuando lo recibieras — para que se sintiera único, especial, solo tuyo.\n\nQue Dios te siga bendiciendo, que te cuide siempre, y que este nuevo año de vida venga cargado de toda la felicidad que te mereces. Gracias por existir, por ser quien eres, y por dejarme ser parte de tu vida.\n\nTe amo infinito, hoy y siempre. Feliz cumpleaños, mi reina. 💛🌻"
     };
@@ -891,7 +891,7 @@
             emojiEl.textContent = today.emoji || '🎁';
             titleEl.textContent = today.title || `Sorpresa del Día ${dayNumber}`;
             funEl.textContent = today.funPhrase || '¡Hoy es un día especial! 💕';
-            recoveryEl.textContent = today.recoveryQuote || 'Cada día más fuerte 💪';
+            //recoveryEl.textContent = today.recover';//
         } else {
             emojiEl.textContent = '🎁';
             titleEl.textContent = 'Sorpresa del Día';
