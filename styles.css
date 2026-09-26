@@ -1607,3 +1607,29 @@ html, body {
     color: var(--text-primary);
     font-weight: 500;
 }
+
+/* =============================================
+   BIRTHDAY SPECIAL THEME — Flores Amarillas 🌻
+   Active only on Sept 26 (see app.js isBirthdaySpecial)
+   ============================================= */
+body.theme-birthday {
+    --primary: #ffd54f;
+    --cyan: #ffd54f;
+    --primary-dark: #ffb300;
+    --primary-deeper: #ff8f00;
+    --primary-glow: rgba(255, 213, 79, 0.5);
+    --primary-soft: rgba(255, 213, 79, 0.18);
+    --gold: #fff176;
+    --gold-glow: rgba(255, 241, 118, 0.6);
+    --pink: #ffca28;
+    --pink-glow: rgba(255, 202, 40, 0.4);
+    --purple: #ffa726;
+    --green: #c0ca33;
+    --accent-pink: #ffb300;
+}
+
+body.theme-birthday .day-badge {
+    background: rgba(255, 213, 79, 0.12);
+    border-color: var(--primary);
+}
+

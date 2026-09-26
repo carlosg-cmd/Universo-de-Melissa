@@ -299,24 +299,56 @@
     // =============================================
     //  WELCOME SCREEN
     // =============================================
+    // =============================================
+    //  BIRTHDAY SPECIAL (Sept 26, one-day-only override)
+    // =============================================
+    function isBirthdaySpecial() {
+        // --- MODO DE PRUEBA (SOLO PARA TI): agrega ?cumple=1 a la URL ---
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('cumple') === '1') return true;
+        if (urlParams.get('cumple') === '0') return false;
+        // -----------------------------------------------------------------
+
+        const now = new Date();
+        return now.getFullYear() === 2026 && now.getMonth() === 8 && now.getDate() === 26; // months are 0-indexed, 8 = September
+    }
+
+    const BIRTHDAY_CONTENT = {
+        title: "🎂 Feliz Cumpleaños, Mi Amor 🌻",
+        badge: "🌻 Un día distinto, para alguien distinta 🌻",
+        dailyMsg: "Hoy celebramos que naciste, mi amor 🎉🌻",
+        song: "musica/cumpleanos.mp3",
+        letter: "¡Feliz cumpleaños, mi amor! 🎂🌻\n\nHoy es un día que quiero celebrar contigo con todo mi corazón: cumples un año más de vida, y no hay nada que me haga más feliz que verte crecer, brillar y seguir siendo tan maravillosa como eres.\n\nQuiero confesarte algo: mi forma de amarte cambió. Ya no me muevo por lo que dicta la costumbre o lo que \"toca hacer\" en cierta fecha, sino por lo que de verdad siento. Por eso, aunque quizás esperabas este tipo de detalle en otro momento, quise que fuera justo hoy, en tu cumpleaños, cuando lo recibieras — para que se sintiera único, especial, solo tuyo.\n\nQue Dios te siga bendiciendo, que te cuide siempre, y que este nuevo año de vida venga cargado de toda la felicidad que te mereces. Gracias por existir, por ser quien eres, y por dejarme ser parte de tu vida.\n\nTe amo infinito, hoy y siempre. Feliz cumpleaños, mi reina. 💛🌻"
+    };
+
     function initWelcomeScreen() {
         const dayNumber = typeof DailyContent !== 'undefined' ? DailyContent.getCurrentDay() : 1;
         const dayEl = document.getElementById('day-number');
         const msgEl = document.getElementById('welcome-daily-msg');
         const exploreBtn = document.getElementById('explore-btn');
+        const dayCounterEl = document.getElementById('day-counter');
 
-        dayEl.textContent = dayNumber;
+        if (isBirthdaySpecial()) {
+            document.body.classList.add('theme-birthday');
+            if (dayCounterEl) {
+                dayCounterEl.innerHTML = `<span class="day-badge">${BIRTHDAY_CONTENT.badge}</span>`;
+            }
+            msgEl.textContent = BIRTHDAY_CONTENT.dailyMsg;
+        } else {
+            document.body.classList.remove('theme-birthday');
+            dayEl.textContent = dayNumber;
 
-        // Get today's content
-        if (typeof DailyContent !== 'undefined') {
-            const today = DailyContent.getDay(dayNumber);
-            if (today && today.recoveryQuote) {
-                msgEl.textContent = today.recoveryQuote;
+            // Get today's content
+            if (typeof DailyContent !== 'undefined') {
+                const today = DailyContent.getDay(dayNumber);
+                if (today && today.recoveryQuote) {
+                    msgEl.textContent = today.recoveryQuote;
+                } else {
+                    msgEl.textContent = 'Cada día estás más cerca de estar al 100% 💪';
+                }
             } else {
                 msgEl.textContent = 'Cada día estás más cerca de estar al 100% 💪';
             }
-        } else {
-            msgEl.textContent = 'Cada día estás más cerca de estar al 100% 💪';
         }
 
         // ====== MUSIC SYSTEM ======
@@ -327,7 +359,9 @@
         // Use the current day or explicit song setting to select the song
         const currentDay = typeof DailyContent !== 'undefined' ? DailyContent.getCurrentDay() : 1;
         const todayData = typeof DailyContent !== 'undefined' ? DailyContent.getDay(currentDay) : null;
-        const rawSongPath = (todayData && todayData.song) ? todayData.song : `musica/cancion${currentDay}.mp3`;
+        const rawSongPath = isBirthdaySpecial()
+            ? BIRTHDAY_CONTENT.song
+            : ((todayData && todayData.song) ? todayData.song : `musica/cancion${currentDay}.mp3`);
         music.src = encodeURI(rawSongPath);
         music.loop = true;
         
@@ -869,12 +903,21 @@
     }
 
     function openLetterModal() {
-        const dayNumber = typeof DailyContent !== 'undefined' ? DailyContent.getCurrentDay() : 1;
-        const today = typeof DailyContent !== 'undefined' ? DailyContent.getDay(dayNumber) : null;
-
         const titleEl = document.getElementById('letter-title');
         const textEl = document.getElementById('letter-text');
 
+        if (isBirthdaySpecial()) {
+            if (window.notifyCarlos) window.notifyCarlos('Melissa abrió la carta especial de cumpleaños.');
+            titleEl.textContent = BIRTHDAY_CONTENT.title;
+            textEl.innerHTML = BIRTHDAY_CONTENT.letter
+                .replace(/\*\*(.*?)\*\*/g, '<strong style="color:var(--gold); font-weight:600;">$1</strong>')
+                .replace(/\n/g, '<br>');
+            openModal('letter-modal');
+            return;
+        }
+
+        const dayNumber = typeof DailyContent !== 'undefined' ? DailyContent.getCurrentDay() : 1;
+        const today = typeof DailyContent !== 'undefined' ? DailyContent.getDay(dayNumber) : null;
         if (today && today.letter) {
             if (window.notifyCarlos) window.notifyCarlos(`Melissa abrió la Carta del Día ${dayNumber}.`);
             titleEl.textContent = today.title || `Carta del Día ${dayNumber}`;
